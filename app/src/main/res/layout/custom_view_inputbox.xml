@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
+    <com.dev.ecommerce.common.customviews.CustomTextView
+        android:id="@+id/mTVCustomInputTitle"
+        style="@style/text_tile_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Title" />
+
+    <com.software.erp.common.customviews.CustomEditText
+        android:id="@+id/mETCustomInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:hint="Hint" />
+
+    <com.dev.ecommerce.common.customviews.CustomTextView
+        android:id="@+id/mTVCustomInputError"
+        style="@style/text_error_style"
+        android:visibility="gone"
+        tools:text="Error"
+        tools:visibility="visible" />
+</LinearLayout>

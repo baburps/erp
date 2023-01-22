@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.software.erp.R
 import com.software.erp.databinding.FragmentDashboardBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.CHECKING
@@ -33,8 +35,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
@@ -46,6 +47,10 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewmodel = viewModel
 
+
+        viewModel.navigationLiveData.observe(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
+        }
     }
 
     override fun onDestroyView() {

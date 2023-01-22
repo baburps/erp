@@ -21,4 +21,18 @@
     <string name="dashboard_checking">Checking</string>
     <string name="dashboard_iron_Pack">Iron &amp; Pack</string>
     <string name="dashboard_shipment_ready">Shipment ready</string>
+
+    <string name="yarn_purchase_invoice_no">Invoice No.</string>
+    <string name="yarn_purchase_date">Date</string>
+    <string name="yarn_purchase_spinning_mill">Spinning Mill</string>
+    <string name="yarn_purchase_desc">Goods Description</string>
+    <string name="yarn_purchase_no_of_bags">No. of bags</string>
+    <string name="yarn_purchase_qty">Quantity in Kgs</string>
+    <string name="yarn_purchase_rate">Rate</string>
+    <string name="yarn_purchase_gst">G.S.T %</string>
+    <string name="yarn_purchase_price">Price</string>
+    <string name="yarn_purchase_price_hint">(Quantity in Kg * Rate) + GST</string>
+    <string name="yarn_purchase_lot_track_name">Lot track name</string>
+    <string name="yarn_purchase_save">Save</string>
+
 </resources>

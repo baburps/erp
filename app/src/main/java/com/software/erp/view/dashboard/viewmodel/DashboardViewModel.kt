@@ -1,6 +1,7 @@
 package com.software.erp.view.dashboard.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -24,9 +25,15 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
         const val SHIPMENT_READY = "SHIPMENT_READY"
     }
 
+    val navigationLiveData = MutableLiveData<DashboardNavigation>()
+
     //Handle button click
     fun onButtonClickSelection(flow: String) {
         Log.d(TAG, "onButtonClickSelection--$flow")
-
+        when (flow) {
+            YARN_PURCHASE -> {
+                navigationLiveData.postValue(DashboardNavigation(YARN_PURCHASE))
+            }
+        }
     }
 }
