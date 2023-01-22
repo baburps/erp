@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.dashboard.DashboardFragment">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.software.erp.view.dashboard.viewmodel.DashboardViewModel" />
+    </data>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_dashboard_yarn_purchase"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.YARN_PURCHASE)}"
+                android:text="@string/dashboard_yarn_purchase" />
+
+            <Button
+                android:id="@+id/btn_dashboard_knitting_program"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.KNITTING_PROGRAM)}"
+                android:text="@string/dashboard_knitting_program" />
+
+            <Button
+                android:id="@+id/btn_dashboard_grey_fabric_stock"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.GREY_FABRIC_STOCK)}"
+                android:text="@string/dashboard_grey_fabric_stock" />
+
+            <Button
+                android:id="@+id/btn_dashboard_dying_program"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.DYING_PROGRAM)}"
+                android:text="@string/dashboard_dying_program" />
+
+            <Button
+                android:id="@+id/btn_dashboard_dyed_fabric"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.DYED_FABRIC)}"
+                android:text="@string/dashboard_dyed_fabric" />
+
+            <Button
+                android:id="@+id/btn_dashboard_cutting"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.CUTTING)}"
+                android:text="@string/dashboard_cutting" />
+
+            <Button
+                android:id="@+id/btn_dashboard_fusing"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.FUSING)}"
+                android:text="@string/dashboard_fusing" />
+
+            <Button
+                android:id="@+id/btn_dashboard_stitching"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.STITCHING)}"
+                android:text="@string/dashboard_stitching" />
+
+            <Button
+                android:id="@+id/btn_dashboard_checking"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.CHECKING)}"
+                android:text="@string/dashboard_checking" />
+
+            <Button
+                android:id="@+id/btn_dashboard_iron_Pack"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.IRON_AND_PACK)}"
+                android:text="@string/dashboard_iron_Pack" />
+
+            <Button
+                android:id="@+id/btn_dashboard_shipment_ready"
+                style="@style/button_style"
+                android:onClick="@{()-> viewmodel.onButtonClickSelection(viewmodel.SHIPMENT_READY)}"
+                android:text="@string/dashboard_shipment_ready" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

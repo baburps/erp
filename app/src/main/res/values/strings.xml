@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">ERP</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="dashboard_yarn_purchase">Yarn purchase</string>
+    <string name="dashboard_knitting_program">Knitting program</string>
+    <string name="dashboard_grey_fabric_stock">Grey fabric stock</string>
+    <string name="dashboard_dying_program">Dying program</string>
+    <string name="dashboard_dyed_fabric">Dyed fabric</string>
+    <string name="dashboard_cutting">Cutting</string>
+    <string name="dashboard_fusing">Fusing</string>
+    <string name="dashboard_stitching">Stitching</string>
+    <string name="dashboard_checking">Checking</string>
+    <string name="dashboard_iron_Pack">Iron &amp; Pack</string>
+    <string name="dashboard_shipment_ready">Shipment ready</string>
+</resources>
