@@ -42,6 +42,7 @@ abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, layoutId(), container, false
         )
+        binding?.lifecycleOwner = this
 
         return binding!!.root
     }
