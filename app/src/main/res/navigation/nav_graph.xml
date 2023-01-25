@@ -12,8 +12,9 @@
         tools:layout="@layout/fragment_dashboard">
 
         <action
-            android:id="@+id/action_Dashboard_to_YarnPurchaseFragment"
-            app:destination="@id/YarnPurchaseFragment" />
+            android:id="@+id/action_Dashboard_to_ProgramDetailsFragment"
+            app:destination="@id/ProgramDetailsFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/YarnPurchaseFragment"
@@ -21,8 +22,14 @@
         android:label="YarnPurchaseFragment"
         tools:layout="@layout/fragment_yarn_purchase">
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/DashboardFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/ProgramDetailsFragment"
+        android:name="com.software.erp.view.dashboard.ProgramDetailsFragment"
+        android:label="ProgramDetailsFragment"
+        tools:layout="@layout/fragment_program_details">
+
+    </fragment>
+
 </navigation>

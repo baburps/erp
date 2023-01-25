@@ -22,6 +22,8 @@
     <string name="dashboard_iron_Pack">Iron &amp; Pack</string>
     <string name="dashboard_shipment_ready">Shipment ready</string>
 
+    <string name="add_new">Add new</string>
+
     <string name="yarn_purchase_invoice_no">Invoice No.</string>
     <string name="yarn_purchase_date">Date</string>
     <string name="yarn_purchase_spinning_mill">Spinning Mill</string>

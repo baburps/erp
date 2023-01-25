@@ -13,7 +13,7 @@ import com.software.erp.common.utils.LoadingDialogFragment
 
 abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
 
-    internal lateinit var binding: DB
+    internal var binding: DB? = null
     private var dialogFragment: DialogFragment? = null
 
     internal var TAG: String? = null
@@ -37,18 +37,30 @@ abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
 //        val view = inflater.inflate(layoutId(), container, false)
         /*  //To update toolbar menu from fragment
           setHasOptionsMenu(setOptionMenu())*/
+        TAG = getViewTag()
 
         binding = DataBindingUtil.inflate(
             inflater, layoutId(), container, false
         )
 
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
+        binding?.lifecycleOwner = this
         onSetUp()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    internal fun setTitle(title: String?) {
+        title?.let {
+            (activity as ToolbarDelegate).setTitle(title)
+        }
     }
 
     internal fun showLoading() {

@@ -4,22 +4,24 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import com.software.erp.R
-import kotlinx.android.synthetic.main.custom_view_inputbox.view.*
+import com.software.erp.databinding.CustomViewInputboxBinding
 
 
 class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
-    private var view: View
+    private var mBinding: CustomViewInputboxBinding
 
     companion object {
         const val TAG = "CustomInputBox"
     }
 
     init {
-        view = View.inflate(context, R.layout.custom_view_inputbox, this)
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        mBinding = CustomViewInputboxBinding.inflate(inflater)
         mapAttributes()
     }
 
@@ -31,21 +33,21 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         try {
             val title = attributes.getString(R.styleable.custom_prop_title)
             title?.let {
-                view.mTVCustomInputTitle.text = title
+                mBinding.mTVCustomInputTitle.text = title
             } ?: run {
-                view.mTVCustomInputTitle.text = ""
+                mBinding.mTVCustomInputTitle.text = ""
             }
             val hint = attributes.getString(R.styleable.custom_prop_hint)
             hint?.let {
-                view.mETCustomInput.hint = hint
+                mBinding.mETCustomInput.hint = hint
             } ?: run {
-                view.mETCustomInput.hint = ""
+                mBinding.mETCustomInput.hint = ""
             }
             val error = attributes.getString(R.styleable.custom_prop_error)
             error?.let {
-                view.mTVCustomInputError.text = error
+                mBinding.mTVCustomInputError.text = error
             } ?: run {
-                view.mTVCustomInputError.text = ""
+                mBinding.mTVCustomInputError.text = ""
             }
         } catch (e: Exception) {
             e.message?.let { Log.e(TAG, it) }
@@ -55,13 +57,13 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
     }
 
     fun getInputValue(): String {
-        return view.mETCustomInput.text.toString()
+        return mBinding.mETCustomInput.text.toString()
     }
 
     fun showError(showError: Boolean) = if (showError) {
-        view.mTVCustomInputError.visibility = View.VISIBLE
+        mBinding.mTVCustomInputError.visibility = View.VISIBLE
     } else {
-        view.mTVCustomInputError.visibility = View.GONE
+        mBinding.mTVCustomInputError.visibility = View.GONE
     }
 
 }
