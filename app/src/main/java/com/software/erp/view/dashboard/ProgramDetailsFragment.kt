@@ -1,6 +1,7 @@
 package com.software.erp.view.dashboard
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.software.erp.R
 import com.software.erp.base.BaseFragment
 import com.software.erp.databinding.FragmentProgramDetailsBinding
@@ -17,6 +18,10 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
 //        binding?.viewmodel = viewModel
         val programKey = arguments?.getString(DashboardViewModel.PROGRAM_DETAIL_KEY)
         setTitle(programKey)
+        
+        binding?.mBTProgramDetailsAdd?.setOnClickListener {
+            handleNavigation(programKey)
+        }
     }
 
     override fun layoutId(): Int {
@@ -27,40 +32,39 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
         return "ProgramDetailsFragment"
     }
 
-    fun handleNavigation(){
-
-//            when(it.toString()){
-        /*DashboardViewModel.YARN_PURCHASE -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-      DashboardViewModel.KNITTING_PROGRAM -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.DYING_PROGRAM -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.DYED_FABRIC -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.CUTTING -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.FUSING -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.STITCHING -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.CHECKING -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.IRON_AND_PACK -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }
-       DashboardViewModel.SHIPMENT_READY -> {
-           findNavController().navigate(R.id.action_Dashboard_to_YarnPurchaseFragment)
-       }*/
-//            }
+    private fun handleNavigation(programKey: String?) {
+        when (programKey) {
+            DashboardViewModel.YARN_PURCHASE -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.KNITTING_PROGRAM -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.DYING_PROGRAM -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.DYED_FABRIC -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.CUTTING -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.FUSING -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.STITCHING -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.CHECKING -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.IRON_AND_PACK -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+            DashboardViewModel.SHIPMENT_READY -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+            }
+        }
     }
 
 }

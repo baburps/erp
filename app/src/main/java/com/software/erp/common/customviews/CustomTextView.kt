@@ -1,4 +1,4 @@
-package com.dev.ecommerce.common.customviews
+package com.software.erp.common.customviews
 
 import android.content.Context
 import android.util.AttributeSet

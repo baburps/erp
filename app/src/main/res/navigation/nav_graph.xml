@@ -30,6 +30,9 @@
         android:label="ProgramDetailsFragment"
         tools:layout="@layout/fragment_program_details">
 
+        <action
+            android:id="@+id/action_ProgramDetailsFragment_to_YarnPurchaseFragment"
+            app:destination="@id/YarnPurchaseFragment" />
     </fragment>
 
 </navigation>

@@ -7,21 +7,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.databinding.BindingAdapter
 import com.software.erp.R
+import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.CustomViewInputboxBinding
 
 
 class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
-    private var mBinding: CustomViewInputboxBinding
+    private var binding: CustomViewInputboxBinding
 
     companion object {
         const val TAG = "CustomInputBox"
+
+        @JvmStatic
+        @BindingAdapter("input_text")
+        fun setInputValue(customInputBox: CustomInputBox, value: String) {
+            customInputBox.setInputValue(value)
+        }
+    }
+
+    private fun setInputValue(value: String) {
+        LoggerUtils.debug(TAG, value)
+        binding.mETCustomInput.setText(value)
     }
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mBinding = CustomViewInputboxBinding.inflate(inflater)
+        binding = CustomViewInputboxBinding.inflate(inflater, this, true)
         mapAttributes()
     }
 
@@ -33,37 +46,44 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         try {
             val title = attributes.getString(R.styleable.custom_prop_title)
             title?.let {
-                mBinding.mTVCustomInputTitle.text = title
+                LoggerUtils.debug(TAG, title)
+                binding.mTVCustomInputTitle.text = title
             } ?: run {
-                mBinding.mTVCustomInputTitle.text = ""
+                binding.mTVCustomInputTitle.text = ""
             }
             val hint = attributes.getString(R.styleable.custom_prop_hint)
             hint?.let {
-                mBinding.mETCustomInput.hint = hint
-            } ?: run {
-                mBinding.mETCustomInput.hint = ""
+                LoggerUtils.debug(TAG, hint)
+                binding.mETCustomInput.hint = hint
+            }
+            val inputValue = attributes.getString(R.styleable.custom_prop_input_text)
+            inputValue?.let {
+                LoggerUtils.debug(TAG, inputValue)
+                binding.mETCustomInput.setText(inputValue)
             }
             val error = attributes.getString(R.styleable.custom_prop_error)
             error?.let {
-                mBinding.mTVCustomInputError.text = error
+                LoggerUtils.debug(TAG, error)
+                binding.mTVCustomInputError.text = error
             } ?: run {
-                mBinding.mTVCustomInputError.text = ""
+                binding.mTVCustomInputError.text = ""
             }
         } catch (e: Exception) {
             e.message?.let { Log.e(TAG, it) }
         } finally {
+            LoggerUtils.debug(TAG, "attributes.recycle()")
             attributes.recycle()
         }
     }
 
     fun getInputValue(): String {
-        return mBinding.mETCustomInput.text.toString()
+        return binding.mETCustomInput.text.toString()
     }
 
     fun showError(showError: Boolean) = if (showError) {
-        mBinding.mTVCustomInputError.visibility = View.VISIBLE
+        binding.mTVCustomInputError.visibility = View.VISIBLE
     } else {
-        mBinding.mTVCustomInputError.visibility = View.GONE
+        binding.mTVCustomInputError.visibility = View.GONE
     }
 
 }

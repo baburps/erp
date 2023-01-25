@@ -8,7 +8,7 @@
         android:background="@color/background_color"
         android:orientation="vertical">
 
-        <com.dev.ecommerce.common.customviews.CustomTextView
+        <com.software.erp.common.customviews.CustomTextView
             android:id="@+id/mTVCustomInputTitle"
             style="@style/text_tile_style"
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             tools:hint="Hint" />
 
-        <com.dev.ecommerce.common.customviews.CustomTextView
+        <com.software.erp.common.customviews.CustomTextView
             android:id="@+id/mTVCustomInputError"
             style="@style/text_error_style"
             android:visibility="gone"
