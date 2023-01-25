@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
 import com.software.erp.R
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.CustomViewInputboxBinding
@@ -24,6 +25,11 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         @BindingAdapter("input_text")
         fun setInputValue(customInputBox: CustomInputBox, value: String) {
             customInputBox.setInputValue(value)
+        }
+
+        @InverseBindingAdapter(attribute = "app:input_text")
+        fun getRealValue(customInputBox: CustomInputBox): String {
+            return customInputBox.getInputValue()
         }
     }
 
