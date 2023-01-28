@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 import com.software.erp.R
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.CustomViewInputboxBinding
@@ -23,14 +22,30 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
 
         @JvmStatic
         @BindingAdapter("input_text")
-        fun setInputValue(customInputBox: CustomInputBox, value: String) {
-            customInputBox.setInputValue(value)
+        fun setInputText(customInputBox: CustomInputBox?, value: String) {
+            customInputBox?.setInputValue(value)
+        }
+/*
+        @JvmStatic
+        @InverseBindingAdapter(attribute = "input_text")
+        fun getInputText(customInputBox: CustomInputBox?): String {
+            customInputBox?.let {
+                return it.getInputValue()
+            } ?: run {
+                return ""
+            }
         }
 
-        @InverseBindingAdapter(attribute = "app:input_text")
-        fun getRealValue(customInputBox: CustomInputBox): String {
-            return customInputBox.getInputValue()
-        }
+        @BindingAdapter("input_textAttrChanged")
+        @JvmStatic
+        fun setListeners(
+            customInputBox: CustomInputBox?,
+            attrChange: InverseBindingListener
+        ) {
+            customInputBox?.binding?.mETCustomInput?.doAfterTextChanged {
+                attrChange.onChange()
+            }
+        }*/
     }
 
     private fun setInputValue(value: String) {
@@ -62,11 +77,6 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
                 LoggerUtils.debug(TAG, hint)
                 binding.mETCustomInput.hint = hint
             }
-            val inputValue = attributes.getString(R.styleable.custom_prop_input_text)
-            inputValue?.let {
-                LoggerUtils.debug(TAG, inputValue)
-                binding.mETCustomInput.setText(inputValue)
-            }
             val error = attributes.getString(R.styleable.custom_prop_error)
             error?.let {
                 LoggerUtils.debug(TAG, error)
@@ -84,6 +94,13 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
 
     fun getInputValue(): String {
         return binding.mETCustomInput.text.toString()
+    }
+
+    fun setText(value: String?) {
+        LoggerUtils.debug(TAG, "setText$value")
+        value?.let {
+            binding.mETCustomInput.setText(it)
+        }
     }
 
     fun showError(showError: Boolean) = if (showError) {
