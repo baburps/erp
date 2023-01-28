@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class YarnPurchaseViewModel @Inject constructor(yarnPurchaseRoomDAO: YarnPurchaseRoomDAO) :
+class YarnPurchaseViewModel @Inject constructor(private val yarnPurchaseRoomDAO: YarnPurchaseRoomDAO) :
     ViewModel() {
 
     companion object {
@@ -21,26 +21,11 @@ class YarnPurchaseViewModel @Inject constructor(yarnPurchaseRoomDAO: YarnPurchas
         //fetch all yarn purchase list
         val yarnPurchaseList: List<YarnPurchasePO> = yarnPurchaseRoomDAO.fetchAllYarnPurchases()
         yarnPurchaseList.let {
-            LoggerUtils.debug(TAG, "yarnPurchaseList")
             if (it.isNotEmpty()) {
+                LoggerUtils.debug(TAG, "yarnPurchaseList not null")
                 yarnPurchasePO.postValue(it[0])
             } else {
-                //TODO remove after room implementation
                 LoggerUtils.debug(TAG, "yarnPurchaseList null")
-                val yarnPurchasePO1 = YarnPurchasePO(
-                    "100222",
-                    "12-10-2023",
-                    "Spinnies",
-                    "Yarn purchase",
-                    "20",
-                    "50",
-                    "12,000",
-                    "12",
-                    "20000",
-                    "Zoho order",
-                    101
-                )
-                yarnPurchasePO.postValue(yarnPurchasePO1)
             }
         }
     }
@@ -59,6 +44,14 @@ class YarnPurchaseViewModel @Inject constructor(yarnPurchaseRoomDAO: YarnPurchas
         LoggerUtils.debug(TAG, "gst${yarnPurchasePO.value?.gst}")
         LoggerUtils.debug(TAG, "value${yarnPurchasePO.value?.value}")
         LoggerUtils.debug(TAG, "lotTrackName${yarnPurchasePO.value?.lotTrackName}")
+        LoggerUtils.debug(TAG, "trackingID${yarnPurchasePO.value?.trackingID}")
 
+        if (yarnPurchasePO.value?.trackingID != 0) {
+            LoggerUtils.debug(TAG, "onSubmitClick update")
+            yarnPurchasePO.value?.let { yarnPurchaseRoomDAO.update(yarnPurchasePO = it) }
+        } else {
+            LoggerUtils.debug(TAG, "onSubmitClick insert")
+            yarnPurchasePO.value?.let { yarnPurchaseRoomDAO.insert(yarnPurchasePO = it) }
+        }
     }
 }

@@ -13,7 +13,7 @@ interface YarnPurchaseRoomDAO {
     fun insert(yarnPurchasePO: YarnPurchasePO): Long
 
     @Update
-    fun update(vararg yarnPurchasePO: YarnPurchasePO)
+    fun update(yarnPurchasePO: YarnPurchasePO)
 
     @Delete
     fun delete(yarnPurchasePO: YarnPurchasePO)
