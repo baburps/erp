@@ -1,6 +1,5 @@
 package com.software.erp.view.yarnpurchase
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.software.erp.common.utils.LoggerUtils
@@ -46,13 +45,20 @@ class YarnPurchaseViewModel @Inject constructor(yarnPurchaseRoomDAO: YarnPurchas
         }
     }
 
-    val onSubmitClick: View.OnClickListener = View.OnClickListener {
+    fun onSubmitClick() {
         LoggerUtils.debug(TAG, "onSubmitClick")
         //Get all data & validate
         //TODO validation
-        if (yarnPurchasePO != null) {
-
-        }
+        LoggerUtils.debug(TAG, "invoiceNo${yarnPurchasePO.value?.invoiceNo}")
+        LoggerUtils.debug(TAG, "date${yarnPurchasePO.value?.date}")
+        LoggerUtils.debug(TAG, "spinnerMill${yarnPurchasePO.value?.spinnerMill}")
+        LoggerUtils.debug(TAG, "goodsDesc${yarnPurchasePO.value?.goodsDesc}")
+        LoggerUtils.debug(TAG, "noOfBags${yarnPurchasePO.value?.noOfBags}")
+        LoggerUtils.debug(TAG, "qtyInKgs${yarnPurchasePO.value?.qtyInKgs}")
+        LoggerUtils.debug(TAG, "price${yarnPurchasePO.value?.price}")
+        LoggerUtils.debug(TAG, "gst${yarnPurchasePO.value?.gst}")
+        LoggerUtils.debug(TAG, "value${yarnPurchasePO.value?.value}")
+        LoggerUtils.debug(TAG, "lotTrackName${yarnPurchasePO.value?.lotTrackName}")
 
     }
 }

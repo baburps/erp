@@ -7,12 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.databinding.BindingAdapter
+import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.*
 import com.software.erp.R
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.CustomViewInputboxBinding
 
-
+@InverseBindingMethods(
+    InverseBindingMethod(
+        type = CustomInputBox::class,
+        attribute = "android:text"
+    )
+)
 class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
     private var binding: CustomViewInputboxBinding
@@ -21,13 +27,7 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         const val TAG = "CustomInputBox"
 
         @JvmStatic
-        @BindingAdapter("input_text")
-        fun setInputText(customInputBox: CustomInputBox?, value: String) {
-            customInputBox?.setInputValue(value)
-        }
-/*
-        @JvmStatic
-        @InverseBindingAdapter(attribute = "input_text")
+        @InverseBindingAdapter(attribute = "android:text")
         fun getInputText(customInputBox: CustomInputBox?): String {
             customInputBox?.let {
                 return it.getInputValue()
@@ -36,7 +36,7 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
             }
         }
 
-        @BindingAdapter("input_textAttrChanged")
+        @BindingAdapter("android:textAttrChanged")
         @JvmStatic
         fun setListeners(
             customInputBox: CustomInputBox?,
@@ -45,7 +45,7 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
             customInputBox?.binding?.mETCustomInput?.doAfterTextChanged {
                 attrChange.onChange()
             }
-        }*/
+        }
     }
 
     private fun setInputValue(value: String) {
