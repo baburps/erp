@@ -2,9 +2,11 @@ package com.software.erp.view.yarnpurchase
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.domain.room.ERPRoomDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,14 +46,16 @@ class YarnPurchaseViewModel @Inject constructor(private val erpRoomDAO: ERPRoomD
         LoggerUtils.debug(TAG, "lotTrackName${yarnPurchasePOLiveData.value?.lotTrackName}")
         LoggerUtils.debug(TAG, "trackingID${yarnPurchasePOLiveData.value?.trackingID}")
 
-        if (yarnPurchasePOLiveData.value?.trackingID != 0) {
-            LoggerUtils.debug(TAG, "onSubmitClick update")
-            yarnPurchasePOLiveData.value?.let { erpRoomDAO.update(yarnPurchasePO = it) }
-        } else {
-            LoggerUtils.debug(TAG, "onSubmitClick insert")
-            yarnPurchasePOLiveData.value?.let { erpRoomDAO.insert(yarnPurchasePO = it) }
-        }
+        viewModelScope.launch {
+            if (yarnPurchasePOLiveData.value?.trackingID != 0) {
+                LoggerUtils.debug(TAG, "onSubmitClick update")
+                yarnPurchasePOLiveData.value?.let { erpRoomDAO.updateYarnPurchaseDetails(yarnPurchasePO = it) }
+            } else {
+                LoggerUtils.debug(TAG, "onSubmitClick insert")
+                yarnPurchasePOLiveData.value?.let { erpRoomDAO.insertYarnPurchaseDetails(yarnPurchasePO = it) }
+            }
 
-        onYarnStockAddSuccess.postValue(true)
+            onYarnStockAddSuccess.postValue(true)
+        }
     }
 }

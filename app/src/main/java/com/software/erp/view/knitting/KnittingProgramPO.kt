@@ -12,19 +12,19 @@ data class KnittingProgramPO constructor(
     @ColumnInfo var lotTrackName: String,
     @ColumnInfo var goodsDesc: String,
     @ColumnInfo var orderRefNo: String,
-    @ColumnInfo var fabricStructureList: List<FabricStructurePO> = ArrayList()
+    @ColumnInfo var fabricStructureList: ArrayList<FabricStructurePO> = ArrayList()
 ) : Serializable {
     constructor() : this("", "", "", "", "", "", ArrayList())
 }
 
 data class FabricStructurePO constructor(
-    @ColumnInfo var fabricStructure: String,
-    @ColumnInfo var machineGage: String,
-    @ColumnInfo var loopLength: String,
-    @ColumnInfo var fabricDiaList: List<FabricDia>
+    @ColumnInfo var fabricStructure: String = "",
+    @ColumnInfo var machineGage: String = "",
+    @ColumnInfo var loopLength: String = "",
+    @ColumnInfo var fabricDiaList: ArrayList<FabricDia> = ArrayList()
 ) : Serializable
 
 data class FabricDia constructor(
-    @ColumnInfo var dia: String,
-    @ColumnInfo var qtyInKgs: String,
+    @ColumnInfo var dia: String = "",
+    @ColumnInfo var qtyInKgs: String = "",
 ) : Serializable

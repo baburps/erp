@@ -19,14 +19,20 @@ interface ERPRoomDAO {
     fun fetchGoodsDesc(lotTrackName: String): List<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(yarnPurchasePO: YarnPurchasePO): Long
+    fun insertYarnPurchaseDetails(yarnPurchasePO: YarnPurchasePO): Long
 
     @Update
-    fun update(yarnPurchasePO: YarnPurchasePO)
+    fun updateYarnPurchaseDetails(yarnPurchasePO: YarnPurchasePO): Int
 
     @Delete
-    fun delete(yarnPurchasePO: YarnPurchasePO)
+    fun deleteYarnPurchaseDetails(yarnPurchasePO: YarnPurchasePO): Int
 
     @Delete
     fun deleteYarnPurchaseList(yarnPurchasePOList: List<YarnPurchasePO>)
+
+    /*@Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertKnittingDetails(knittingProgramPO: KnittingProgramPO): Long
+
+    @Update
+    fun updateKnittingDetails(knittingProgramPO: KnittingProgramPO): Long*/
 }
