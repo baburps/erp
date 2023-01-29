@@ -33,6 +33,18 @@
         <action
             android:id="@+id/action_ProgramDetailsFragment_to_YarnPurchaseFragment"
             app:destination="@id/YarnPurchaseFragment" />
+
+        <action
+            android:id="@+id/action_ProgramDetailsFragment_to_KnittingDetailsFragment"
+            app:destination="@id/KnittingDetailsFragment" />
+
+    </fragment>
+
+    <fragment android:id="@+id/KnittingDetailsFragment"
+        android:name="com.software.erp.view.knitting.KnittingDetailsFragment"
+        android:label="KnittingDetailsFragment"
+        tools:layout="@layout/fragment_knitting_details">
+
     </fragment>
 
 </navigation>

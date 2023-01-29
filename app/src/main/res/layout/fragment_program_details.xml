@@ -35,7 +35,7 @@
 
             <com.software.erp.common.customviews.CustomTextView
                 style="@style/yarn_list_text_tile_style"
-                android:text="@string/yarn_purchase_goods" />
+                android:text="@string/description" />
 
             <com.software.erp.common.customviews.CustomTextView
                 style="@style/yarn_list_text_tile_style"
@@ -43,7 +43,7 @@
 
             <com.software.erp.common.customviews.CustomTextView
                 style="@style/yarn_list_text_tile_style"
-                android:text="@string/yarn_purchase_qty" />
+                android:text="@string/qty_in_kgs" />
         </LinearLayout>
 
         <View

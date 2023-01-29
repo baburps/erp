@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="background_color">#FFFFFFFF</color>
-
+    <color name="knitting_fabric_structure_bg">#CCCCCC</color>
     <color name="transparent_black">#1A000000</color>
 
     <color name="title_textColor">#FF000000</color>

@@ -9,7 +9,7 @@ import java.io.Serializable
 data class YarnPurchasePO constructor(
     @ColumnInfo var invoiceNo: String,
     @ColumnInfo var date: String,
-    @ColumnInfo var spinnerMill: String,
+    @ColumnInfo var spinningMill: String,
     @ColumnInfo var goodsDesc: String,
     @ColumnInfo var noOfBags: String,
     @ColumnInfo var qtyInKgs: String,

@@ -34,20 +34,20 @@
                 android:id="@+id/mIBYarnPurchaseDate"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.date}"
-                app:title="@string/yarn_purchase_date"
+                app:title="@string/date"
                 app:type="@{constant.DATE}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseSpinnerMills"
                 style="@style/custom_input_box"
-                android:text="@={viewModel.yarnPurchasePOLiveData.spinnerMill}"
-                app:title="@string/yarn_purchase_spinning_mill" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.spinningMill}"
+                app:title="@string/spinning_mill" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseDesc"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.goodsDesc}"
-                app:title="@string/yarn_purchase_goods_desc" />
+                app:title="@string/goods_desc" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseNoOfBags"
@@ -60,7 +60,7 @@
                 android:id="@+id/mIBYarnPurchaseQty"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.qtyInKgs}"
-                app:title="@string/yarn_purchase_qty"
+                app:title="@string/qty_in_kgs"
                 app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
@@ -88,7 +88,7 @@
                 android:id="@+id/mIBYarnPurchaseTrackName"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.lotTrackName}"
-                app:title="@string/yarn_purchase_lot_track_name" />
+                app:title="@string/lot_track_name" />
 
             <com.software.erp.common.customviews.CustomButton
                 style="@style/button_style_full"
@@ -96,7 +96,7 @@
                 android:layout_marginEnd="@dimen/side_margin"
                 android:layout_marginBottom="50dp"
                 android:onClick="@{() -> viewModel.onSubmitClick()}"
-                android:text="@string/yarn_purchase_save" />
+                android:text="@string/save" />
         </LinearLayout>
     </ScrollView>
 </layout>

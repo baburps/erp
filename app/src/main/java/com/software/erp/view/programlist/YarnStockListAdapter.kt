@@ -24,7 +24,7 @@ class YarnStockListAdapter(
     override fun onBindViewHolder(holder: YarnStockListHolder, position: Int) {
         val yarnPurchasePO = yarnStockList[position]
         yarnPurchasePO.let {
-            it.spinnerMill.let { millName ->
+            it.spinningMill.let { millName ->
                 holder.binding.mTVItemYarnMillName.text = millName
             }
 

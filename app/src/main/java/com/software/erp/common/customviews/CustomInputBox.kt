@@ -173,7 +173,6 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
             binding.mETCustomInput.setText(dayOfMonth.toString() + "-" + (monthOfYear + 1).toString() + "-" + years.toString())
 
             binding.mETCustomInput.clearFocus()
-            binding.mLLCustomInputParenLayout.requestFocus()
         }, year, month, day)
 
         datePickerDialog.show()

@@ -34,7 +34,7 @@ class YarnPurchaseViewModel @Inject constructor(private val erpRoomDAO: ERPRoomD
         //TODO validation
         LoggerUtils.debug(TAG, "invoiceNo${yarnPurchasePOLiveData.value?.invoiceNo}")
         LoggerUtils.debug(TAG, "date${yarnPurchasePOLiveData.value?.date}")
-        LoggerUtils.debug(TAG, "spinnerMill${yarnPurchasePOLiveData.value?.spinnerMill}")
+        LoggerUtils.debug(TAG, "spinnerMill${yarnPurchasePOLiveData.value?.spinningMill}")
         LoggerUtils.debug(TAG, "goodsDesc${yarnPurchasePOLiveData.value?.goodsDesc}")
         LoggerUtils.debug(TAG, "noOfBags${yarnPurchasePOLiveData.value?.noOfBags}")
         LoggerUtils.debug(TAG, "qtyInKgs${yarnPurchasePOLiveData.value?.qtyInKgs}")

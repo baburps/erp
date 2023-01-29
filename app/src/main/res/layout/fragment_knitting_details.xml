@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="constant"
+            type="com.software.erp.common.customviews.CustomAttributes" />
+
+        <variable
+            name="viewModel"
+            type="com.software.erp.view.knitting.KnittingDetailsViewModel" />
+
+    </data>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_color"
+            android:orientation="vertical">
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingDCNo"
+                style="@style/custom_input_box"
+                app:title="@string/knitting_SRKW_DC_no" />
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingDate"
+                style="@style/custom_input_box"
+                app:title="@string/date" />
+
+            <com.software.erp.common.customviews.CustomSpinnerBox
+                android:id="@+id/mSBKnittingMills"
+                style="@style/custom_spinner_box"
+                app:spinnerList="@{viewModel.spinningMillListLiveData}"
+                app:spinnerSelection="@{viewModel.spinningMillSelectionListener}"
+                app:title="@string/spinning_mill" />
+
+            <com.software.erp.common.customviews.CustomSpinnerBox
+                android:id="@+id/mSBKnittingLotTrackNo"
+                style="@style/custom_spinner_box"
+                app:spinnerList="@{viewModel.lotTrackNoListLiveData}"
+                app:spinnerSelection="@{viewModel.lotTrackNameSelectionListener}"
+                app:title="@string/lot_track_name" />
+
+            <com.software.erp.common.customviews.CustomSpinnerBox
+                style="@style/custom_spinner_box"
+                app:spinnerList="@{viewModel.goodsDescListLiveData}"
+                app:spinnerSelection="@{viewModel.goodsDescSelectionListener}"
+                app:title="@string/goods_desc" />
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingOrderRefNo"
+                style="@style/custom_input_box"
+                app:title="@string/order_ref_no" />
+
+            <View style="@style/divider_line_style" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/knitting_fabric_structure_bg"
+                android:orientation="vertical">
+
+                <com.software.erp.common.customviews.CustomSpinnerBox
+                    android:id="@+id/mSBKnitting"
+                    style="@style/custom_spinner_box"
+                    app:spinnerList="@{viewModel.fabricStructureListLiveData}"
+                    app:title="@string/fabric_structure" />
+
+                <com.software.erp.common.customviews.CustomInputBox
+                    android:id="@+id/mIBKnittingGage"
+                    style="@style/custom_input_box"
+                    app:title="@string/machine_gage" />
+
+                <com.software.erp.common.customviews.CustomInputBox
+                    android:id="@+id/mIBKnittingLoopLength"
+                    style="@style/custom_input_box"
+                    app:title="@string/loop_length" />
+
+                <com.software.erp.common.customviews.CustomInputBox
+                    android:id="@+id/mIBKnittingDia"
+                    style="@style/custom_input_box"
+                    app:title="@string/knitting_dia" />
+
+                <com.software.erp.common.customviews.CustomInputBox
+                    android:id="@+id/mIBKnittingQtyInKgs"
+                    style="@style/custom_input_box"
+                    app:title="@string/qty_in_kgs" />
+            </LinearLayout>
+
+            <View style="@style/divider_line_style" />
+
+            <com.software.erp.common.customviews.CustomButton
+                style="@style/button_style_full"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:layout_marginBottom="50dp"
+                android:onClick="@{() -> viewModel.onSubmitClick()}"
+                android:text="@string/save" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

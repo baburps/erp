@@ -44,7 +44,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                 navigateToYarnPurchaseFragment(null)
             }
             DashboardViewModel.KNITTING_PROGRAM -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_KnittingDetailsFragment)
             }
             DashboardViewModel.DYING_PROGRAM -> {
                 findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)

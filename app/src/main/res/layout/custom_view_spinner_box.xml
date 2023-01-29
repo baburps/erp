@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mLLCustomSpinnerParenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:orientation="vertical">
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVCustomSpinnerTitle"
+            style="@style/text_tile_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Title" />
+
+        <Spinner
+            android:id="@+id/mSpinnerCustomSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVCustomSpinnerError"
+            style="@style/text_error_style"
+            android:visibility="gone"
+            tools:text="Error"
+            tools:visibility="visible" />
+    </LinearLayout>
+</layout>
