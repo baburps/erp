@@ -6,6 +6,7 @@
         <variable
             name="constant"
             type="com.software.erp.common.customviews.CustomAttributes" />
+
         <variable
             name="viewModel"
             type="com.software.erp.view.yarnpurchase.YarnPurchaseViewModel" />
@@ -26,71 +27,74 @@
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseInvoiceNo"
                 style="@style/custom_input_box"
-                android:text="@={viewModel.yarnPurchasePO.invoiceNo}"
+                android:text="@={viewModel.yarnPurchasePOLiveData.invoiceNo}"
                 app:title="@string/yarn_purchase_invoice_no" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseDate"
                 style="@style/custom_input_box"
-                app:type="@{constant.DATE}"
-                android:text="@={viewModel.yarnPurchasePO.date}"
-                app:title="@string/yarn_purchase_date" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.date}"
+                app:title="@string/yarn_purchase_date"
+                app:type="@{constant.DATE}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseSpinnerMills"
                 style="@style/custom_input_box"
-                android:text="@={viewModel.yarnPurchasePO.spinnerMill}"
+                android:text="@={viewModel.yarnPurchasePOLiveData.spinnerMill}"
                 app:title="@string/yarn_purchase_spinning_mill" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseDesc"
                 style="@style/custom_input_box"
-                android:text="@={viewModel.yarnPurchasePO.goodsDesc}"
+                android:text="@={viewModel.yarnPurchasePOLiveData.goodsDesc}"
                 app:title="@string/yarn_purchase_goods_desc" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseNoOfBags"
                 style="@style/custom_input_box"
-                app:type="@{constant.NUMBERS}"
-                android:text="@={viewModel.yarnPurchasePO.noOfBags}"
-                app:title="@string/yarn_purchase_no_of_bags" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.noOfBags}"
+                app:title="@string/yarn_purchase_no_of_bags"
+                app:type="@{constant.NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseQty"
                 style="@style/custom_input_box"
-                app:type="@{constant.DECIMAL_NUMBERS}"
-                android:text="@={viewModel.yarnPurchasePO.qtyInKgs}"
-                app:title="@string/yarn_purchase_qty" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.qtyInKgs}"
+                app:title="@string/yarn_purchase_qty"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseRate"
                 style="@style/custom_input_box"
-                android:text="@={viewModel.yarnPurchasePO.price}"
-                app:type="@{constant.DECIMAL_NUMBERS}"
-                app:title="@string/yarn_purchase_rate" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.price}"
+                app:title="@string/yarn_purchase_rate"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseGST"
                 style="@style/custom_input_box"
-                app:type="@{constant.DECIMAL_NUMBERS}"
-                android:text="@={viewModel.yarnPurchasePO.gst}"
-                app:title="@string/yarn_purchase_gst" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.gst}"
+                app:title="@string/yarn_purchase_gst"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchasePrice"
                 style="@style/custom_input_box"
-                app:type="@{constant.DECIMAL_NUMBERS}"
-                android:text="@={viewModel.yarnPurchasePO.price}"
-                app:title="@string/yarn_purchase_price" />
+                android:text="@={viewModel.yarnPurchasePOLiveData.price}"
+                app:title="@string/yarn_purchase_price"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseTrackName"
                 style="@style/custom_input_box"
-                android:text="@={viewModel.yarnPurchasePO.lotTrackName}"
+                android:text="@={viewModel.yarnPurchasePOLiveData.lotTrackName}"
                 app:title="@string/yarn_purchase_lot_track_name" />
 
             <com.software.erp.common.customviews.CustomButton
                 style="@style/button_style_full"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:layout_marginBottom="50dp"
                 android:onClick="@{() -> viewModel.onSubmitClick()}"
                 android:text="@string/yarn_purchase_save" />
         </LinearLayout>

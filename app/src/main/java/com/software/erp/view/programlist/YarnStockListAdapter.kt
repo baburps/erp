@@ -6,12 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.software.erp.databinding.ItemYarnStockListBinding
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
-class YarnStockListAdapter constructor(private val yarnStockList: List<YarnPurchasePO>) : RecyclerView.Adapter<YarnStockListAdapter.YarnStockListHolder>() {
+class YarnStockListAdapter(
+    private val yarnStockList: List<YarnPurchasePO>,
+    private val onItemSelectionListener: ItemSelectionListener?
+) :
+    RecyclerView.Adapter<YarnStockListAdapter.YarnStockListHolder>() {
 
-    open class YarnStockListHolder(val binding: ItemYarnStockListBinding) : RecyclerView.ViewHolder(binding.root)
+    open class YarnStockListHolder(val binding: ItemYarnStockListBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YarnStockListHolder {
-        val binding = ItemYarnStockListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemYarnStockListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return YarnStockListHolder(binding)
     }
 
@@ -34,9 +40,17 @@ class YarnStockListAdapter constructor(private val yarnStockList: List<YarnPurch
                 holder.binding.mTVItemYarnQtyInKgs.text = qtyInKgs
             }
         }
+
+        holder.binding.root.setOnClickListener {
+            onItemSelectionListener?.onItemSelection(yarnPurchasePO)
+        }
     }
 
     override fun getItemCount(): Int {
         return yarnStockList.size
+    }
+
+    interface ItemSelectionListener {
+        fun onItemSelection(yarnPurchasePO: YarnPurchasePO)
     }
 }

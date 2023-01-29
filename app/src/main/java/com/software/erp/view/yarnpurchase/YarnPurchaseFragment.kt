@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.software.erp.R
 import com.software.erp.base.BaseFragment
 import com.software.erp.databinding.FragmentYarnPurchaseBinding
+import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +20,14 @@ class YarnPurchaseFragment : BaseFragment<FragmentYarnPurchaseBinding>() {
             showToast(getString(R.string.yarn_purchase_saved_successfully))
             //Pop backstack to go back to list page
             findNavController().popBackStack()
+        }
+
+        arguments?.let {
+            if (it.containsKey(DashboardViewModel.YARN_PURCHASE_PO)) {
+                val yarnPurchasePO =
+                    it.getSerializable(DashboardViewModel.YARN_PURCHASE_PO) as YarnPurchasePO
+                viewModel.updateEditScreenPO(yarnPurchasePO)
+            }
         }
     }
 
