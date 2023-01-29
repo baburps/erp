@@ -4,6 +4,6 @@
         <attr name="title" format="string" />
         <attr name="hint" format="string" />
         <attr name="error" format="string" />
-        <attr name="input_text" format="string" />
+        <attr name="type" format="string" />
     </declare-styleable>
 </resources>

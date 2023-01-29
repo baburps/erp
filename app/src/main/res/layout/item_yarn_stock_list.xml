@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVItemYarnMillName"
+            style="@style/yarn_list_text_tile_style"
+            tools:text="Mill name" />
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVItemYarnDesc"
+            style="@style/yarn_list_text_desc_style"
+            tools:text="Desc" />
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVItemYarnNoOfBags"
+            style="@style/yarn_list_text_desc_style"
+            tools:text="No of bags" />
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVItemYarnQtyInKgs"
+            style="@style/yarn_list_text_desc_style"
+            tools:text="Qty in kgs" />
+    </LinearLayout>
+
+    <View style="@style/divider_line_style" />
+</LinearLayout>

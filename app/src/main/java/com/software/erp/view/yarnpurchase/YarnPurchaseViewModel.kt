@@ -3,12 +3,12 @@ package com.software.erp.view.yarnpurchase
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.software.erp.common.utils.LoggerUtils
-import com.software.erp.domain.room.YarnPurchaseRoomDAO
+import com.software.erp.domain.room.ERPRoomDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class YarnPurchaseViewModel @Inject constructor(private val yarnPurchaseRoomDAO: YarnPurchaseRoomDAO) :
+class YarnPurchaseViewModel @Inject constructor(private val erpRoomDAO: ERPRoomDAO) :
     ViewModel() {
 
     companion object {
@@ -16,18 +16,19 @@ class YarnPurchaseViewModel @Inject constructor(private val yarnPurchaseRoomDAO:
     }
 
     val yarnPurchasePO = MutableLiveData<YarnPurchasePO>()
+    val onYarnStockAddSuccess = MutableLiveData<Boolean>()
 
     init {
-        //fetch all yarn purchase list
-        val yarnPurchaseList: List<YarnPurchasePO> = yarnPurchaseRoomDAO.fetchAllYarnPurchases()
+        yarnPurchasePO.postValue(YarnPurchasePO())
+       /* //TODO edit logic fetch all yarn purchase list
+        val yarnPurchaseList: List<YarnPurchasePO> = erpRoomDAO.fetchAllYarnPurchases()
         yarnPurchaseList.let {
             if (it.isNotEmpty()) {
                 LoggerUtils.debug(TAG, "yarnPurchaseList not null")
-                yarnPurchasePO.postValue(it[0])
             } else {
                 LoggerUtils.debug(TAG, "yarnPurchaseList null")
             }
-        }
+        }*/
     }
 
     fun onSubmitClick() {
@@ -48,10 +49,12 @@ class YarnPurchaseViewModel @Inject constructor(private val yarnPurchaseRoomDAO:
 
         if (yarnPurchasePO.value?.trackingID != 0) {
             LoggerUtils.debug(TAG, "onSubmitClick update")
-            yarnPurchasePO.value?.let { yarnPurchaseRoomDAO.update(yarnPurchasePO = it) }
+            yarnPurchasePO.value?.let { erpRoomDAO.update(yarnPurchasePO = it) }
         } else {
             LoggerUtils.debug(TAG, "onSubmitClick insert")
-            yarnPurchasePO.value?.let { yarnPurchaseRoomDAO.insert(yarnPurchasePO = it) }
+            yarnPurchasePO.value?.let { erpRoomDAO.insert(yarnPurchasePO = it) }
         }
+
+        onYarnStockAddSuccess.postValue(true)
     }
 }

@@ -3,7 +3,7 @@ package com.software.erp.di
 import android.content.Context
 import androidx.room.Room
 import com.software.erp.domain.room.ERPRoomDatabase
-import com.software.erp.domain.room.YarnPurchaseRoomDAO
+import com.software.erp.domain.room.ERPRoomDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +17,7 @@ object RoomModule {
 
     @Singleton
     @Provides
-    fun provideNotesDAO(appDatabase: ERPRoomDatabase): YarnPurchaseRoomDAO {
+    fun provideNotesDAO(appDatabase: ERPRoomDatabase): ERPRoomDAO {
         return appDatabase.yarnPurchaseDao()
     }
 

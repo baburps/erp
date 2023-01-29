@@ -4,7 +4,7 @@ import androidx.room.*
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
 @Dao
-interface YarnPurchaseRoomDAO {
+interface ERPRoomDAO {
 
     @Query("SELECT * FROM yarn_purchase_list")
     fun fetchAllYarnPurchases(): List<YarnPurchasePO>

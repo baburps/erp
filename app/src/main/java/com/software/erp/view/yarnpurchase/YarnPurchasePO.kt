@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(tableName = "yarn_purchase_list")
-data class YarnPurchasePO(
+data class YarnPurchasePO constructor(
     @ColumnInfo var invoiceNo: String,
     @ColumnInfo var date: String,
     @ColumnInfo var spinnerMill: String,
@@ -17,5 +17,8 @@ data class YarnPurchasePO(
     @ColumnInfo var gst: String,
     @ColumnInfo var value: String,
     @ColumnInfo var lotTrackName: String,
-    @PrimaryKey(autoGenerate = true) var trackingID: Int = 0
-) : Serializable
+    @PrimaryKey(autoGenerate = true) var trackingID: Int
+) : Serializable {
+    constructor() :
+            this("", "", "", "", "", "", "", "", "", "", 0)
+}

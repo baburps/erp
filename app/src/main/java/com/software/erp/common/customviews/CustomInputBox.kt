@@ -1,7 +1,10 @@
 package com.software.erp.common.customviews
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.TypedArray
+import android.text.InputType
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +15,7 @@ import androidx.databinding.*
 import com.software.erp.R
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.CustomViewInputboxBinding
+import java.util.*
 
 @InverseBindingMethods(
     InverseBindingMethod(
@@ -96,6 +100,12 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         return binding.mETCustomInput.text.toString()
     }
 
+    fun setType(type: String?) {
+        LoggerUtils.debug(TAG, "setType$type")
+        type?.let { handleFiledType(it) }
+    }
+
+
     fun setText(value: String?) {
         LoggerUtils.debug(TAG, "setText$value")
         value?.let {
@@ -108,5 +118,66 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
     } else {
         binding.mTVCustomInputError.visibility = View.GONE
     }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun handleFiledType(type: String) {
+        when (type) {
+            CustomAttributes.DATE -> {
+                //Make filed only clickable to select date from date picker
+                binding.mETCustomInput.setOnFocusChangeListener { _, focused ->
+                    if (focused) {
+                        openDatePicker()
+                    }
+                }
+
+                binding.mETCustomInput.setOnClickListener {
+                    LoggerUtils.debug(TAG, "mETCustomInput click")
+                }
+/*
+                binding.mETCustomInput.setOnTouchListener { v, event ->
+                    when (event?.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            openDatePicker()
+                        }
+                    }
+                    v?.onTouchEvent(event) ?: true
+                }
+*/
+            }
+
+            CustomAttributes.NUMBERS -> {
+                binding.mETCustomInput.inputType = InputType.TYPE_CLASS_NUMBER
+            }
+
+            CustomAttributes.DECIMAL_NUMBERS -> {
+                binding.mETCustomInput.inputType =
+                    InputType.TYPE_CLASS_NUMBER or
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL
+
+            }
+        }
+    }
+
+    private fun openDatePicker() {
+        LoggerUtils.debug(TAG, "openDatePicker")
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(context, { _, years, monthOfYear, dayOfMonth ->
+            LoggerUtils.debug(
+                TAG,
+                "onDateSelection-year=$years,monthOfYear=$monthOfYear,dayOfMonth=$dayOfMonth"
+            )
+            binding.mETCustomInput.setText(dayOfMonth.toString() + "-" + (monthOfYear + 1).toString() + "-" + years.toString())
+
+            binding.mETCustomInput.clearFocus()
+            binding.mLLCustomInputParenLayout.requestFocus()
+        }, year, month, day)
+
+        datePickerDialog.show()
+    }
+
 
 }

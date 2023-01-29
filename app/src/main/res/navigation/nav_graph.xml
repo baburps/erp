@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/ProgramDetailsFragment"
-        android:name="com.software.erp.view.dashboard.ProgramDetailsFragment"
+        android:name="com.software.erp.view.programlist.ProgramDetailsFragment"
         android:label="ProgramDetailsFragment"
         tools:layout="@layout/fragment_program_details">
 
