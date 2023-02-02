@@ -46,6 +46,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
 
                 val greyFabricDetailsPO = GreyFabricDetailsPO()
                 greyFabricDetailsPO.knittingDCNo = _knittingProgramPO.dcNo
+                greyFabricDetailsPO.spinningMill = _knittingProgramPO.spinningMill
                 greyFabricDetailsPO.date = _knittingProgramPO.date
                 greyFabricDetailsPO.orderRefNo = _knittingProgramPO.orderRefNo
                 greyFabricDetailsPO.goodsDesc = _knittingProgramPO.goodsDesc
@@ -85,6 +86,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
     fun onSubmitClick() {
         LoggerUtils.debug(TAG, "onSubmitClick")
         LoggerUtils.debug(TAG, "onSubmitClick--knittingDCNo--${greyFabricDetailsPOLiveData.value?.knittingDCNo}")
+        LoggerUtils.debug(TAG, "onSubmitClick--spinningMill--${greyFabricDetailsPOLiveData.value?.spinningMill}")
         LoggerUtils.debug(TAG, "onSubmitClick--date--${greyFabricDetailsPOLiveData.value?.date}")
         LoggerUtils.debug(TAG, "onSubmitClick--goodsDesc--${greyFabricDetailsPOLiveData.value?.goodsDesc}")
         LoggerUtils.debug(TAG, "onSubmitClick--orderRefNo--${greyFabricDetailsPOLiveData.value?.orderRefNo}")

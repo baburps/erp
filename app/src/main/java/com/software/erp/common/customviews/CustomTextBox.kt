@@ -63,17 +63,9 @@ class CustomTextBox(context: Context, var attrs: AttributeSet?) : LinearLayout(c
     fun setValue(value: String?) {
         LoggerUtils.debug(TAG, "setValue$value")
         value?.let {
-            binding.mTVCustomTextValue.text = it
+            binding.mTVCustomTextValue.text = ": $it"
         }
     }
-
-    /*fun setVisibility(show: Boolean) {
-        if (show) {
-            binding.mLLCustomTextBoxParenLayout.visibility = View.VISIBLE
-        } else {
-            binding.mLLCustomTextBoxParenLayout.visibility = View.GONE
-        }
-    }*/
 
     fun setTitle(value: String?) {
         LoggerUtils.debug(TAG, "setTitle$value")

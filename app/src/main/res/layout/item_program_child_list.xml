@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.software.erp.view.programlist.adapter.ProgramChildAdapterPO" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_color"
+        android:orientation="vertical">
+
+        <com.software.erp.common.customviews.CustomTextBox
+            style="@style/custom_input_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@{model.title}"
+            app:value="@{model.desc}" />
+    </LinearLayout>
+</layout>

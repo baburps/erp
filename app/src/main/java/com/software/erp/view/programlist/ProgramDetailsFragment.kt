@@ -9,12 +9,10 @@ import com.software.erp.base.BaseFragment
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.FragmentProgramDetailsBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
-import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.KNITTING_PROGRAM_PO
-import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.YARN_PURCHASE_PO
-import com.software.erp.view.greyfabric.GreyFabricDetailsPO
-import com.software.erp.view.greyfabric.GreyFabricListAdapter
-import com.software.erp.view.knitting.KnittingProgramPO
-import com.software.erp.view.yarnpurchase.YarnPurchasePO
+import com.software.erp.view.programlist.adapter.ProgramChildAdapterPO
+import com.software.erp.view.programlist.adapter.ProgramListChildAdapter
+import com.software.erp.view.programlist.adapter.ProgramListParentAdapter
+import com.software.erp.view.programlist.adapter.ProgramParentAdapterPO
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +26,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
         setTitle(programKey)
 
         binding?.mBTProgramDetailsAdd?.setOnClickListener {
-            handleNavigation(programKey)
+            handleNavigation(programKey , null)
         }
 
         programKey?.let { fetchProgramList(it) }
@@ -42,16 +40,16 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
         return "ProgramDetailsFragment"
     }
 
-    private fun handleNavigation(programKey: String?) {
+    private fun handleNavigation(programKey: String? , bundle: Bundle?) {
         when (programKey) {
             DashboardViewModel.YARN_PURCHASE -> {
-                navigateToYarnPurchaseFragment(null)
+                navigateToYarnPurchaseFragment(bundle)
             }
             DashboardViewModel.KNITTING_PROGRAM -> {
-                navigateToKnittingProgramFragment(null)
+                navigateToKnittingProgramFragment(bundle)
             }
             DashboardViewModel.GREY_FABRIC_STOCK -> {
-                navigateToGreyFabricFragment(null)
+                navigateToGreyFabricFragment(bundle)
             }
             DashboardViewModel.DYING_PROGRAM -> {
             }
@@ -78,115 +76,192 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
 
         when (programKey) {
             DashboardViewModel.YARN_PURCHASE -> {
-                handleYarnPurchaseList()
+                populateYarnProgramList()
             }
             DashboardViewModel.KNITTING_PROGRAM -> {
                 handleKnittingProgramList()
             }
-        }
-
-    }
-
-    private fun handleYarnPurchaseList() {
-        //Update list titles
-        updateListTitles(
-            resources.getString(R.string.yarn_purchase_mill_name),
-            resources.getString(R.string.description),
-            resources.getString(R.string.yarn_purchase_no_of_bags),
-            resources.getString(R.string.qty_in_kgs)
-        )
-        viewModel.fetchYarnStockDetails()
-
-        viewModel.yarnPurchasePOListLiveData.observe(this) {
-            //populate recycler view
-            it.let {
-                binding?.mRVProgramDetails?.adapter =
-                    YarnStockListAdapter(it, object : YarnStockListAdapter.ItemSelectionListener {
-                        override fun onItemSelection(yarnPurchasePO: YarnPurchasePO) {
-                            LoggerUtils.debug(TAG, "onItemSelection")
-                            val bundle = Bundle()
-                            bundle.putSerializable(YARN_PURCHASE_PO, yarnPurchasePO)
-                            navigateToYarnPurchaseFragment(bundle)
-                        }
-                    })
+            DashboardViewModel.GREY_FABRIC_STOCK -> {
+                handleGreyFabricList()
             }
         }
-    }
 
-    private fun updateListTitles(field1: String, field2: String, field3: String, field4: String) {
-        binding?.mTVProgramListField1?.text = field1
-        binding?.mTVProgramListField2?.text = field2
-        binding?.mTVProgramListField3?.text = field3
-        binding?.mTVProgramListField4?.text = field4
     }
 
     private fun navigateToYarnPurchaseFragment(bundle: Bundle?) {
         findNavController().navigate(
-            R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment,
+            R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment ,
             bundle
         )
     }
 
     private fun handleKnittingProgramList() {
-        //Update list titles
-        updateListTitles(
-            resources.getString(R.string.SRKW_DC_no),
-            resources.getString(R.string.lot_track_name),
-            resources.getString(R.string.description),
-            resources.getString(R.string.qty_in_kgs)
-        )
-
+        val programKey = DashboardViewModel.KNITTING_PROGRAM
         viewModel.fetchKnittingProgramDetails()
 
         viewModel.knittingProgramPOListLiveData.observe(this) {
             //populate recycler view
-            it.let {
-                binding?.mRVProgramDetails?.adapter =
-                    KnittingProgramListAdapter(it, object : KnittingProgramListAdapter.ItemSelectionListener {
-                        override fun onItemSelection(knittingProgramPO: KnittingProgramPO) {
-                            LoggerUtils.debug(TAG, "onItemSelection")
-                            val bundle = Bundle()
-                            bundle.putSerializable(KNITTING_PROGRAM_PO, knittingProgramPO)
-                            navigateToKnittingProgramFragment(bundle)
-                        }
-                    })
+            it.let { listOfEntries ->
+                val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
+
+                listOfEntries.forEach { knittingProgramPO ->
+                    val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            resources.getString(R.string.SRKW_DC_no) , knittingProgramPO.dcNo , knittingProgramPO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            resources.getString(R.string.lot_track_name) , knittingProgramPO.lotTrackName , knittingProgramPO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            resources.getString(R.string.description) , knittingProgramPO.goodsDesc , knittingProgramPO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            resources.getString(R.string.qty_in_kgs) , knittingProgramPO.qtyInKgs , knittingProgramPO
+                        )
+                    )
+
+                    listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
+                }
+                populateRecyclerView(listOfParentEntries)
             }
         }
     }
 
     private fun navigateToKnittingProgramFragment(bundle: Bundle?) {
-        findNavController().navigate(R.id.action_ProgramDetailsFragment_to_KnittingDetailsFragment, bundle)
+        findNavController().navigate(R.id.action_ProgramDetailsFragment_to_KnittingDetailsFragment , bundle)
     }
 
     private fun handleGreyFabricList() {
-        //Update list titles
-        updateListTitles(
-            resources.getString(R.string.SRKW_DC_no),
-            resources.getString(R.string.lot_track_name),
-            resources.getString(R.string.description),
-            resources.getString(R.string.qty_in_kgs)
-        )
-
         viewModel.fetchGreyFabricDetails()
+
+        val programKey = DashboardViewModel.GREY_FABRIC_STOCK
 
         viewModel.greyFabricDetailsPOListLiveData.observe(this) {
             //populate recycler view
             it.let {
-                binding?.mRVProgramDetails?.adapter =
-                    GreyFabricListAdapter(it, object : GreyFabricListAdapter.ItemSelectionListener {
-                        override fun onItemSelection(greyFabricDetailsPO: GreyFabricDetailsPO) {
-                            LoggerUtils.debug(TAG, "onItemSelection")
-                            val bundle = Bundle()
-                            bundle.putSerializable(KNITTING_PROGRAM_PO, greyFabricDetailsPO)
-                            navigateToGreyFabricFragment(bundle)
-                        }
-                    })
+                it.let { listOfEntries ->
+                    val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
+
+                    listOfEntries.forEach { greyFabricDetailsPO ->
+                        val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.spinning_mill) , greyFabricDetailsPO.spinningMill , greyFabricDetailsPO
+                            )
+                        )
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.goods_desc) , greyFabricDetailsPO.goodsDesc , greyFabricDetailsPO
+                            )
+                        )
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.fabric_structure) , greyFabricDetailsPO.fabricStructure , greyFabricDetailsPO
+                            )
+                        )
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.machine_gage) , greyFabricDetailsPO.machineGage , greyFabricDetailsPO
+                            )
+                        )
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.loop_length) , greyFabricDetailsPO.loopLength , greyFabricDetailsPO
+                            )
+                        )
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.knitting_dia) , greyFabricDetailsPO.dia , greyFabricDetailsPO
+                            )
+                        )
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                resources.getString(R.string.qty_in_kgs) , greyFabricDetailsPO.programmedQtyInKgs , greyFabricDetailsPO
+                            )
+                        )
+                        listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
+                    }
+                    populateRecyclerView(listOfParentEntries)
+                }
             }
         }
     }
 
     private fun navigateToGreyFabricFragment(bundle: Bundle?) {
-        findNavController().navigate(R.id.action_ProgramDetailsFragment_to_greyFabricDetailsFragment, bundle)
+        findNavController().navigate(R.id.action_ProgramDetailsFragment_to_greyFabricDetailsFragment , bundle)
+    }
+
+    private fun populateYarnProgramList() {
+        val programKey = DashboardViewModel.YARN_PURCHASE
+        viewModel.fetchYarnStockDetails()
+
+        viewModel.yarnPurchasePOListLiveData.observe(this) {
+            //populate recycler view
+            it.let { listOfEntries ->
+                val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
+
+                listOfEntries.forEach { yarnPurchasePO ->
+                    val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            context?.resources?.getString(R.string.spinning_mill)!! , yarnPurchasePO.spinningMill , yarnPurchasePO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            context?.resources?.getString(R.string.description)!! , yarnPurchasePO.goodsDesc , yarnPurchasePO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            context?.resources?.getString(R.string.yarn_purchase_no_of_bags)!! , yarnPurchasePO.noOfBags , yarnPurchasePO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            context?.resources?.getString(R.string.qty_in_kgs)!! , yarnPurchasePO.qtyInKgs , yarnPurchasePO
+                        )
+                    )
+
+                    listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
+                }
+                populateRecyclerView(listOfParentEntries)
+            }
+        }
+    }
+
+    private fun populateRecyclerView(listOfParentEntries: MutableList<ProgramParentAdapterPO>) {
+        binding?.mRVProgramDetails?.adapter =
+            ProgramListParentAdapter(listOfParentEntries , object : ProgramListChildAdapter.ItemSelectionListener {
+                override fun onItemSelection(programChildAdapterPO: ProgramChildAdapterPO) {
+                    LoggerUtils.debug(TAG , "onItemSelection")
+                    val bundle = Bundle()
+                    bundle.putSerializable(programChildAdapterPO.programKey , programChildAdapterPO)
+                    handleNavigation(programChildAdapterPO.programKey , bundle)
+                }
+            } , requireContext())
     }
 
 
