@@ -9,7 +9,9 @@ import com.software.erp.base.BaseFragment
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.FragmentProgramDetailsBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
+import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.KNITTING_PROGRAM_PO
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.YARN_PURCHASE_PO
+import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,7 +46,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                 navigateToYarnPurchaseFragment(null)
             }
             DashboardViewModel.KNITTING_PROGRAM -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_KnittingDetailsFragment)
+                navigateToKnittingProgramFragment(null)
             }
             DashboardViewModel.DYING_PROGRAM -> {
                 findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
@@ -81,11 +83,21 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
             DashboardViewModel.YARN_PURCHASE -> {
                 handleYarnPurchaseList()
             }
+            DashboardViewModel.KNITTING_PROGRAM -> {
+                handleKnittingProgramList()
+            }
         }
 
     }
 
     private fun handleYarnPurchaseList() {
+        //Update list titles
+        updateListTitles(
+            resources.getString(R.string.yarn_purchase_mill_name),
+            resources.getString(R.string.description),
+            resources.getString(R.string.yarn_purchase_no_of_bags),
+            resources.getString(R.string.qty_in_kgs)
+        )
         viewModel.fetchYarnStockDetails()
 
         viewModel.yarnPurchasePOListLiveData.observe(this) {
@@ -104,11 +116,50 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
         }
     }
 
+    private fun updateListTitles(field1: String, field2: String, field3: String, field4: String) {
+        binding?.mTVProgramListField1?.text = field1
+        binding?.mTVProgramListField2?.text = field2
+        binding?.mTVProgramListField3?.text = field3
+        binding?.mTVProgramListField4?.text = field4
+    }
+
     private fun navigateToYarnPurchaseFragment(bundle: Bundle?) {
         findNavController().navigate(
             R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment,
             bundle
         )
     }
+
+    private fun handleKnittingProgramList() {
+        //Update list titles
+        updateListTitles(
+            resources.getString(R.string.knitting_SRKW_DC_no),
+            resources.getString(R.string.lot_track_name),
+            resources.getString(R.string.description),
+            resources.getString(R.string.qty_in_kgs)
+        )
+
+        viewModel.fetchKnittingProgramDetails()
+
+        viewModel.knittingProgramPOListLiveData.observe(this) {
+            //populate recycler view
+            it.let {
+                binding?.mRVProgramDetails?.adapter =
+                    KnittingProgramListAdapter(it, object : KnittingProgramListAdapter.ItemSelectionListener {
+                        override fun onItemSelection(knittingProgramPO: KnittingProgramPO) {
+                            LoggerUtils.debug(TAG, "onItemSelection")
+                            val bundle = Bundle()
+                            bundle.putSerializable(KNITTING_PROGRAM_PO, knittingProgramPO)
+                            navigateToKnittingProgramFragment(bundle)
+                        }
+                    })
+            }
+        }
+    }
+
+    private fun navigateToKnittingProgramFragment(bundle: Bundle?) {
+        findNavController().navigate(R.id.action_ProgramDetailsFragment_to_KnittingDetailsFragment, bundle)
+    }
+
 
 }

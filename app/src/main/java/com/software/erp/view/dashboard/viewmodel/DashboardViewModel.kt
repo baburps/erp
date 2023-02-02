@@ -19,6 +19,8 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
         const val YARN_PURCHASE_PO = "YarnPurchasePO"
 
         const val KNITTING_PROGRAM = "KNITTING_PROGRAM"
+        const val KNITTING_PROGRAM_PO = "KNITTING_PROGRAM_PO"
+
         const val GREY_FABRIC_STOCK = "GREY_FABRIC_STOCK"
         const val DYING_PROGRAM = "DYING_PROGRAM"
         const val DYED_FABRIC = "DYED_FABRIC"

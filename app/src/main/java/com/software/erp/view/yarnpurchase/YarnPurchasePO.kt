@@ -17,8 +17,13 @@ data class YarnPurchasePO constructor(
     @ColumnInfo var gst: String,
     @ColumnInfo var value: String,
     @ColumnInfo var lotTrackName: String,
+    @ColumnInfo var currentQtyInKgs: String,
     @PrimaryKey(autoGenerate = true) var trackingID: Int
 ) : Serializable {
     constructor() :
-            this("", "", "", "", "", "", "", "", "", "", 0)
+            this("", "",
+                "", "",
+                "", "",
+                "", "", "",
+                "","", 0)
 }

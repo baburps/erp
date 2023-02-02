@@ -30,18 +30,22 @@
             android:weightSum="4">
 
             <com.software.erp.common.customviews.CustomTextView
+                android:id="@+id/mTVProgramListField1"
                 style="@style/yarn_list_text_tile_style"
                 android:text="@string/yarn_purchase_mill_name" />
 
             <com.software.erp.common.customviews.CustomTextView
+                android:id="@+id/mTVProgramListField2"
                 style="@style/yarn_list_text_tile_style"
                 android:text="@string/description" />
 
             <com.software.erp.common.customviews.CustomTextView
+                android:id="@+id/mTVProgramListField3"
                 style="@style/yarn_list_text_tile_style"
                 android:text="@string/yarn_purchase_no_of_bags" />
 
             <com.software.erp.common.customviews.CustomTextView
+                android:id="@+id/mTVProgramListField4"
                 style="@style/yarn_list_text_tile_style"
                 android:text="@string/qty_in_kgs" />
         </LinearLayout>

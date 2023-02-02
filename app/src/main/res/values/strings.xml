@@ -32,6 +32,7 @@
     <string name="description">Description</string>
     <string name="yarn_purchase_no_of_bags">No. of bags</string>
     <string name="qty_in_kgs">Qty in Kgs</string>
+    <string name="available_qty_in_kgs">Available Qty in Kgs:</string>
     <string name="yarn_purchase_rate">Rate</string>
     <string name="yarn_purchase_gst">G.S.T %</string>
     <string name="yarn_purchase_price">Price</string>
@@ -47,4 +48,5 @@
     <string name="machine_gage">Machine gage</string>
     <string name="loop_length">Loop length</string>
     <string name="knitting_dia">Dia</string>
+    <string name="knitting_saved_successfully">Knitting program added successfully</string>
 </resources>

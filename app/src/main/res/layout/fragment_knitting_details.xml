@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -57,6 +57,26 @@
                 app:spinnerSelection="@{viewModel.goodsDescSelectionListener}"
                 app:title="@string/goods_desc" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:orientation="horizontal">
+
+                <com.software.erp.common.customviews.CustomTextView
+                    style="@style/text_tile_style"
+                    android:text="@string/available_qty_in_kgs" />
+
+                <com.software.erp.common.customviews.CustomTextView
+                    style="@style/text_tile_style"
+                    android:layout_marginStart="10dp"
+                    tools:text="100"
+                    android:text="@={viewModel.availableYarnQtyLiveData}" />
+
+            </LinearLayout>
+
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingOrderRefNo"
                 style="@style/custom_input_box"
@@ -81,26 +101,26 @@
                 <com.software.erp.common.customviews.CustomInputBox
                     android:id="@+id/mIBKnittingGage"
                     style="@style/custom_input_box"
-                    android:text="@={viewModel.fabricStructurePOLiveData.machineGage}"
+                    android:text="@={viewModel.knittingDetailsPOLiveData.machineGage}"
                     app:title="@string/machine_gage" />
 
                 <com.software.erp.common.customviews.CustomInputBox
                     android:id="@+id/mIBKnittingLoopLength"
                     style="@style/custom_input_box"
-                    android:text="@={viewModel.fabricStructurePOLiveData.loopLength}"
+                    android:text="@={viewModel.knittingDetailsPOLiveData.loopLength}"
                     app:title="@string/loop_length" />
 
                 <com.software.erp.common.customviews.CustomInputBox
                     android:id="@+id/mIBKnittingDia"
                     style="@style/custom_input_box"
-                    android:text="@={viewModel.fabricDiaPOLiveData.dia}"
+                    android:text="@={viewModel.knittingDetailsPOLiveData.dia}"
                     app:title="@string/knitting_dia"
                     app:type="@{constant.NUMBERS}" />
 
                 <com.software.erp.common.customviews.CustomInputBox
                     android:id="@+id/mIBKnittingQtyInKgs"
                     style="@style/custom_input_box"
-                    android:text="@={viewModel.fabricDiaPOLiveData.qtyInKgs}"
+                    android:text="@={viewModel.knittingDetailsPOLiveData.qtyInKgs}"
                     app:title="@string/qty_in_kgs"
                     app:type="@{constant.DECIMAL_NUMBERS}" />
             </LinearLayout>

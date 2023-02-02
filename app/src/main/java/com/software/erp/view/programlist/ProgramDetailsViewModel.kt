@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ class ProgramDetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val yarnPurchasePOListLiveData = MutableLiveData<List<YarnPurchasePO>>()
+    val knittingProgramPOListLiveData = MutableLiveData<List<KnittingProgramPO>>()
 
     fun fetchYarnStockDetails() {
         viewModelScope.launch {
@@ -22,4 +24,11 @@ class ProgramDetailsViewModel @Inject constructor(
             yarnPurchasePOListLiveData.postValue(list)
         }
     }
+
+    fun fetchKnittingProgramDetails() {
+        viewModelScope.launch {
+            knittingProgramPOListLiveData.postValue(erpRoomDAO.fetchAllKnittingProgram())
+        }
+    }
+
 }

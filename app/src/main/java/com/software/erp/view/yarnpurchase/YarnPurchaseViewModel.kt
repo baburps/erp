@@ -43,10 +43,16 @@ class YarnPurchaseViewModel @Inject constructor(private val erpRoomDAO: ERPRoomD
         LoggerUtils.debug(TAG, "price${yarnPurchasePOLiveData.value?.price}")
         LoggerUtils.debug(TAG, "gst${yarnPurchasePOLiveData.value?.gst}")
         LoggerUtils.debug(TAG, "value${yarnPurchasePOLiveData.value?.value}")
+        //TODO handle unique entry of track no
         LoggerUtils.debug(TAG, "lotTrackName${yarnPurchasePOLiveData.value?.lotTrackName}")
         LoggerUtils.debug(TAG, "trackingID${yarnPurchasePOLiveData.value?.trackingID}")
 
         viewModelScope.launch {
+            //Save qty to use for reducing in Knitting program
+            yarnPurchasePOLiveData.value?.qtyInKgs?.let { qtyInKgs ->
+                yarnPurchasePOLiveData.value?.currentQtyInKgs = qtyInKgs
+            }
+
             if (yarnPurchasePOLiveData.value?.trackingID != 0) {
                 LoggerUtils.debug(TAG, "onSubmitClick update")
                 yarnPurchasePOLiveData.value?.let { erpRoomDAO.updateYarnPurchaseDetails(yarnPurchasePO = it) }
