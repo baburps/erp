@@ -1,6 +1,7 @@
 package com.software.erp.domain.room
 
 import androidx.room.*
+import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
@@ -39,9 +40,20 @@ interface ERPRoomDAO {
     @Query("SELECT * FROM knitting_program_list")
     fun fetchAllKnittingProgram(): List<KnittingProgramPO>
 
+    @Query("SELECT * FROM knitting_program_list where dcNo = :dcNo")
+    fun searchKnittingProgramWithDCNo(dcNo:String): KnittingProgramPO?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertKnittingDetails(knittingProgramPO: KnittingProgramPO)
 
     @Update
     fun updateKnittingDetails(knittingProgramPO: KnittingProgramPO)
+
+    //    ********Grey Fabric********
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertGreyFabricDetails(gretFabricDetailsPO: GreyFabricDetailsPO): Long
+
+    @Query("SELECT * FROM grey_fabric_list")
+    fun fetchAllGreyFabricList(): List<GreyFabricDetailsPO>
 }

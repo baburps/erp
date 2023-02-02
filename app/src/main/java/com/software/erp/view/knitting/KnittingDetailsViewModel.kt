@@ -144,8 +144,8 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
 
         yarnPurchasePO?.let { yarnPurchasePO_ ->
             knittingDetailsPOLiveData.value?.let { knittingPO ->
-                val availableQty = yarnPurchasePO_.currentQtyInKgs.toInt()
-                val qtyToBeReduced = knittingPO.qtyInKgs.toInt()
+                val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
+                val qtyToBeReduced = knittingPO.qtyInKgs.toDouble()
                 if (availableQty < qtyToBeReduced) {
                     showToastMessage.postValue("Given qty is more than available qty")
                 } else {

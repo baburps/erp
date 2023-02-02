@@ -15,3 +15,8 @@ fun onFocusChange(text: EditText, listener: View.OnFocusChangeListener?) {
 fun onClick(button: Button, listener: View.OnClickListener?) {
     button.setOnClickListener(listener)
 }
+
+@BindingAdapter("android:visibility")
+fun setVisibility(view: View, isVisible: Boolean) {
+    view.visibility = if (isVisible) View.VISIBLE else View.GONE
+}

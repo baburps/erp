@@ -11,6 +11,8 @@ import com.software.erp.databinding.FragmentProgramDetailsBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.KNITTING_PROGRAM_PO
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel.Companion.YARN_PURCHASE_PO
+import com.software.erp.view.greyfabric.GreyFabricDetailsPO
+import com.software.erp.view.greyfabric.GreyFabricListAdapter
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,29 +50,24 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
             DashboardViewModel.KNITTING_PROGRAM -> {
                 navigateToKnittingProgramFragment(null)
             }
+            DashboardViewModel.GREY_FABRIC_STOCK -> {
+                navigateToGreyFabricFragment(null)
+            }
             DashboardViewModel.DYING_PROGRAM -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.DYED_FABRIC -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.CUTTING -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.FUSING -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.STITCHING -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.CHECKING -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.IRON_AND_PACK -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
             DashboardViewModel.SHIPMENT_READY -> {
-                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_YarnPurchaseFragment)
             }
         }
     }
@@ -133,7 +130,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
     private fun handleKnittingProgramList() {
         //Update list titles
         updateListTitles(
-            resources.getString(R.string.knitting_SRKW_DC_no),
+            resources.getString(R.string.SRKW_DC_no),
             resources.getString(R.string.lot_track_name),
             resources.getString(R.string.description),
             resources.getString(R.string.qty_in_kgs)
@@ -159,6 +156,37 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
 
     private fun navigateToKnittingProgramFragment(bundle: Bundle?) {
         findNavController().navigate(R.id.action_ProgramDetailsFragment_to_KnittingDetailsFragment, bundle)
+    }
+
+    private fun handleGreyFabricList() {
+        //Update list titles
+        updateListTitles(
+            resources.getString(R.string.SRKW_DC_no),
+            resources.getString(R.string.lot_track_name),
+            resources.getString(R.string.description),
+            resources.getString(R.string.qty_in_kgs)
+        )
+
+        viewModel.fetchGreyFabricDetails()
+
+        viewModel.greyFabricDetailsPOListLiveData.observe(this) {
+            //populate recycler view
+            it.let {
+                binding?.mRVProgramDetails?.adapter =
+                    GreyFabricListAdapter(it, object : GreyFabricListAdapter.ItemSelectionListener {
+                        override fun onItemSelection(greyFabricDetailsPO: GreyFabricDetailsPO) {
+                            LoggerUtils.debug(TAG, "onItemSelection")
+                            val bundle = Bundle()
+                            bundle.putSerializable(KNITTING_PROGRAM_PO, greyFabricDetailsPO)
+                            navigateToGreyFabricFragment(bundle)
+                        }
+                    })
+            }
+        }
+    }
+
+    private fun navigateToGreyFabricFragment(bundle: Bundle?) {
+        findNavController().navigate(R.id.action_ProgramDetailsFragment_to_greyFabricDetailsFragment, bundle)
     }
 
 

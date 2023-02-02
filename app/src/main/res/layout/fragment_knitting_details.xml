@@ -28,7 +28,7 @@
                 android:id="@+id/mIBKnittingDCNo"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.knittingDetailsPOLiveData.dcNo}"
-                app:title="@string/knitting_SRKW_DC_no" />
+                app:title="@string/SRKW_DC_no" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingDate"

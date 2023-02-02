@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="custom_prop">
         <attr name="title" format="string" />
+        <attr name="value" format="string" />
         <attr name="hint" format="string" />
         <attr name="error" format="string" />
         <attr name="type" format="string" />

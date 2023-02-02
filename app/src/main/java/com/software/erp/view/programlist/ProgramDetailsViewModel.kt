@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ class ProgramDetailsViewModel @Inject constructor(
 
     val yarnPurchasePOListLiveData = MutableLiveData<List<YarnPurchasePO>>()
     val knittingProgramPOListLiveData = MutableLiveData<List<KnittingProgramPO>>()
+    val greyFabricDetailsPOListLiveData = MutableLiveData<List<GreyFabricDetailsPO>>()
 
     fun fetchYarnStockDetails() {
         viewModelScope.launch {
@@ -30,5 +32,12 @@ class ProgramDetailsViewModel @Inject constructor(
             knittingProgramPOListLiveData.postValue(erpRoomDAO.fetchAllKnittingProgram())
         }
     }
+
+    fun fetchGreyFabricDetails() {
+        viewModelScope.launch {
+            greyFabricDetailsPOListLiveData.postValue(erpRoomDAO.fetchAllGreyFabricList())
+        }
+    }
+
 
 }

@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_ProgramDetailsFragment_to_KnittingDetailsFragment"
             app:destination="@id/KnittingDetailsFragment" />
+        <action
+            android:id="@+id/action_ProgramDetailsFragment_to_greyFabricDetailsFragment"
+            app:destination="@id/greyFabricDetailsFragment" />
 
     </fragment>
 
@@ -46,5 +49,10 @@
         tools:layout="@layout/fragment_knitting_details">
 
     </fragment>
+    <fragment
+        android:id="@+id/greyFabricDetailsFragment"
+        android:name="com.software.erp.view.greyfabric.GreyFabricDetailsFragment"
+        tools:layout="@layout/fragment_grey_fabric_details"
+        android:label="GreyFabricDetailsFragment" />
 
 </navigation>

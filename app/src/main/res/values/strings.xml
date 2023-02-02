@@ -24,6 +24,9 @@
 
     <string name="add_new">Add new</string>
 
+    <string name="search">Search</string>
+    <string name="calculate_shortage">Calculate Shortage</string>
+
     <string name="yarn_purchase_invoice_no">Invoice No.</string>
     <string name="date">Date</string>
     <string name="spinning_mill">Spinning Mill</string>
@@ -42,11 +45,17 @@
     <string name="yarn_purchase_saved_successfully">Yarn stock saved successfully</string>
 
 
-    <string name="knitting_SRKW_DC_no">SRKW D.C.No</string>
+    <string name="SRKW_DC_no">SRKW D.C.No</string>
     <string name="order_ref_no">Order Ref</string>
     <string name="fabric_structure">Fabric structure</string>
     <string name="machine_gage">Machine gage</string>
     <string name="loop_length">Loop length</string>
     <string name="knitting_dia">Dia</string>
     <string name="knitting_saved_successfully">Knitting program added successfully</string>
+
+    <string name="knitting_DC_no">Knitting D.C.No</string>
+    <string name="programmed_qty">Programmed Qty in Kgs</string>
+    <string name="received_qty_kgs">Received Qty in Kgs</string>
+    <string name="shortage">Shortage in Kgs</string>
+    <string name="shortage_percent">Shortage %</string>
 </resources>
