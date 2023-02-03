@@ -143,65 +143,10 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
     }
 
     private fun handleGreyFabricList() {
-        viewModel.fetchGreyFabricDetails()
+        viewModel.fetchGreyFabricDetails(DashboardViewModel.GREY_FABRIC_STOCK)
 
-        val programKey = DashboardViewModel.GREY_FABRIC_STOCK
-
-        viewModel.greyFabricDetailsPOListLiveData.observe(this) {
-            //populate recycler view
-            it.let {
-                it.let { listOfEntries ->
-                    val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
-
-                    listOfEntries.forEach { greyFabricDetailsPO ->
-                        val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.spinning_mill) , greyFabricDetailsPO.spinningMill , greyFabricDetailsPO
-                            )
-                        )
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.goods_desc) , greyFabricDetailsPO.goodsDesc , greyFabricDetailsPO
-                            )
-                        )
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.fabric_structure) , greyFabricDetailsPO.fabricStructure , greyFabricDetailsPO
-                            )
-                        )
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.machine_gage) , greyFabricDetailsPO.machineGage.toString() , greyFabricDetailsPO
-                            )
-                        )
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.loop_length) , greyFabricDetailsPO.loopLength.toString() , greyFabricDetailsPO
-                            )
-                        )
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.knitting_dia) , greyFabricDetailsPO.dia.toString() , greyFabricDetailsPO
-                            )
-                        )
-                        listOfChildEntries.add(
-                            ProgramChildAdapterPO(
-                                programKey ,
-                                resources.getString(R.string.qty_in_kgs) , greyFabricDetailsPO.programmedQtyInKgs.toString() , greyFabricDetailsPO
-                            )
-                        )
-                        listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
-                    }
-                    populateRecyclerView(listOfParentEntries)
-                }
-            }
+        viewModel.greyFabricAdapterPOLiveData.observe(this) {
+            populateRecyclerView(it)
         }
     }
 

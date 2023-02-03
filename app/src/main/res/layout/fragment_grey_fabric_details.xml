@@ -35,7 +35,7 @@
                 style="@style/custom_input_box"
                 android:layout_below="@+id/mIBKnittingDCNo"
                 android:layout_toStartOf="@+id/mBTGreyFabricDCNoSearch"
-                android:text="@={viewModel.greyFabricDetailsPOLiveData.srkwDCNo}"
+                android:text="@={viewModel.greyFabricDetailsPOLiveData.knittingProgramSRKWDCNo}"
                 app:title="@string/SRKW_DC_no" />
 
             <com.software.erp.common.customviews.CustomButton
@@ -120,6 +120,14 @@
                     android:layout_height="wrap_content"
                     app:title="@string/programmed_qty"
                     app:value="@{viewModel.greyFabricDetailsPOLiveData.programmedQtyInKgs}" />
+
+                <com.software.erp.common.customviews.CustomTextBox
+                    style="@style/custom_input_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility='@{!viewModel.greyFabricDetailsPOLiveData.remainingQtyInKgs.equals("")}'
+                    app:title="@string/remaining_qty"
+                    app:value="@{viewModel.greyFabricDetailsPOLiveData.remainingQtyInKgs}" />
 
                 <com.software.erp.common.customviews.CustomInputBox
                     style="@style/custom_input_box"

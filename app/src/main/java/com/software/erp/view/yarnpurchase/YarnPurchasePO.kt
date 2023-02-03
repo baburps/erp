@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "yarn_purchase_list")
+@Entity(tableName = "yarn_purchase")
 data class YarnPurchasePO constructor(
     @ColumnInfo var invoiceNo: String,
     @ColumnInfo var date: String,

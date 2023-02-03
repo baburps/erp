@@ -2,12 +2,13 @@ package com.software.erp.view.knitting
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(
-    tableName = "knitting_program_list"
-//    indices = [Index(value = ["srkwDCNo"] , unique = true)]
+    tableName = "knitting_program",
+    indices = [Index(value = ["srkwDCNo"] , unique = true)]
 )
 data class KnittingProgramPO constructor(
     @PrimaryKey var srkwDCNo: String,//Used by self to track fabric

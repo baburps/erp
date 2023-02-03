@@ -2,28 +2,29 @@ package com.software.erp.domain.room
 
 import androidx.room.*
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
+import com.software.erp.view.greyfabric.GreyFabricWrapper
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
 @Dao
 interface ERPRoomDAO {
 
-    @Query("SELECT * FROM yarn_purchase_list")
+    @Query("SELECT * FROM yarn_purchase")
     fun fetchAllYarnPurchases(): List<YarnPurchasePO>
 
-    @Query("SELECT spinningMill FROM yarn_purchase_list")
+    @Query("SELECT spinningMill FROM yarn_purchase")
     fun fetchSpinningMills(): List<String>
 
-    @Query("SELECT lotTrackName FROM yarn_purchase_list where spinningMill = :millName")
+    @Query("SELECT lotTrackName FROM yarn_purchase where spinningMill = :millName")
     fun fetchLotTrackName(millName: String): List<String>
 
-    @Query("SELECT goodsDesc FROM yarn_purchase_list where lotTrackName = :lotTrackName")
+    @Query("SELECT goodsDesc FROM yarn_purchase where lotTrackName = :lotTrackName")
     fun fetchGoodsDesc(lotTrackName: String): List<String>
 
-    @Query("SELECT * FROM yarn_purchase_list where lotTrackName = :lotTrackName")
+    @Query("SELECT * FROM yarn_purchase where lotTrackName = :lotTrackName")
     fun fetchYarnPurchasesPO(lotTrackName: String): YarnPurchasePO
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertYarnPurchaseDetails(yarnPurchasePO: YarnPurchasePO): Long
 
     @Update
@@ -37,13 +38,13 @@ interface ERPRoomDAO {
 
 //    ********Knitting********
 
-    @Query("SELECT * FROM knitting_program_list")
+    @Query("SELECT * FROM knitting_program")
     fun fetchAllKnittingProgram(): List<KnittingProgramPO>
 
-    @Query("SELECT * FROM knitting_program_list where srkwDCNo = :dcNo")
-    fun searchKnittingProgramWithDCNo(dcNo:String): KnittingProgramPO?
+    @Query("SELECT * FROM knitting_program where srkwDCNo = :dcNo")
+    fun searchKnittingProgramWithDCNo(dcNo: String): KnittingProgramPO?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertKnittingDetails(knittingProgramPO: KnittingProgramPO)
 
     @Update
@@ -51,9 +52,17 @@ interface ERPRoomDAO {
 
     //    ********Grey Fabric********
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun insertGreyFabricDetails(gretFabricDetailsPO: GreyFabricDetailsPO): Long
 
-    @Query("SELECT * FROM grey_fabric_list")
+    @Query("SELECT * FROM grey_fabric")
     fun fetchAllGreyFabricList(): List<GreyFabricDetailsPO>
+
+    @Transaction
+    @Query("SELECT * FROM knitting_program")
+    fun fetchGreyFabricBasedOnDCNo(): List<GreyFabricWrapper>
+
+    @Transaction
+    @Query("SELECT * FROM knitting_program where knitting_program.srkwDCNo = :srkwDCNo")
+    fun fetchGreyFabricBasedOnDCNo(srkwDCNo: String): GreyFabricWrapper?
 }

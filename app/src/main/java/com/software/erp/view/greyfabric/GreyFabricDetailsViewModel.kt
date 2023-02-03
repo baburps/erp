@@ -16,6 +16,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         const val TAG = "GreyFabricDetailsViewModel"
     }
 
+    private var existingReceivedQty: Double? = null
     val onGretFabricAddSuccess = MutableLiveData<Boolean>()
     val showToastMessage = MutableLiveData<String>()
     val greyFabricDetailsPOLiveData = MutableLiveData<GreyFabricDetailsPO>()
@@ -31,9 +32,11 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
 
     fun onKnittingDCSearchClick() {
         LoggerUtils.debug(TAG , "onKnittingDCSearchClick")
-        val srkwDCNO = greyFabricDetailsPOLiveData.value?.srkwDCNo
+        val srkwDCNO = greyFabricDetailsPOLiveData.value?.knittingProgramSRKWDCNo
         if (srkwDCNO != null) {
+            existingReceivedQty = getAlreadyReceivedQty(srkwDCNO)
             val knittingProgramPO = erpRoomDAO.searchKnittingProgramWithDCNo(srkwDCNO)
+
             knittingProgramPO?.let { _knittingProgramPO ->
                 LoggerUtils.debug(TAG , "onKnittingDCSearchClick-date--${_knittingProgramPO.date}")
                 LoggerUtils.debug(TAG , "onKnittingDCSearchClick-orderRefNo--${_knittingProgramPO.orderRefNo}")
@@ -47,7 +50,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
                 val greyFabricDetailsPO = greyFabricDetailsPOLiveData.value
                 greyFabricDetailsPO?.let { _greyFabricPo ->
                     _greyFabricPo.spinningMill = _knittingProgramPO.spinningMill
-                    _greyFabricPo.srkwDCNo = _knittingProgramPO.srkwDCNo
+                    _greyFabricPo.knittingProgramSRKWDCNo = _knittingProgramPO.srkwDCNo
                     _greyFabricPo.date = _knittingProgramPO.date
                     _greyFabricPo.orderRefNo = _knittingProgramPO.orderRefNo
                     _greyFabricPo.goodsDesc = _knittingProgramPO.goodsDesc
@@ -57,6 +60,11 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
                     _greyFabricPo.dia = _knittingProgramPO.dia
                     _greyFabricPo.programmedQtyInKgs = _knittingProgramPO.qtyInKgs
                     _greyFabricPo.showKnittingDetails = true
+                    _greyFabricPo.remainingQtyInKgs = _knittingProgramPO.qtyInKgs
+
+                    existingReceivedQty?.let {
+                        _greyFabricPo.remainingQtyInKgs = (_knittingProgramPO.qtyInKgs.toDouble() - it).toString()
+                    }
 
                     greyFabricDetailsPOLiveData.postValue(_greyFabricPo)
                 }
@@ -64,15 +72,27 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         }
     }
 
+    private fun getAlreadyReceivedQty(srkwDCNO: String?): Double? {
+        var receivedQty = 0.0
+        srkwDCNO?.let {
+            val greyFabricWrapper = erpRoomDAO.fetchGreyFabricBasedOnDCNo(it)
+            greyFabricWrapper?.let { wrapper ->
+                if (wrapper.greyFabricList.isNotEmpty()) {
+                    wrapper.greyFabricList.forEach { _po ->
+                        receivedQty += _po.receivedQtyInKgs.toDouble()
+                    }
+                }
+            }
+        }
+        return if (receivedQty > 0.0) receivedQty else null
+    }
+
     fun onCalculateShortageClick() {
         greyFabricDetailsPOLiveData.value?.let { greyFabricPO ->
             val receivedQty = greyFabricPO.receivedQtyInKgs.toDouble()
             val actualQty = greyFabricPO.programmedQtyInKgs.toDouble()
 
-            if (receivedQty > actualQty) {
-                //Show error
-                showToastMessage.postValue("Received Qty is more the programmed Qty")
-            } else {
+            if (isReceivedQtyValid()) {
                 //Calculate shortage
                 val shortage = actualQty - receivedQty
                 greyFabricPO.shortageInKgs = shortage.toString()
@@ -85,10 +105,24 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         }
     }
 
+    private fun isReceivedQtyValid(): Boolean {
+        if (existingReceivedQty == null) {
+            existingReceivedQty = greyFabricDetailsPOLiveData.value?.programmedQtyInKgs?.toDouble()!!
+        }
+
+        if (greyFabricDetailsPOLiveData.value?.receivedQtyInKgs?.toDouble()!! + existingReceivedQty!! >
+            greyFabricDetailsPOLiveData.value?.programmedQtyInKgs?.toDouble()!!
+        ) {
+            showToastMessage.postValue("Received Qty is more the Programmed Qty")
+            return false
+        }
+        return true
+    }
+
     fun onSubmitClick() {
         LoggerUtils.debug(TAG , "onSubmitClick")
         LoggerUtils.debug(TAG , "onSubmitClick--knittingDCNo--${greyFabricDetailsPOLiveData.value?.knittingCompanyDCNo}")
-        LoggerUtils.debug(TAG , "onSubmitClick--SRKWDCNo--${greyFabricDetailsPOLiveData.value?.srkwDCNo}")
+        LoggerUtils.debug(TAG , "onSubmitClick--knittingProgramSRKWDCNo--${greyFabricDetailsPOLiveData.value?.knittingProgramSRKWDCNo}")
         LoggerUtils.debug(TAG , "onSubmitClick--spinningMill--${greyFabricDetailsPOLiveData.value?.spinningMill}")
         LoggerUtils.debug(TAG , "onSubmitClick--date--${greyFabricDetailsPOLiveData.value?.date}")
         LoggerUtils.debug(TAG , "onSubmitClick--goodsDesc--${greyFabricDetailsPOLiveData.value?.goodsDesc}")
@@ -98,14 +132,15 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         LoggerUtils.debug(TAG , "onSubmitClick--dia--${greyFabricDetailsPOLiveData.value?.dia}")
         LoggerUtils.debug(TAG , "onSubmitClick--loopLength--${greyFabricDetailsPOLiveData.value?.loopLength}")
         LoggerUtils.debug(TAG , "onSubmitClick--programmedQtyInKgs--${greyFabricDetailsPOLiveData.value?.programmedQtyInKgs}")
+        LoggerUtils.debug(TAG , "onSubmitClick--remainingQtyInKgs--${greyFabricDetailsPOLiveData.value?.remainingQtyInKgs}")
         LoggerUtils.debug(TAG , "onSubmitClick--receivedQtyInKgs--${greyFabricDetailsPOLiveData.value?.receivedQtyInKgs}")
         LoggerUtils.debug(TAG , "onSubmitClick--shortageInKgs--${greyFabricDetailsPOLiveData.value?.shortageInKgs}")
         LoggerUtils.debug(TAG , "onSubmitClick--shortagePercentage--${greyFabricDetailsPOLiveData.value?.shortagePercentage}")
 
-        greyFabricDetailsPOLiveData.value?.let { erpRoomDAO.insertGreyFabricDetails(it) }
-
-        onGretFabricAddSuccess.postValue(true)
-
+        if (isReceivedQtyValid()) {
+            greyFabricDetailsPOLiveData.value?.let { erpRoomDAO.insertGreyFabricDetails(it) }
+            onGretFabricAddSuccess.postValue(true)
+        }
     }
 
 }
