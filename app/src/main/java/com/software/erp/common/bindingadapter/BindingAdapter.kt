@@ -1,4 +1,4 @@
-package com.dev.ecommerce.common.bindingadapter
+package com.software.erp.common.bindingadapter
 
 import android.view.View
 import android.widget.Button

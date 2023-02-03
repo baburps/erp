@@ -26,38 +26,40 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
     }
 
     fun updateEditScreenPO(knittingProgramPO: KnittingProgramPO) {
-        LoggerUtils.debug(YarnPurchaseViewModel.TAG, "updateEditScreenPO")
+        LoggerUtils.debug(YarnPurchaseViewModel.TAG , "updateEditScreenPO")
     }
 
     fun onKnittingDCSearchClick() {
-        LoggerUtils.debug(TAG, "onKnittingDCSearchClick")
-        val knittingDCNo = greyFabricDetailsPOLiveData.value?.knittingDCNo
-        if (knittingDCNo != null) {
-            val knittingProgramPO = erpRoomDAO.searchKnittingProgramWithDCNo(knittingDCNo)
+        LoggerUtils.debug(TAG , "onKnittingDCSearchClick")
+        val srkwDCNO = greyFabricDetailsPOLiveData.value?.srkwDCNo
+        if (srkwDCNO != null) {
+            val knittingProgramPO = erpRoomDAO.searchKnittingProgramWithDCNo(srkwDCNO)
             knittingProgramPO?.let { _knittingProgramPO ->
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-date--${_knittingProgramPO.date}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-orderRefNo--${_knittingProgramPO.orderRefNo}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-goodsDesc--${_knittingProgramPO.goodsDesc}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-fabricStructure--${_knittingProgramPO.fabricStructure}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-machineGage--${_knittingProgramPO.machineGage}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-loopLength--${_knittingProgramPO.loopLength}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-dia--${_knittingProgramPO.dia}")
-                LoggerUtils.debug(TAG, "onKnittingDCSearchClick-qtyInKgs--${_knittingProgramPO.qtyInKgs}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-date--${_knittingProgramPO.date}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-orderRefNo--${_knittingProgramPO.orderRefNo}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-goodsDesc--${_knittingProgramPO.goodsDesc}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-fabricStructure--${_knittingProgramPO.fabricStructure}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-machineGage--${_knittingProgramPO.machineGage}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-loopLength--${_knittingProgramPO.loopLength}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-dia--${_knittingProgramPO.dia}")
+                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-qtyInKgs--${_knittingProgramPO.qtyInKgs}")
 
-                val greyFabricDetailsPO = GreyFabricDetailsPO()
-                greyFabricDetailsPO.knittingDCNo = _knittingProgramPO.dcNo
-                greyFabricDetailsPO.spinningMill = _knittingProgramPO.spinningMill
-                greyFabricDetailsPO.date = _knittingProgramPO.date
-                greyFabricDetailsPO.orderRefNo = _knittingProgramPO.orderRefNo
-                greyFabricDetailsPO.goodsDesc = _knittingProgramPO.goodsDesc
-                greyFabricDetailsPO.fabricStructure = _knittingProgramPO.fabricStructure
-                greyFabricDetailsPO.machineGage = _knittingProgramPO.machineGage
-                greyFabricDetailsPO.loopLength = _knittingProgramPO.loopLength
-                greyFabricDetailsPO.dia = _knittingProgramPO.dia
-                greyFabricDetailsPO.programmedQtyInKgs = _knittingProgramPO.qtyInKgs
-                greyFabricDetailsPO.showKnittingDetails = true
+                val greyFabricDetailsPO = greyFabricDetailsPOLiveData.value
+                greyFabricDetailsPO?.let { _greyFabricPo ->
+                    _greyFabricPo.spinningMill = _knittingProgramPO.spinningMill
+                    _greyFabricPo.srkwDCNo = _knittingProgramPO.srkwDCNo
+                    _greyFabricPo.date = _knittingProgramPO.date
+                    _greyFabricPo.orderRefNo = _knittingProgramPO.orderRefNo
+                    _greyFabricPo.goodsDesc = _knittingProgramPO.goodsDesc
+                    _greyFabricPo.fabricStructure = _knittingProgramPO.fabricStructure
+                    _greyFabricPo.machineGage = _knittingProgramPO.machineGage
+                    _greyFabricPo.loopLength = _knittingProgramPO.loopLength
+                    _greyFabricPo.dia = _knittingProgramPO.dia
+                    _greyFabricPo.programmedQtyInKgs = _knittingProgramPO.qtyInKgs
+                    _greyFabricPo.showKnittingDetails = true
 
-                greyFabricDetailsPOLiveData.postValue(greyFabricDetailsPO)
+                    greyFabricDetailsPOLiveData.postValue(_greyFabricPo)
+                }
             }
         }
     }
@@ -84,20 +86,21 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
     }
 
     fun onSubmitClick() {
-        LoggerUtils.debug(TAG, "onSubmitClick")
-        LoggerUtils.debug(TAG, "onSubmitClick--knittingDCNo--${greyFabricDetailsPOLiveData.value?.knittingDCNo}")
-        LoggerUtils.debug(TAG, "onSubmitClick--spinningMill--${greyFabricDetailsPOLiveData.value?.spinningMill}")
-        LoggerUtils.debug(TAG, "onSubmitClick--date--${greyFabricDetailsPOLiveData.value?.date}")
-        LoggerUtils.debug(TAG, "onSubmitClick--goodsDesc--${greyFabricDetailsPOLiveData.value?.goodsDesc}")
-        LoggerUtils.debug(TAG, "onSubmitClick--orderRefNo--${greyFabricDetailsPOLiveData.value?.orderRefNo}")
-        LoggerUtils.debug(TAG, "onSubmitClick--fabricStructure--${greyFabricDetailsPOLiveData.value?.fabricStructure}")
-        LoggerUtils.debug(TAG, "onSubmitClick--machineGage--${greyFabricDetailsPOLiveData.value?.machineGage}")
-        LoggerUtils.debug(TAG, "onSubmitClick--dia--${greyFabricDetailsPOLiveData.value?.dia}")
-        LoggerUtils.debug(TAG, "onSubmitClick--loopLength--${greyFabricDetailsPOLiveData.value?.loopLength}")
-        LoggerUtils.debug(TAG, "onSubmitClick--programmedQtyInKgs--${greyFabricDetailsPOLiveData.value?.programmedQtyInKgs}")
-        LoggerUtils.debug(TAG, "onSubmitClick--receivedQtyInKgs--${greyFabricDetailsPOLiveData.value?.receivedQtyInKgs}")
-        LoggerUtils.debug(TAG, "onSubmitClick--shortageInKgs--${greyFabricDetailsPOLiveData.value?.shortageInKgs}")
-        LoggerUtils.debug(TAG, "onSubmitClick--shortagePercentage--${greyFabricDetailsPOLiveData.value?.shortagePercentage}")
+        LoggerUtils.debug(TAG , "onSubmitClick")
+        LoggerUtils.debug(TAG , "onSubmitClick--knittingDCNo--${greyFabricDetailsPOLiveData.value?.knittingCompanyDCNo}")
+        LoggerUtils.debug(TAG , "onSubmitClick--SRKWDCNo--${greyFabricDetailsPOLiveData.value?.srkwDCNo}")
+        LoggerUtils.debug(TAG , "onSubmitClick--spinningMill--${greyFabricDetailsPOLiveData.value?.spinningMill}")
+        LoggerUtils.debug(TAG , "onSubmitClick--date--${greyFabricDetailsPOLiveData.value?.date}")
+        LoggerUtils.debug(TAG , "onSubmitClick--goodsDesc--${greyFabricDetailsPOLiveData.value?.goodsDesc}")
+        LoggerUtils.debug(TAG , "onSubmitClick--orderRefNo--${greyFabricDetailsPOLiveData.value?.orderRefNo}")
+        LoggerUtils.debug(TAG , "onSubmitClick--fabricStructure--${greyFabricDetailsPOLiveData.value?.fabricStructure}")
+        LoggerUtils.debug(TAG , "onSubmitClick--machineGage--${greyFabricDetailsPOLiveData.value?.machineGage}")
+        LoggerUtils.debug(TAG , "onSubmitClick--dia--${greyFabricDetailsPOLiveData.value?.dia}")
+        LoggerUtils.debug(TAG , "onSubmitClick--loopLength--${greyFabricDetailsPOLiveData.value?.loopLength}")
+        LoggerUtils.debug(TAG , "onSubmitClick--programmedQtyInKgs--${greyFabricDetailsPOLiveData.value?.programmedQtyInKgs}")
+        LoggerUtils.debug(TAG , "onSubmitClick--receivedQtyInKgs--${greyFabricDetailsPOLiveData.value?.receivedQtyInKgs}")
+        LoggerUtils.debug(TAG , "onSubmitClick--shortageInKgs--${greyFabricDetailsPOLiveData.value?.shortageInKgs}")
+        LoggerUtils.debug(TAG , "onSubmitClick--shortagePercentage--${greyFabricDetailsPOLiveData.value?.shortagePercentage}")
 
         greyFabricDetailsPOLiveData.value?.let { erpRoomDAO.insertGreyFabricDetails(it) }
 

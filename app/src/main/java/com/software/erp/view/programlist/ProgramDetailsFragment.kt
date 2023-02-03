@@ -109,7 +109,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                     listOfChildEntries.add(
                         ProgramChildAdapterPO(
                             programKey ,
-                            resources.getString(R.string.SRKW_DC_no) , knittingProgramPO.dcNo , knittingProgramPO
+                            resources.getString(R.string.SRKW_DC_no) , knittingProgramPO.srkwDCNo , knittingProgramPO
                         )
                     )
                     listOfChildEntries.add(
@@ -127,7 +127,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                     listOfChildEntries.add(
                         ProgramChildAdapterPO(
                             programKey ,
-                            resources.getString(R.string.qty_in_kgs) , knittingProgramPO.qtyInKgs , knittingProgramPO
+                            resources.getString(R.string.qty_in_kgs) , knittingProgramPO.qtyInKgs.toString() , knittingProgramPO
                         )
                     )
 
@@ -176,25 +176,25 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                         listOfChildEntries.add(
                             ProgramChildAdapterPO(
                                 programKey ,
-                                resources.getString(R.string.machine_gage) , greyFabricDetailsPO.machineGage , greyFabricDetailsPO
+                                resources.getString(R.string.machine_gage) , greyFabricDetailsPO.machineGage.toString() , greyFabricDetailsPO
                             )
                         )
                         listOfChildEntries.add(
                             ProgramChildAdapterPO(
                                 programKey ,
-                                resources.getString(R.string.loop_length) , greyFabricDetailsPO.loopLength , greyFabricDetailsPO
+                                resources.getString(R.string.loop_length) , greyFabricDetailsPO.loopLength.toString() , greyFabricDetailsPO
                             )
                         )
                         listOfChildEntries.add(
                             ProgramChildAdapterPO(
                                 programKey ,
-                                resources.getString(R.string.knitting_dia) , greyFabricDetailsPO.dia , greyFabricDetailsPO
+                                resources.getString(R.string.knitting_dia) , greyFabricDetailsPO.dia.toString() , greyFabricDetailsPO
                             )
                         )
                         listOfChildEntries.add(
                             ProgramChildAdapterPO(
                                 programKey ,
-                                resources.getString(R.string.qty_in_kgs) , greyFabricDetailsPO.programmedQtyInKgs , greyFabricDetailsPO
+                                resources.getString(R.string.qty_in_kgs) , greyFabricDetailsPO.programmedQtyInKgs.toString() , greyFabricDetailsPO
                             )
                         )
                         listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
@@ -235,13 +235,13 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                     listOfChildEntries.add(
                         ProgramChildAdapterPO(
                             programKey ,
-                            context?.resources?.getString(R.string.yarn_purchase_no_of_bags)!! , yarnPurchasePO.noOfBags , yarnPurchasePO
+                            context?.resources?.getString(R.string.yarn_purchase_no_of_bags)!! , yarnPurchasePO.noOfBags.toString() , yarnPurchasePO
                         )
                     )
                     listOfChildEntries.add(
                         ProgramChildAdapterPO(
                             programKey ,
-                            context?.resources?.getString(R.string.qty_in_kgs)!! , yarnPurchasePO.qtyInKgs , yarnPurchasePO
+                            context?.resources?.getString(R.string.qty_in_kgs)!! , yarnPurchasePO.qtyInKgs.toString() , yarnPurchasePO
                         )
                     )
 
@@ -257,9 +257,10 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
             ProgramListParentAdapter(listOfParentEntries , object : ProgramListChildAdapter.ItemSelectionListener {
                 override fun onItemSelection(programChildAdapterPO: ProgramChildAdapterPO) {
                     LoggerUtils.debug(TAG , "onItemSelection")
-                    val bundle = Bundle()
-                    bundle.putSerializable(programChildAdapterPO.programKey , programChildAdapterPO)
-                    handleNavigation(programChildAdapterPO.programKey , bundle)
+                    //TODO edit & delete logic
+                    /*  val bundle = Bundle()
+                      bundle.putSerializable(programChildAdapterPO.programKey , programChildAdapterPO)
+                      handleNavigation(programChildAdapterPO.programKey , bundle)*/
                 }
             } , requireContext())
     }

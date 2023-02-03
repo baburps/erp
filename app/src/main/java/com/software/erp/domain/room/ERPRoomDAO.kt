@@ -40,7 +40,7 @@ interface ERPRoomDAO {
     @Query("SELECT * FROM knitting_program_list")
     fun fetchAllKnittingProgram(): List<KnittingProgramPO>
 
-    @Query("SELECT * FROM knitting_program_list where dcNo = :dcNo")
+    @Query("SELECT * FROM knitting_program_list where srkwDCNo = :dcNo")
     fun searchKnittingProgramWithDCNo(dcNo:String): KnittingProgramPO?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

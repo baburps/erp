@@ -117,7 +117,7 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
     fun onSubmitClick() {
         LoggerUtils.debug(TAG, "onSubmitClick")
 
-        LoggerUtils.debug(TAG, "onSubmitClick-dcNo--${knittingDetailsPOLiveData.value?.dcNo}")
+        LoggerUtils.debug(TAG, "onSubmitClick-dcNo--${knittingDetailsPOLiveData.value?.srkwDCNo}")
         LoggerUtils.debug(TAG, "onSubmitClick-date--${knittingDetailsPOLiveData.value?.date}")
         LoggerUtils.debug(TAG, "onSubmitClick-lotTrackName--${knittingDetailsPOLiveData.value?.lotTrackName}")
         LoggerUtils.debug(TAG, "onSubmitClick-goodsDesc--${knittingDetailsPOLiveData.value?.goodsDesc}")

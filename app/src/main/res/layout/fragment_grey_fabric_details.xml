@@ -27,15 +27,23 @@
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingDCNo"
                 style="@style/custom_input_box"
-                android:layout_toStartOf="@+id/mBTGreyFabricDCNoSearch"
-                android:text="@={viewModel.greyFabricDetailsPOLiveData.knittingDCNo}"
+                android:text="@={viewModel.greyFabricDetailsPOLiveData.knittingCompanyDCNo}"
                 app:title="@string/knitting_DC_no" />
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBSRKWNo"
+                style="@style/custom_input_box"
+                android:layout_below="@+id/mIBKnittingDCNo"
+                android:layout_toStartOf="@+id/mBTGreyFabricDCNoSearch"
+                android:text="@={viewModel.greyFabricDetailsPOLiveData.srkwDCNo}"
+                app:title="@string/SRKW_DC_no" />
 
             <com.software.erp.common.customviews.CustomButton
                 android:id="@+id/mBTGreyFabricDCNoSearch"
                 style="@style/button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/mIBKnittingDCNo"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:onClick="@{() -> viewModel.onKnittingDCSearchClick()}"
@@ -45,7 +53,7 @@
                 android:id="@+id/mLLGreyFabricDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mIBKnittingDCNo"
+                android:layout_below="@+id/mIBSRKWNo"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.greyFabricDetailsPOLiveData.showKnittingDetails}">
 
