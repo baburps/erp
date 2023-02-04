@@ -18,18 +18,20 @@ data class GreyFabricDetailsPO constructor(
     @ColumnInfo var knittingProgramSRKWDCNo: String = "" ,//Used by self to track fabric
     @ColumnInfo var knittingCompanyDCNo: String = "" ,//Used by knitting company
     @Ignore var date: String = "" ,
-    @Ignore var spinningMill: String = "" ,
-    @Ignore var lotTrackName: String = "" ,
-    @Ignore var goodsDesc: String = "" ,
-    @Ignore var orderRefNo: String = "" ,
-    @Ignore var fabricStructure: String = "" ,
-    @Ignore var machineGage: String = "" ,
-    @Ignore var loopLength: String = "" ,
-    @Ignore var dia: String = "" ,
+    @ColumnInfo var spinningMill: String = "" ,
+    @ColumnInfo var lotTrackName: String = "" ,
+    @ColumnInfo var goodsDesc: String = "" ,
+    @ColumnInfo var orderRefNo: String = "" ,
+    @ColumnInfo var fabricStructure: String = "" ,
+    @ColumnInfo var machineGage: String = "" ,
+    @ColumnInfo var loopLength: String = "" ,
+    @ColumnInfo var dia: String = "" ,
     @ColumnInfo var programmedQtyInKgs: String = "" ,
     @Ignore var remainingQtyInKgs: String = "" ,
     //Available Grey fabric in Stock, can be used in Dyeing program
     @ColumnInfo var receivedQtyInKgs: String = "" ,
+    //Available Grey fabric in Stock, can be used in Dyeing program
+    @ColumnInfo var stockQtyInKgs: String = "" ,
     @ColumnInfo var shortageInKgs: String = "" ,
     @ColumnInfo var shortagePercentage: String = "" ,
     @Ignore var showKnittingDetails: Boolean = false ,

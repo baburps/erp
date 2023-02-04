@@ -3,10 +3,10 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mLLCustomInputParenLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_color"
-        android:id="@+id/mLLCustomInputParenLayout"
         android:orientation="vertical">
 
         <com.software.erp.common.customviews.CustomTextView
@@ -20,6 +20,9 @@
             android:id="@+id/mETCustomInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:singleLine="true"
             tools:hint="Hint" />
 
         <com.software.erp.common.customviews.CustomTextView

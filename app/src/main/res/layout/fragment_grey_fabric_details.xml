@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:visibility="@{viewModel.greyFabricDetailsPOLiveData.showShortageDetails}"
                     app:title="@string/shortage_percent"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.shortageInKgs}" />
+                    app:value="@{viewModel.greyFabricDetailsPOLiveData.shortagePercentage}" />
 
             </LinearLayout>
 

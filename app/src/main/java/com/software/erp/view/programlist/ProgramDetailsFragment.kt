@@ -52,6 +52,7 @@ class ProgramDetailsFragment : BaseFragment<FragmentProgramDetailsBinding>() {
                 findNavController().navigate(R.id.action_ProgramDetailsFragment_to_greyFabricDetailsFragment , bundle)
             }
             DashboardViewModel.DYING_PROGRAM -> {
+                findNavController().navigate(R.id.action_ProgramDetailsFragment_to_dyeingDetailsFragment , bundle)
             }
             DashboardViewModel.DYED_FABRIC -> {
             }

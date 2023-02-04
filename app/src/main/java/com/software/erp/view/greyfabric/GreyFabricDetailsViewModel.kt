@@ -77,7 +77,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         srkwDCNO?.let {
             val greyFabricWrapper = erpRoomDAO.fetchGreyFabricBasedOnDCNo(it)
             greyFabricWrapper?.let { wrapper ->
-                if (wrapper.greyFabricList.isNotEmpty()) {
+                if (!wrapper.greyFabricList.isNullOrEmpty()) {
                     wrapper.greyFabricList.forEach { _po ->
                         receivedQty += _po.receivedQtyInKgs.toDouble()
                     }
@@ -90,7 +90,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
     fun onCalculateShortageClick() {
         greyFabricDetailsPOLiveData.value?.let { greyFabricPO ->
             val receivedQty = greyFabricPO.receivedQtyInKgs.toDouble()
-            val actualQty = greyFabricPO.programmedQtyInKgs.toDouble()
+            val actualQty = greyFabricPO.remainingQtyInKgs.toDouble()
 
             if (isReceivedQtyValid()) {
                 //Calculate shortage
@@ -106,11 +106,12 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
     }
 
     private fun isReceivedQtyValid(): Boolean {
-        if (existingReceivedQty == null) {
-            existingReceivedQty = greyFabricDetailsPOLiveData.value?.programmedQtyInKgs?.toDouble()!!
+        var existingReceivedQtyTemp = existingReceivedQty
+        if (existingReceivedQtyTemp == null) {
+            existingReceivedQtyTemp = 0.0
         }
 
-        if (greyFabricDetailsPOLiveData.value?.receivedQtyInKgs?.toDouble()!! + existingReceivedQty!! >
+        if (greyFabricDetailsPOLiveData.value?.receivedQtyInKgs?.toDouble()!! + existingReceivedQtyTemp >
             greyFabricDetailsPOLiveData.value?.programmedQtyInKgs?.toDouble()!!
         ) {
             showToastMessage.postValue("Received Qty is more the Programmed Qty")

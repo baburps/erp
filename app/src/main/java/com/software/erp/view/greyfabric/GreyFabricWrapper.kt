@@ -10,5 +10,5 @@ data class GreyFabricWrapper(
         parentColumn = "srkwDCNo" ,
         entityColumn = "knittingProgramSRKWDCNo"
     )
-    val greyFabricList: List<GreyFabricDetailsPO>
+    val greyFabricList: List<GreyFabricDetailsPO>?
 )

@@ -19,7 +19,7 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideNotesDAO(appDatabase: ERPRoomDatabase): ERPRoomDAO {
-        return appDatabase.yarnPurchaseDao()
+        return appDatabase.erpDao()
     }
 
     @Provides

@@ -68,32 +68,32 @@
 
             <com.software.erp.common.customviews.CustomSpinnerBox
                 style="@style/custom_spinner_box"
-                app:spinnerList="@{viewModel.spinningMillListLiveData}"
-                app:spinnerSelection="@{viewModel.spinningMillSelectionListener}"
+                app:spinnerList="@{viewModel.goodsDescListLiveData}"
+                app:spinnerSelection="@{viewModel.goodsDescSelectionListener}"
                 app:title="@string/goods_desc" />
 
             <com.software.erp.common.customviews.CustomSpinnerBox
                 style="@style/custom_spinner_box"
-                app:spinnerList="@{viewModel.spinningMillListLiveData}"
-                app:spinnerSelection="@{viewModel.spinningMillSelectionListener}"
+                app:spinnerList="@{viewModel.fabricStructureListLiveData}"
+                app:spinnerSelection="@{viewModel.fabricStructureSelectionListener}"
                 app:title="@string/fabric_structure" />
 
             <com.software.erp.common.customviews.CustomSpinnerBox
                 style="@style/custom_spinner_box"
-                app:spinnerList="@{viewModel.spinningMillListLiveData}"
-                app:spinnerSelection="@{viewModel.spinningMillSelectionListener}"
+                app:spinnerList="@{viewModel.gageListLiveData}"
+                app:spinnerSelection="@{viewModel.gageSelectionListener}"
                 app:title="@string/machine_gage" />
 
             <com.software.erp.common.customviews.CustomSpinnerBox
                 style="@style/custom_spinner_box"
-                app:spinnerList="@{viewModel.spinningMillListLiveData}"
-                app:spinnerSelection="@{viewModel.spinningMillSelectionListener}"
+                app:spinnerList="@{viewModel.loopLengthListLiveData}"
+                app:spinnerSelection="@{viewModel.loopLengthSelectionListener}"
                 app:title="@string/loop_length" />
 
             <com.software.erp.common.customviews.CustomSpinnerBox
                 style="@style/custom_spinner_box"
-                app:spinnerList="@{viewModel.spinningMillListLiveData}"
-                app:spinnerSelection="@{viewModel.spinningMillSelectionListener}"
+                app:spinnerList="@{viewModel.diaListLiveData}"
+                app:spinnerSelection="@{viewModel.diaSelectionListener}"
                 app:title="@string/dia" />
 
             <com.software.erp.common.customviews.CustomInputBox

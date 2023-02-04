@@ -130,8 +130,10 @@ class ProgramDetailsViewModel @Inject constructor(
 
                         var receivedQty = 0.0
 
-                        wrapper.greyFabricList.forEach { greyFabricDetailsPOs ->
-                            receivedQty += greyFabricDetailsPOs.receivedQtyInKgs.toDouble()
+                        if (!wrapper.greyFabricList.isNullOrEmpty()) {
+                            wrapper.greyFabricList.forEach { greyFabricDetailsPOs ->
+                                receivedQty += greyFabricDetailsPOs.receivedQtyInKgs.toDouble()
+                            }
                         }
 
                         val actualQty = knittingProgramPO.qtyInKgs.toDouble()
@@ -139,6 +141,13 @@ class ProgramDetailsViewModel @Inject constructor(
                         val shortagePercentage = shortage / (actualQty / 100)
 
                         val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
+                        listOfChildEntries.add(
+                            ProgramChildAdapterPO(
+                                programKey ,
+                                getString(R.string.knitting_DC_no) , knittingProgramPO.srkwDCNo , greyFabricDetailsPO
+                            )
+                        )
+
                         listOfChildEntries.add(
                             ProgramChildAdapterPO(
                                 programKey ,

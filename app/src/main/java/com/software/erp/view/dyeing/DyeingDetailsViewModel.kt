@@ -37,6 +37,13 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
     val diaListLiveData = MutableLiveData<List<String>>()
     lateinit var diaSelectionListener: CustomSpinnerBox.SpinnerSelection
 
+    private var selectedSpinningMill: String? = null
+    private var selectedGoodsDesc: String? = null
+    private var selectedFabricStructure: String? = null
+    private var selectedMachineGage: String? = null
+    private var selectedLoopLength: String? = null
+    private var selectedDia: String? = null
+
     init {
         dyingDetailsPOLiveData.postValue(DyeingDetailsPO())
 
@@ -49,44 +56,70 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
         //Update Lot track no spinner when Spinning mill is selected
         spinningMillSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG , "spinningMillSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "spinningMillSelectionListener-- onSpinnerItemSelection--$selectedItem")
+                selectedSpinningMill = selectedItem
                 selectedItem?.let {
-                    val lotTrackNameList = erpRoomDAO.fetchLotTrackName(selectedItem)
+                    //Populate goods desc
+                    goodsDescListLiveData.postValue(erpRoomDAO.fetchGoodsDescFromGreyFabricStock(selectedItem))
                 }
             }
         }
 
+        //TODO check if more than one goods desc will be available
         goodsDescSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG , "goodsDescSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "goodsDescSelectionListener-- onSpinnerItemSelection--$selectedItem")
+                selectedGoodsDesc = selectedItem
                 selectedItem?.let {
+                    fabricStructureListLiveData.postValue(selectedSpinningMill?.let { it1 ->
+                        erpRoomDAO.fetchFabricStructureFromGreyFabricStock(
+                            it1 ,
+                            selectedItem
+                        )
+                    })
                 }
             }
         }
+
         fabricStructureSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG , "fabricStructureSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "fabricStructureSelectionListener-- onSpinnerItemSelection--$selectedItem")
+                selectedFabricStructure = selectedItem
                 selectedItem?.let {
+                    gageListLiveData.postValue(selectedSpinningMill?.let { spinningMill ->
+                        selectedGoodsDesc?.let { goodsDesc ->
+                            selectedFabricStructure?.let { fabricStructure ->
+                                erpRoomDAO.fetchMachineGageFromGreyFabricStock(
+                                    spinningMill ,
+                                    goodsDesc ,
+                                    fabricStructure
+                                )
+                            }
+                        }
+                    })
+
                 }
             }
         }
         gageSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG , "gageSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "gageSelectionListener-- onSpinnerItemSelection--$selectedItem")
+                selectedFabricStructure = selectedItem
                 selectedItem?.let {
+
                 }
             }
         }
         loopLengthSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG , "loopLengthSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "loopLengthSelectionListener-- onSpinnerItemSelection--$selectedItem")
                 selectedItem?.let {
                 }
             }
         }
         diaSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG , "diaSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "diaSelectionListener-- onSpinnerItemSelection--$selectedItem")
                 selectedItem?.let {
                 }
             }
@@ -94,6 +127,12 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
     }
 
     private fun populateSpinningMillList() {
+        val spinnerList = erpRoomDAO.fetchSpinningMillsFromGreyFabricStock()
+
+        spinnerList?.let {
+            //Populate spinning mill list
+            spinningMillListLiveData.postValue(it)
+        }
     }
 
     private fun getAlreadyReceivedQty() {
