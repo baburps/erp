@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.software.erp.R
 import com.software.erp.base.ERPApplication
 import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.programlist.adapter.ProgramChildAdapterPO
@@ -26,27 +27,96 @@ class ProgramDetailsViewModel @Inject constructor(
     }
 
     fun getString(stringId: Int): String {
-        return application.applicationContext.resources.getString(stringId)
+        return application.applicationContext.getString(stringId)
     }
 
     val yarnPurchasePOListLiveData = MutableLiveData<List<YarnPurchasePO>>()
     val knittingProgramPOListLiveData = MutableLiveData<List<KnittingProgramPO>>()
-    val greyFabricAdapterPOLiveData = MutableLiveData<MutableList<ProgramParentAdapterPO>>()
+    val recyclerViewAdapterPOLiveData = MutableLiveData<MutableList<ProgramParentAdapterPO>>()
 
     fun fetchYarnStockDetails() {
+        val programKey = DashboardViewModel.YARN_PURCHASE
         viewModelScope.launch {
-            val list = erpRoomDAO.fetchAllYarnPurchases()
-            yarnPurchasePOListLiveData.postValue(list)
+            val listOfEntries = erpRoomDAO.fetchAllYarnPurchases()
+
+            val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
+
+            listOfEntries.forEach { yarnPurchasePO ->
+                val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.spinning_mill)!! , yarnPurchasePO.spinningMill , yarnPurchasePO
+                    )
+                )
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.description)!! , yarnPurchasePO.goodsDesc , yarnPurchasePO
+                    )
+                )
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.no_of_bags)!! , yarnPurchasePO.noOfBags.toString() , yarnPurchasePO
+                    )
+                )
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.qty_in_kgs)!! , yarnPurchasePO.qtyInKgs.toString() , yarnPurchasePO
+                    )
+                )
+
+                listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
+            }
+            recyclerViewAdapterPOLiveData.postValue(listOfParentEntries)
         }
     }
 
     fun fetchKnittingProgramDetails() {
+        val programKey = DashboardViewModel.KNITTING_PROGRAM
         viewModelScope.launch {
-            knittingProgramPOListLiveData.postValue(erpRoomDAO.fetchAllKnittingProgram())
+            val listOfEntries = erpRoomDAO.fetchAllKnittingProgram()
+
+            val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
+
+            listOfEntries.forEach { knittingProgramPO ->
+                val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.SRKW_DC_no) , knittingProgramPO.srkwDCNo , knittingProgramPO
+                    )
+                )
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.lot_track_name) , knittingProgramPO.lotTrackName , knittingProgramPO
+                    )
+                )
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.description) , knittingProgramPO.goodsDesc , knittingProgramPO
+                    )
+                )
+                listOfChildEntries.add(
+                    ProgramChildAdapterPO(
+                        programKey ,
+                        getString(R.string.qty_in_kgs) , knittingProgramPO.qtyInKgs , knittingProgramPO
+                    )
+                )
+
+                listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
+            }
+
+            recyclerViewAdapterPOLiveData.postValue(listOfParentEntries)
         }
     }
 
-    fun fetchGreyFabricDetails(programKey: String) {
+    fun fetchGreyFabricDetails() {
+        val programKey = DashboardViewModel.GREY_FABRIC_STOCK
         viewModelScope.launch {
             val fabricList = erpRoomDAO.fetchGreyFabricBasedOnDCNo()
 
@@ -102,7 +172,7 @@ class ProgramDetailsViewModel @Inject constructor(
                         listOfChildEntries.add(
                             ProgramChildAdapterPO(
                                 programKey ,
-                                getString(R.string.knitting_dia) , knittingProgramPO.dia , greyFabricDetailsPO
+                                getString(R.string.dia) , knittingProgramPO.dia , greyFabricDetailsPO
                             )
                         )
                         listOfChildEntries.add(
@@ -133,10 +203,13 @@ class ProgramDetailsViewModel @Inject constructor(
                         listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
                     }
 
-                    greyFabricAdapterPOLiveData.postValue(listOfParentEntries)
+                    recyclerViewAdapterPOLiveData.postValue(listOfParentEntries)
                 }
             }
         }
+    }
+
+    fun fetchDyeingProgramList() {
     }
 
 

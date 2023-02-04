@@ -110,7 +110,7 @@
                     style="@style/custom_input_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:title="@string/knitting_dia"
+                    app:title="@string/dia"
                     app:value="@{viewModel.greyFabricDetailsPOLiveData.dia}" />
 
                 <com.software.erp.common.customviews.CustomTextBox

@@ -114,7 +114,7 @@
                     android:id="@+id/mIBKnittingDia"
                     style="@style/custom_input_box"
                     android:text="@={viewModel.knittingDetailsPOLiveData.dia}"
-                    app:title="@string/knitting_dia"
+                    app:title="@string/dia"
                     app:type="@{constant.NUMBERS}" />
 
                 <com.software.erp.common.customviews.CustomInputBox

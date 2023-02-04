@@ -28,7 +28,7 @@
                 android:id="@+id/mIBYarnPurchaseInvoiceNo"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.invoiceNo}"
-                app:title="@string/yarn_purchase_invoice_no" />
+                app:title="@string/invoice_no" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseDate"
@@ -53,7 +53,7 @@
                 android:id="@+id/mIBYarnPurchaseNoOfBags"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.noOfBags}"
-                app:title="@string/yarn_purchase_no_of_bags"
+                app:title="@string/no_of_bags"
                 app:type="@{constant.NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
@@ -67,21 +67,21 @@
                 android:id="@+id/mIBYarnPurchaseRate"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.price}"
-                app:title="@string/yarn_purchase_rate"
+                app:title="@string/rate"
                 app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchaseGST"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.gst}"
-                app:title="@string/yarn_purchase_gst"
+                app:title="@string/gst"
                 app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBYarnPurchasePrice"
                 style="@style/custom_input_box"
                 android:text="@={viewModel.yarnPurchasePOLiveData.price}"
-                app:title="@string/yarn_purchase_price"
+                app:title="@string/price"
                 app:type="@{constant.DECIMAL_NUMBERS}" />
 
             <com.software.erp.common.customviews.CustomInputBox

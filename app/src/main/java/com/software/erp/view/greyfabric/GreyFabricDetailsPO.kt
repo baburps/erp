@@ -28,6 +28,7 @@ data class GreyFabricDetailsPO constructor(
     @Ignore var dia: String = "" ,
     @ColumnInfo var programmedQtyInKgs: String = "" ,
     @Ignore var remainingQtyInKgs: String = "" ,
+    //Available Grey fabric in Stock, can be used in Dyeing program
     @ColumnInfo var receivedQtyInKgs: String = "" ,
     @ColumnInfo var shortageInKgs: String = "" ,
     @ColumnInfo var shortagePercentage: String = "" ,

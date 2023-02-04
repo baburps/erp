@@ -43,7 +43,7 @@
             <com.software.erp.common.customviews.CustomTextView
                 android:id="@+id/mTVProgramListField3"
                 style="@style/yarn_list_text_tile_style"
-                android:text="@string/yarn_purchase_no_of_bags" />
+                android:text="@string/no_of_bags" />
 
             <com.software.erp.common.customviews.CustomTextView
                 android:id="@+id/mTVProgramListField4"
