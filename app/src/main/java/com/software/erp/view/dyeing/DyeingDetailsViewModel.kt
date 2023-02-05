@@ -2,14 +2,16 @@ package com.software.erp.view.dyeing
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.software.erp.common.customviews.CustomSpinnerBox
 import com.software.erp.common.utils.LoggerUtils
-import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.domain.repo.ERPRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoomDAO) : ViewModel() {
+class DyeingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo) : ViewModel() {
 
     companion object {
         const val TAG = "DyeingDetailsViewModel"
@@ -59,8 +61,14 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
                 LoggerUtils.debug(TAG , "spinningMillSelectionListener-- onSpinnerItemSelection--$selectedItem")
                 selectedSpinningMill = selectedItem
                 selectedItem?.let {
-                    //Populate goods desc
-                    goodsDescListLiveData.postValue(erpRoomDAO.fetchGoodsDescFromGreyFabricStock(selectedItem))
+                    viewModelScope.launch {
+                        erpRepo.fetchGoodsDescFromGreyFabricStock(selectedItem).collect { result ->
+                            //Populate goods desc
+                            result.data?.let { goodsDescList ->
+                                goodsDescListLiveData.postValue(goodsDescList)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -71,12 +79,15 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
                 LoggerUtils.debug(TAG , "goodsDescSelectionListener-- onSpinnerItemSelection--$selectedItem")
                 selectedGoodsDesc = selectedItem
                 selectedItem?.let {
-                    fabricStructureListLiveData.postValue(selectedSpinningMill?.let { it1 ->
-                        erpRoomDAO.fetchFabricStructureFromGreyFabricStock(
-                            it1 ,
-                            selectedItem
-                        )
-                    })
+                    selectedSpinningMill?.let { it1 ->
+                        viewModelScope.launch {
+                            erpRepo.fetchFabricStructureFromGreyFabricStock(it1 , selectedItem).collect { result ->
+                                result.data?.let { fabricStructureList ->
+                                    fabricStructureListLiveData.postValue(fabricStructureList)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -86,18 +97,19 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
                 LoggerUtils.debug(TAG , "fabricStructureSelectionListener-- onSpinnerItemSelection--$selectedItem")
                 selectedFabricStructure = selectedItem
                 selectedItem?.let {
-                    gageListLiveData.postValue(selectedSpinningMill?.let { spinningMill ->
+                    selectedSpinningMill?.let { spinningMill ->
                         selectedGoodsDesc?.let { goodsDesc ->
                             selectedFabricStructure?.let { fabricStructure ->
-                                erpRoomDAO.fetchMachineGageFromGreyFabricStock(
-                                    spinningMill ,
-                                    goodsDesc ,
-                                    fabricStructure
-                                )
+                                viewModelScope.launch {
+                                    erpRepo.fetchMachineGageFromGreyFabricStock(spinningMill , goodsDesc , fabricStructure).collect { result ->
+                                        result.data?.let { gageList ->
+                                            gageListLiveData.postValue(gageList)
+                                        }
+                                    }
+                                }
                             }
                         }
-                    })
-
+                    }
                 }
             }
         }
@@ -113,25 +125,25 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoom
         loopLengthSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
                 LoggerUtils.debug(TAG , "loopLengthSelectionListener-- onSpinnerItemSelection--$selectedItem")
-                selectedItem?.let {
-                }
+                selectedItem?.let {}
             }
         }
         diaSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
                 LoggerUtils.debug(TAG , "diaSelectionListener-- onSpinnerItemSelection--$selectedItem")
-                selectedItem?.let {
-                }
+                selectedItem?.let {}
             }
         }
     }
 
     private fun populateSpinningMillList() {
-        val spinnerList = erpRoomDAO.fetchSpinningMillsFromGreyFabricStock()
-
-        spinnerList?.let {
-            //Populate spinning mill list
-            spinningMillListLiveData.postValue(it)
+        viewModelScope.launch {
+            erpRepo.fetchSpinningMillsFromGreyFabricStock().collect { result ->
+                result.data?.let {
+                    //Populate spinning mill list
+                    spinningMillListLiveData.postValue(it)
+                }
+            }
         }
     }
 

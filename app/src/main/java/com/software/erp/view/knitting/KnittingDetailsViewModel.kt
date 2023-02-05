@@ -2,16 +2,19 @@ package com.software.erp.view.knitting
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.software.erp.common.customviews.CustomSpinnerBox
 import com.software.erp.common.utils.LoggerUtils
-import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.domain.model.ResultHandler
+import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import com.software.erp.view.yarnpurchase.YarnPurchaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoomDAO) : ViewModel() {
+class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo) : ViewModel() {
 
     companion object {
         const val TAG = "KnittingDetailsViewModel"
@@ -44,7 +47,7 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
     }
 
     fun updateEditScreenPO(knittingProgramPO: KnittingProgramPO) {
-        LoggerUtils.debug(YarnPurchaseViewModel.TAG, "updateEditScreenPO")
+        LoggerUtils.debug(YarnPurchaseViewModel.TAG , "updateEditScreenPO")
         knittingDetailsPOLiveData.postValue(knittingProgramPO)
     }
 
@@ -53,17 +56,27 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
         fabricStructurePOLiveData.postValue(FabricStructurePO())
         fabricDiaPOLiveData.postValue(FabricDia())
 
-        val listOfSpinningMills = erpRoomDAO.fetchSpinningMills()
-        spinningMillListLiveData.postValue(listOfSpinningMills)
+        viewModelScope.launch {
+            erpRepo.fetchSpinningMills().collect { result ->
+                result.data?.let {
+                    spinningMillListLiveData.postValue(it)
+                }
+            }
+        }
 
         //Update Lot track no spinner when Spinning mill is selected
         spinningMillSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG, "spinningMillSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "spinningMillSelectionListener-- onSpinnerItemSelection")
                 selectedItem?.let {
-                    val lotTrackNameList = erpRoomDAO.fetchLotTrackName(selectedItem)
-                    lotTrackNoListLiveData.postValue(lotTrackNameList)
-                    knittingDetailsPOLiveData.value?.spinningMill = selectedItem
+                    viewModelScope.launch {
+                        erpRepo.fetchLotTrackName(selectedItem).collect { result ->
+                            result.data?.let { lotTrackNameList ->
+                                lotTrackNoListLiveData.postValue(lotTrackNameList)
+                                knittingDetailsPOLiveData.value?.spinningMill = selectedItem
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -71,40 +84,51 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
         //Update Goods desc spinner when Lot track no is selected
         lotTrackNameSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
             override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG, "lotTrackNameSelectionListener-- onSpinnerItemSelection")
+                LoggerUtils.debug(TAG , "lotTrackNameSelectionListener-- onSpinnerItemSelection")
+                yarnPurchasePO = null
                 selectedItem?.let {
-                    val goodsDescList = erpRoomDAO.fetchGoodsDesc(selectedItem)
-                    goodsDescListLiveData.postValue(goodsDescList)
-                    knittingDetailsPOLiveData.value?.lotTrackName = selectedItem
-                    //Get yarn details of track name
-                    yarnPurchasePO = erpRoomDAO.fetchYarnPurchasesPO(selectedItem)
-                    yarnPurchasePO?.let {
-                        //Update available qty
-                        availableYarnQtyLiveData.postValue(it.currentQtyInKgs)
+                    viewModelScope.launch {
+                        erpRepo.fetchGoodsDesc(selectedItem).collect { result ->
+                            result.data?.let { goodsDescList ->
+                                goodsDescListLiveData.postValue(goodsDescList)
+                                knittingDetailsPOLiveData.value?.lotTrackName = selectedItem
+
+                                //Get yarn details of track name
+                                erpRepo.fetchYarnPurchasesPO(selectedItem).collect { resultPurchasePO ->
+                                    resultPurchasePO.data?.let { yarnPurchasePo1 ->
+                                        yarnPurchasePO = yarnPurchasePo1
+                                        //Update available qty
+                                        availableYarnQtyLiveData.postValue(yarnPurchasePo1.currentQtyInKgs)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
 
-        goodsDescSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
-            override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG, "goodsDescSelectionListener-- onSpinnerItemSelection")
-                selectedItem?.let {
-                    knittingDetailsPOLiveData.value?.goodsDesc = selectedItem
+        goodsDescSelectionListener =
+            object : CustomSpinnerBox.SpinnerSelection {
+                override fun onSpinnerItemSelection(selectedItem: String?) {
+                    LoggerUtils.debug(TAG , "goodsDescSelectionListener-- onSpinnerItemSelection")
+                    selectedItem?.let {
+                        knittingDetailsPOLiveData.value?.goodsDesc = selectedItem
+                    }
                 }
             }
-        }
 
-        fabricStructureSelectionListener = object : CustomSpinnerBox.SpinnerSelection {
-            override fun onSpinnerItemSelection(selectedItem: String?) {
-                LoggerUtils.debug(TAG, "goodsDescSelectionListener-- onSpinnerItemSelection")
-                selectedItem?.let {
-                    //TODO after multiple fabric structure change
-                    //                    fabricStructurePOLiveData.value?.fabricStructure = selectedItem
-                    knittingDetailsPOLiveData.value?.fabricStructure = selectedItem
+        fabricStructureSelectionListener =
+            object : CustomSpinnerBox.SpinnerSelection {
+                override fun onSpinnerItemSelection(selectedItem: String?) {
+                    LoggerUtils.debug(TAG , "goodsDescSelectionListener-- onSpinnerItemSelection")
+                    selectedItem?.let {
+                        //TODO after multiple fabric structure change
+                        //                    fabricStructurePOLiveData.value?.fabricStructure = selectedItem
+                        knittingDetailsPOLiveData.value?.fabricStructure = selectedItem
+                    }
                 }
             }
-        }
 
         //TODO dummy list
         val fabricList = ArrayList<String>()
@@ -115,14 +139,14 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
 
 
     fun onSubmitClick() {
-        LoggerUtils.debug(TAG, "onSubmitClick")
+        LoggerUtils.debug(TAG , "onSubmitClick")
 
-        LoggerUtils.debug(TAG, "onSubmitClick-dcNo--${knittingDetailsPOLiveData.value?.srkwDCNo}")
-        LoggerUtils.debug(TAG, "onSubmitClick-date--${knittingDetailsPOLiveData.value?.date}")
-        LoggerUtils.debug(TAG, "onSubmitClick-lotTrackName--${knittingDetailsPOLiveData.value?.lotTrackName}")
-        LoggerUtils.debug(TAG, "onSubmitClick-goodsDesc--${knittingDetailsPOLiveData.value?.goodsDesc}")
-        LoggerUtils.debug(TAG, "onSubmitClick-orderRefNo--${knittingDetailsPOLiveData.value?.orderRefNo}")
-        LoggerUtils.debug(TAG, "onSubmitClick-spinningMill--${knittingDetailsPOLiveData.value?.spinningMill}")
+        LoggerUtils.debug(TAG , "onSubmitClick-dcNo--${knittingDetailsPOLiveData.value?.srkwDCNo}")
+        LoggerUtils.debug(TAG , "onSubmitClick-date--${knittingDetailsPOLiveData.value?.date}")
+        LoggerUtils.debug(TAG , "onSubmitClick-lotTrackName--${knittingDetailsPOLiveData.value?.lotTrackName}")
+        LoggerUtils.debug(TAG , "onSubmitClick-goodsDesc--${knittingDetailsPOLiveData.value?.goodsDesc}")
+        LoggerUtils.debug(TAG , "onSubmitClick-orderRefNo--${knittingDetailsPOLiveData.value?.orderRefNo}")
+        LoggerUtils.debug(TAG , "onSubmitClick-spinningMill--${knittingDetailsPOLiveData.value?.spinningMill}")
 
         /*TODO after adding logic to get multiple fabric structure
         LoggerUtils.debug(TAG, "onSubmitClick-fabricStructure--${fabricStructurePOLiveData.value?.fabricStructure}")
@@ -141,7 +165,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
             knittingProgramPO?.fabricStructureList?.add(fabricStructurePO)
         }*/
         //TODO Add validation to check qty
-
         yarnPurchasePO?.let { yarnPurchasePO_ ->
             knittingDetailsPOLiveData.value?.let { knittingPO ->
                 val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
@@ -150,12 +173,26 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRo
                     showToastMessage.postValue("Given qty is more than available qty")
                 } else {
                     yarnPurchasePO_.currentQtyInKgs = (availableQty - qtyToBeReduced).toString()
-                    erpRoomDAO.insertKnittingDetails(knittingPO)
-                    erpRoomDAO.updateYarnPurchaseDetails(yarnPurchasePO_)
-                    onKnittingAddSuccess.postValue(true)
+                    viewModelScope.launch {
+                        erpRepo.insertKnittingDetails(knittingPO).collect { insertResult ->
+                            when (insertResult.status) {
+                                ResultHandler.Status.SUCCESS -> {
+                                    LoggerUtils.debug(TAG , "insertKnittingDetails-success")
+                                    erpRepo.updateYarnPurchaseDetails(yarnPurchasePO_).collect { updateYarnPurchaseResult ->
+                                        //TODO handle error
+                                        LoggerUtils.debug(TAG , "updateYarnPurchaseDetails-error")
+                                        onKnittingAddSuccess.postValue(true)
+                                    }
+                                }
+                                ResultHandler.Status.ERROR -> {
+                                    LoggerUtils.debug(TAG , "insertKnittingDetails-error")
+                                    //TODO handle error
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-
 }

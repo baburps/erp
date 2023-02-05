@@ -1,5 +1,7 @@
 package com.software.erp.domain.model
 
+import com.software.erp.common.utils.LoggerUtils
+
 data class ResultHandler<out T>(val status: Status, val data: T?, val message: String) {
 
     enum class Status {
@@ -10,10 +12,12 @@ data class ResultHandler<out T>(val status: Status, val data: T?, val message: S
 
     companion object {
         fun <T> success(data: T): ResultHandler<T> {
+            LoggerUtils.debug("ResultHandler", "success")
             return ResultHandler(Status.SUCCESS, data, "")
         }
 
         fun <T> error(message: String, data: T? = null): ResultHandler<T> {
+            LoggerUtils.debug("ResultHandler", "error")
             return ResultHandler(Status.ERROR, data, message)
         }
 

@@ -2,15 +2,18 @@ package com.software.erp.view.greyfabric
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.software.erp.common.utils.LoggerUtils
-import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.domain.model.ResultHandler
+import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERPRoomDAO) : ViewModel() {
+class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo) : ViewModel() {
 
     companion object {
         const val TAG = "GreyFabricDetailsViewModel"
@@ -35,38 +38,40 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         val srkwDCNO = greyFabricDetailsPOLiveData.value?.knittingProgramSRKWDCNo
         if (srkwDCNO != null) {
             existingReceivedQty = getAlreadyReceivedQty(srkwDCNO)
-            val knittingProgramPO = erpRoomDAO.searchKnittingProgramWithDCNo(srkwDCNO)
+            viewModelScope.launch {
+                erpRepo.searchKnittingProgramWithDCNo(srkwDCNO).collect {
+                    it.data?.let { _knittingProgramPO ->
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-date--${_knittingProgramPO.date}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-orderRefNo--${_knittingProgramPO.orderRefNo}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-goodsDesc--${_knittingProgramPO.goodsDesc}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-fabricStructure--${_knittingProgramPO.fabricStructure}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-machineGage--${_knittingProgramPO.machineGage}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-loopLength--${_knittingProgramPO.loopLength}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-dia--${_knittingProgramPO.dia}")
+                        LoggerUtils.debug(TAG , "onKnittingDCSearchClick-qtyInKgs--${_knittingProgramPO.qtyInKgs}")
 
-            knittingProgramPO?.let { _knittingProgramPO ->
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-date--${_knittingProgramPO.date}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-orderRefNo--${_knittingProgramPO.orderRefNo}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-goodsDesc--${_knittingProgramPO.goodsDesc}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-fabricStructure--${_knittingProgramPO.fabricStructure}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-machineGage--${_knittingProgramPO.machineGage}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-loopLength--${_knittingProgramPO.loopLength}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-dia--${_knittingProgramPO.dia}")
-                LoggerUtils.debug(TAG , "onKnittingDCSearchClick-qtyInKgs--${_knittingProgramPO.qtyInKgs}")
+                        val greyFabricDetailsPO = greyFabricDetailsPOLiveData.value
+                        greyFabricDetailsPO?.let { _greyFabricPo ->
+                            _greyFabricPo.spinningMill = _knittingProgramPO.spinningMill
+                            _greyFabricPo.knittingProgramSRKWDCNo = _knittingProgramPO.srkwDCNo
+                            _greyFabricPo.date = _knittingProgramPO.date
+                            _greyFabricPo.orderRefNo = _knittingProgramPO.orderRefNo
+                            _greyFabricPo.goodsDesc = _knittingProgramPO.goodsDesc
+                            _greyFabricPo.fabricStructure = _knittingProgramPO.fabricStructure
+                            _greyFabricPo.machineGage = _knittingProgramPO.machineGage
+                            _greyFabricPo.loopLength = _knittingProgramPO.loopLength
+                            _greyFabricPo.dia = _knittingProgramPO.dia
+                            _greyFabricPo.programmedQtyInKgs = _knittingProgramPO.qtyInKgs
+                            _greyFabricPo.showKnittingDetails = true
+                            _greyFabricPo.remainingQtyInKgs = _knittingProgramPO.qtyInKgs
 
-                val greyFabricDetailsPO = greyFabricDetailsPOLiveData.value
-                greyFabricDetailsPO?.let { _greyFabricPo ->
-                    _greyFabricPo.spinningMill = _knittingProgramPO.spinningMill
-                    _greyFabricPo.knittingProgramSRKWDCNo = _knittingProgramPO.srkwDCNo
-                    _greyFabricPo.date = _knittingProgramPO.date
-                    _greyFabricPo.orderRefNo = _knittingProgramPO.orderRefNo
-                    _greyFabricPo.goodsDesc = _knittingProgramPO.goodsDesc
-                    _greyFabricPo.fabricStructure = _knittingProgramPO.fabricStructure
-                    _greyFabricPo.machineGage = _knittingProgramPO.machineGage
-                    _greyFabricPo.loopLength = _knittingProgramPO.loopLength
-                    _greyFabricPo.dia = _knittingProgramPO.dia
-                    _greyFabricPo.programmedQtyInKgs = _knittingProgramPO.qtyInKgs
-                    _greyFabricPo.showKnittingDetails = true
-                    _greyFabricPo.remainingQtyInKgs = _knittingProgramPO.qtyInKgs
+                            existingReceivedQty?.let {
+                                _greyFabricPo.remainingQtyInKgs = (_knittingProgramPO.qtyInKgs.toDouble() - it).toString()
+                            }
 
-                    existingReceivedQty?.let {
-                        _greyFabricPo.remainingQtyInKgs = (_knittingProgramPO.qtyInKgs.toDouble() - it).toString()
+                            greyFabricDetailsPOLiveData.postValue(_greyFabricPo)
+                        }
                     }
-
-                    greyFabricDetailsPOLiveData.postValue(_greyFabricPo)
                 }
             }
         }
@@ -75,11 +80,14 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
     private fun getAlreadyReceivedQty(srkwDCNO: String?): Double? {
         var receivedQty = 0.0
         srkwDCNO?.let {
-            val greyFabricWrapper = erpRoomDAO.fetchGreyFabricBasedOnDCNo(it)
-            greyFabricWrapper?.let { wrapper ->
-                if (!wrapper.greyFabricList.isNullOrEmpty()) {
-                    wrapper.greyFabricList.forEach { _po ->
-                        receivedQty += _po.receivedQtyInKgs.toDouble()
+            viewModelScope.launch {
+                erpRepo.fetchGreyFabricBasedOnDCNo(it).collect { result ->
+                    result.data?.let { wrapper ->
+                        if (!wrapper.greyFabricList.isNullOrEmpty()) {
+                            wrapper.greyFabricList.forEach { _po ->
+                                receivedQty += _po.receivedQtyInKgs.toDouble()
+                            }
+                        }
                     }
                 }
             }
@@ -139,9 +147,21 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRoomDAO: ERP
         LoggerUtils.debug(TAG , "onSubmitClick--shortagePercentage--${greyFabricDetailsPOLiveData.value?.shortagePercentage}")
 
         if (isReceivedQtyValid()) {
-            greyFabricDetailsPOLiveData.value?.let { erpRoomDAO.insertGreyFabricDetails(it) }
-            onGretFabricAddSuccess.postValue(true)
+            greyFabricDetailsPOLiveData.value?.let {
+                viewModelScope.launch {
+                    erpRepo.insertGreyFabricDetails(it).collect { result ->
+                        when (result.status) {
+                            ResultHandler.Status.SUCCESS -> {
+                                onGretFabricAddSuccess.postValue(true)
+                            }
+
+                            ResultHandler.Status.ERROR -> {
+                                //TODO handle error
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 }
