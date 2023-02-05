@@ -3,6 +3,7 @@ package com.software.erp.di
 import android.content.Context
 import androidx.room.Room
 import com.software.erp.base.ERPApplication
+import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.domain.room.ERPRoomDAO
 import com.software.erp.domain.room.ERPRoomDatabase
 import dagger.Module
@@ -10,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -36,5 +38,14 @@ object RoomModule {
     @Provides
     fun provideApplication(@ApplicationContext app: Context): ERPApplication {
         return app as ERPApplication
+    }
+
+    @Singleton
+    @Provides
+    fun provideERPRepo(
+        erpRoomDAO: ERPRoomDAO ,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): ERPRepo {
+        return ERPRepo(erpRoomDAO , ioDispatcher)
     }
 }
