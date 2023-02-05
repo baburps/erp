@@ -43,6 +43,7 @@
     <string name="lot_track_name">Lot track name</string>
     <string name="save">Save</string>
     <string name="yarn_purchase_saved_successfully">Yarn stock saved successfully</string>
+    <string name="error">Error</string>
 
 
     <string name="SRKW_DC_no">SRKW D.C.No</string>

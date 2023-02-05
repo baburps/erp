@@ -4,20 +4,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.software.erp.common.utils.LoggerUtils
-import com.software.erp.domain.room.ERPRoomDAO
+import com.software.erp.domain.model.ResultHandler
+import com.software.erp.domain.repo.ERPRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class YarnPurchaseViewModel @Inject constructor(private val erpRoomDAO: ERPRoomDAO) : ViewModel() {
+class YarnPurchaseViewModel @Inject constructor(private val erpRepo: ERPRepo) : ViewModel() {
 
     companion object {
         const val TAG = "YarnPurchaseViewModel"
     }
 
     val yarnPurchasePOLiveData = MutableLiveData<YarnPurchasePO>()
-    val onYarnStockAddSuccess = MutableLiveData<Boolean>()
+    val onYarnStockAddSuccess = MutableLiveData<ResultHandler<Boolean>>()
 
     init {
         yarnPurchasePOLiveData.postValue(YarnPurchasePO())
@@ -54,38 +55,63 @@ class YarnPurchaseViewModel @Inject constructor(private val erpRoomDAO: ERPRoomD
 
             if (yarnPurchasePOLiveData.value?.trackingID != 0) {
                 LoggerUtils.debug(TAG , "onSubmitClick update")
-                yarnPurchasePOLiveData.value?.let { erpRoomDAO.updateYarnPurchaseDetails(yarnPurchasePO = it) }
+                yarnPurchasePOLiveData.value?.let {
+                    erpRepo.updateYarnPurchaseDetails(yarnPurchasePO = it).collect { result ->
+                        onYarnStockAddSuccess.postValue(result)
+                    }
+                }
             } else {
                 LoggerUtils.debug(TAG , "onSubmitClick insert")
-                yarnPurchasePOLiveData.value?.let { erpRoomDAO.insertYarnPurchaseDetails(yarnPurchasePO = it) }
+                yarnPurchasePOLiveData.value?.let {
+                    erpRepo.insertYarnPurchaseDetails(yarnPurchasePO = it).collect { result ->
+                        onYarnStockAddSuccess.postValue(result)
+                    }
+                }
             }
-
-            onYarnStockAddSuccess.postValue(true)
         }
     }
 
     //TODO remove
     fun addDummyData() = try {
-        val list = erpRoomDAO.fetchAllYarnPurchases()
-        val id = list.size + 1
-        val yarnPurchasePO = YarnPurchasePO(
-            "Invoice-$id" ,
-            "01-01-2022" ,
-            "Spinning mill-$id" ,
-            "Desc-$id" ,
-            (100 * id).toString() ,
-            (1000 * id).toString() ,
-            (1000 * id).toString() ,
-            10.toString() ,
-            (1000 * id).toString() ,
-            "Track name-$id" ,
-            (1000 * id).toString() ,
-            0
-        )
+        viewModelScope.launch {
+            erpRepo.fetchAllYarnPurchases().collect {
+                when (it.status) {
+                    ResultHandler.Status.SUCCESS -> {
+                        insertDummyData(it)
+                    }
 
-        erpRoomDAO.insertYarnPurchaseDetails(yarnPurchasePO)
-        onYarnStockAddSuccess.postValue(true)
+                    ResultHandler.Status.ERROR -> {
+                    }
+                }
+            }
+        }
     } catch (e: Exception) {
         LoggerUtils.error(tag = TAG , exception = e)
+    }
+
+    private fun insertDummyData(it: ResultHandler<List<YarnPurchasePO>>) {
+        it.data?.let { list ->
+            val id = list.size + 1
+            val yarnPurchasePO = YarnPurchasePO(
+                "Invoice-$id" ,
+                "01-01-2022" ,
+                "Spinning mill-$id" ,
+                "Desc-$id" ,
+                (100 * id).toString() ,
+                (1000 * id).toString() ,
+                (1000 * id).toString() ,
+                10.toString() ,
+                (1000 * id).toString() ,
+                "Track name-$id" ,
+                (1000 * id).toString() ,
+                0
+            )
+
+            viewModelScope.launch {
+                erpRepo.insertYarnPurchaseDetails(yarnPurchasePO).collect {
+                    onYarnStockAddSuccess.postValue(it)
+                }
+            }
+        }
     }
 }

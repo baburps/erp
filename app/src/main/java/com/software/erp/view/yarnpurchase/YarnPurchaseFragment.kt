@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.software.erp.R
 import com.software.erp.base.BaseFragment
 import com.software.erp.databinding.FragmentYarnPurchaseBinding
+import com.software.erp.domain.model.ResultHandler
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,9 +18,16 @@ class YarnPurchaseFragment : BaseFragment<FragmentYarnPurchaseBinding>() {
         binding?.viewModel = viewModel
 
         viewModel.onYarnStockAddSuccess.observe(this) {
-            showToast(getString(R.string.yarn_purchase_saved_successfully))
-            //Pop backstack to go back to list page
-            findNavController().popBackStack()
+            when (it.status) {
+                ResultHandler.Status.SUCCESS -> {
+                    showToast(getString(R.string.yarn_purchase_saved_successfully))
+                    //Pop backstack to go back to list page
+                    findNavController().popBackStack()
+                }
+                ResultHandler.Status.ERROR -> {
+                    showToast(getString(R.string.error))
+                }
+            }
         }
 
         arguments?.let {
