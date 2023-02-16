@@ -13,10 +13,11 @@
 
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,8 +73,8 @@
                 <com.software.erp.common.customviews.CustomTextView
                     style="@style/text_tile_style"
                     android:layout_marginStart="10dp"
-                    tools:text="100"
-                    android:text="@={viewModel.availableYarnQtyLiveData}" />
+                    android:text="@={viewModel.availableYarnQtyLiveData}"
+                    tools:text="100" />
 
             </LinearLayout>
 
@@ -85,47 +86,21 @@
 
             <View style="@style/divider_line_style" />
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRVKnittingDetailsFabricStructure"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.software.erp.common.customviews.CustomTextView
+                style="@style/text_link_style"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/knitting_fabric_structure_bg"
-                android:orientation="vertical">
-
-                <com.software.erp.common.customviews.CustomSpinnerBox
-                    android:id="@+id/mSBKnitting"
-                    style="@style/custom_spinner_box"
-                    app:spinnerList="@{viewModel.fabricStructureListLiveData}"
-                    app:spinnerSelection="@{viewModel.fabricStructureSelectionListener}"
-                    app:title="@string/fabric_structure" />
-
-                <com.software.erp.common.customviews.CustomInputBox
-                    android:id="@+id/mIBKnittingGage"
-                    style="@style/custom_input_box"
-                    android:text="@={viewModel.knittingDetailsPOLiveData.machineGage}"
-                    app:title="@string/machine_gage" />
-
-                <com.software.erp.common.customviews.CustomInputBox
-                    android:id="@+id/mIBKnittingLoopLength"
-                    style="@style/custom_input_box"
-                    android:text="@={viewModel.knittingDetailsPOLiveData.loopLength}"
-                    app:title="@string/loop_length" />
-
-                <com.software.erp.common.customviews.CustomInputBox
-                    android:id="@+id/mIBKnittingDia"
-                    style="@style/custom_input_box"
-                    android:text="@={viewModel.knittingDetailsPOLiveData.dia}"
-                    app:title="@string/dia"
-                    app:type="@{constant.NUMBERS}" />
-
-                <com.software.erp.common.customviews.CustomInputBox
-                    android:id="@+id/mIBKnittingQtyInKgs"
-                    style="@style/custom_input_box"
-                    android:text="@={viewModel.knittingDetailsPOLiveData.qtyInKgs}"
-                    app:title="@string/qty_in_kgs"
-                    app:type="@{constant.DECIMAL_NUMBERS}" />
-            </LinearLayout>
-
-            <View style="@style/divider_line_style" />
+                android:layout_marginTop="10dp"
+                android:drawableStart="@android:drawable/ic_input_add"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:onClick="@{() -> viewModel.addFabricStructureList()}"
+                android:text="@string/fabric_structure" />
 
             <com.software.erp.common.customviews.CustomButton
                 style="@style/button_style_full"
@@ -135,5 +110,5 @@
                 android:onClick="@{() -> viewModel.onSubmitClick()}"
                 android:text="@string/save" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

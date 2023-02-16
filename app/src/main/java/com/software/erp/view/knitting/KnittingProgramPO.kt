@@ -1,40 +1,60 @@
 package com.software.erp.view.knitting
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.io.Serializable
 
 @Entity(
-    tableName = "knitting_program",
+    tableName = "knitting_program" ,
     indices = [Index(value = ["srkwDCNo"] , unique = true)]
 )
 data class KnittingProgramPO constructor(
-    @PrimaryKey var srkwDCNo: String,//Used by self to track fabric
+    @PrimaryKey var srkwDCNo: String ,//Used by self to track fabric
     @ColumnInfo var date: String ,
     @ColumnInfo var spinningMill: String ,
     @ColumnInfo var lotTrackName: String ,
     @ColumnInfo var goodsDesc: String ,
     @ColumnInfo var orderRefNo: String ,
     @ColumnInfo var fabricStructure: String = "" ,
-    @ColumnInfo var machineGage: String = "",
-    @ColumnInfo var loopLength: String = "",
-    @ColumnInfo var dia: String = "",
-    @ColumnInfo var qtyInKgs: String = ""
-// TODO   @ColumnInfo var fabricStructureList: ArrayList<FabricStructurePO> = ArrayList()
+    @ColumnInfo var machineGage: String = "" ,
+    @ColumnInfo var loopLength: String = "" ,
+    @ColumnInfo var dia: String = "" ,
+    @ColumnInfo var qtyInKgs: String = "" ,
 ) : Serializable {
-    constructor() : this("" , "" , "" , "" , "" , "" , "" , "" , "" , "" , "")
+    constructor() : this(
+        "" , "" , "" , "" ,
+        "" , "" , "" , "" , "" , ""
+    )
 }
 
+@Entity(
+    tableName = "fabric_structure" ,
+    foreignKeys = [ForeignKey(
+        entity = KnittingProgramPO::class ,
+        parentColumns = arrayOf("srkwDCNo") ,
+        childColumns = arrayOf("knittingProgramSRKWDCNo") ,
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class FabricStructurePO constructor(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0 ,
+    @ColumnInfo var knittingProgramSRKWDCNo: String = "" ,//Used by self to track fabric
     @ColumnInfo var fabricStructure: String = "" ,
     @ColumnInfo var machineGage: String = "" ,
     @ColumnInfo var loopLength: String = "" ,
-    @ColumnInfo var fabricDiaList: ArrayList<FabricDia> = ArrayList()
 ) : Serializable
 
+@Entity(
+    tableName = "fabric_dia" ,
+    foreignKeys = [ForeignKey(
+        entity = KnittingProgramPO::class ,
+        parentColumns = arrayOf("id") ,
+        childColumns = arrayOf("fabricStructureId") ,
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class FabricDia constructor(
-    @ColumnInfo var dia: String = "",
+    @PrimaryKey(autoGenerate = true) var id: Int = 0 ,
+    @ColumnInfo var fabricStructureId: Int = 0 ,
+    @ColumnInfo var dia: String = "" ,
     @ColumnInfo var qtyInKgs: String = ""
 ) : Serializable

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="fabricStructurePO"
+            type="com.software.erp.view.knitting.FabricStructurePO" />
+
+        <variable
+            name="fabricStructureList"
+            type="java.util.List&lt;String>" />
+
+        <variable
+            name="fabricStructureSelectionListener"
+            type="com.software.erp.common.customviews.CustomSpinnerBox.SpinnerSelection" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mLLCustomInputParenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/fabric_structure_bg"
+        android:orientation="vertical"
+        android:padding="1dp">
+
+        <com.software.erp.common.customviews.CustomSpinnerBox
+            android:id="@+id/mSBFabricStructure"
+            style="@style/custom_spinner_box"
+            app:spinnerList="@{fabricStructureList}"
+            app:spinnerSelection="@{fabricStructureSelectionListener}"
+            app:title="@string/fabric_structure" />
+
+        <com.software.erp.common.customviews.CustomInputBox
+            android:id="@+id/mIBKnittingGage"
+            style="@style/custom_input_box"
+            app:title="@string/machine_gage" />
+
+        <com.software.erp.common.customviews.CustomInputBox
+            android:id="@+id/mIBKnittingLoopLength"
+            style="@style/custom_input_box"
+            app:title="@string/loop_length" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRVKnittingFabricStructureDia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
+
+        <com.software.erp.common.customviews.CustomTextView
+            android:id="@+id/mTVKnittingDiaAdd"
+            style="@style/text_link_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawableStart="@android:drawable/ic_input_add"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="@string/dia" />
+
+    </LinearLayout>
+</layout>

@@ -3,6 +3,7 @@ package com.software.erp.view.knitting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.software.erp.common.constant.ConstantUtils
 import com.software.erp.common.customviews.CustomSpinnerBox
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.domain.model.ResultHandler
@@ -21,8 +22,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
     }
 
     val knittingDetailsPOLiveData = MutableLiveData<KnittingProgramPO>()
-    val fabricStructurePOLiveData = MutableLiveData<FabricStructurePO>()
-    val fabricDiaPOLiveData = MutableLiveData<FabricDia>()
 
     lateinit var spinningMillSelectionListener: CustomSpinnerBox.SpinnerSelection
     lateinit var lotTrackNameSelectionListener: CustomSpinnerBox.SpinnerSelection
@@ -40,6 +39,9 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
     val onKnittingAddSuccess = MutableLiveData<Boolean>()
     val showToastMessage = MutableLiveData<String>()
 
+    //To update Fabric structure Recycler view
+    val fabricStructurePOListLiveData = MutableLiveData<MutableList<FabricStructurePO>>()
+
     private var yarnPurchasePO: YarnPurchasePO? = null
 
     init {
@@ -53,8 +55,8 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
 
     private fun initializeDefaultValuesForAdd() {
         knittingDetailsPOLiveData.postValue(KnittingProgramPO())
-        fabricStructurePOLiveData.postValue(FabricStructurePO())
-        fabricDiaPOLiveData.postValue(FabricDia())
+        //Populate fabric structure list
+        fabricStructureListLiveData.postValue(ConstantUtils.getFabricStructureList())
 
         viewModelScope.launch {
             erpRepo.fetchSpinningMills().collect { result ->
@@ -130,11 +132,16 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
                 }
             }
 
-        //TODO dummy list
-        val fabricList = ArrayList<String>()
-        fabricList.add("Circular")
-        fabricList.add("Flat")
-        fabricStructureListLiveData.postValue(fabricList)
+        //Default Add one fabric structure item
+        addFabricStructureList()
+    }
+
+    fun addFabricStructureList() {
+        var list: MutableList<FabricStructurePO>? = fabricStructurePOListLiveData.value
+        list?.add(FabricStructurePO()) ?: run {
+            list = mutableListOf(FabricStructurePO())
+        }
+        fabricStructurePOListLiveData.postValue(list!!)
     }
 
 

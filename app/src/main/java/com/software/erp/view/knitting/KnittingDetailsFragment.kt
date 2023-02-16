@@ -2,6 +2,7 @@ package com.software.erp.view.knitting
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.software.erp.R
 import com.software.erp.base.BaseFragment
 import com.software.erp.databinding.FragmentKnittingDetailsBinding
@@ -11,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
 
+    private var fabricStructureAdapter: FabricStructureAdapter? = null
     private val viewModel: KnittingDetailsViewModel by viewModels()
 
     override fun onSetUp() {
@@ -24,14 +26,32 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
 
         arguments?.let {
             if (it.containsKey(DashboardViewModel.KNITTING_PROGRAM_PO)) {
-                val knittingProgramPO =
-                    it.getSerializable(DashboardViewModel.KNITTING_PROGRAM_PO) as KnittingProgramPO
+                val knittingProgramPO = it.getSerializable(DashboardViewModel.KNITTING_PROGRAM_PO) as KnittingProgramPO
                 viewModel.updateEditScreenPO(knittingProgramPO)
+                //TODO handle fabric structure recycler view
             }
         }
 
         viewModel.showToastMessage.observe(this) {
             showToast(it)
+        }
+
+        handleRecyclerView()
+    }
+
+    private fun handleRecyclerView() {
+        binding?.mRVKnittingDetailsFabricStructure?.layoutManager = LinearLayoutManager(activity)
+        //Disable list scroll. It will use page scroll
+        binding?.mRVKnittingDetailsFabricStructure?.isNestedScrollingEnabled = false
+
+        viewModel.fabricStructurePOListLiveData.observe(this) {
+            //Update Recycler view
+            it?.let {
+                fabricStructureAdapter?.updateList(it)?:run {
+                    fabricStructureAdapter = FabricStructureAdapter(requireActivity(), it)
+                    binding?.mRVKnittingDetailsFabricStructure?.adapter = fabricStructureAdapter
+                }
+            }
         }
     }
 
