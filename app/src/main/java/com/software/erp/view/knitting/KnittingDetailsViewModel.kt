@@ -3,7 +3,6 @@ package com.software.erp.view.knitting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.software.erp.common.constant.ConstantUtils
 import com.software.erp.common.customviews.CustomSpinnerBox
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.domain.model.ResultHandler
@@ -34,7 +33,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
     //TODO handle unique entry of track no
     val lotTrackNoListLiveData = MutableLiveData<List<String>>()
     val goodsDescListLiveData = MutableLiveData<List<String>>()
-    val fabricStructureListLiveData = MutableLiveData<List<String>>()
 
     val onKnittingAddSuccess = MutableLiveData<Boolean>()
     val showToastMessage = MutableLiveData<String>()
@@ -55,8 +53,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
 
     private fun initializeDefaultValuesForAdd() {
         knittingDetailsPOLiveData.postValue(KnittingProgramPO())
-        //Populate fabric structure list
-        fabricStructureListLiveData.postValue(ConstantUtils.getFabricStructureList())
 
         viewModelScope.launch {
             erpRepo.fetchSpinningMills().collect { result ->

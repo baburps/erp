@@ -19,6 +19,7 @@ data class KnittingProgramPO constructor(
     @ColumnInfo var loopLength: String = "" ,
     @ColumnInfo var dia: String = "" ,
     @ColumnInfo var qtyInKgs: String = "" ,
+    @Ignore var fabricStructureList: List<FabricStructurePO> = mutableListOf()
 ) : Serializable {
     constructor() : this(
         "" , "" , "" , "" ,
@@ -41,6 +42,7 @@ data class FabricStructurePO constructor(
     @ColumnInfo var fabricStructure: String = "" ,
     @ColumnInfo var machineGage: String = "" ,
     @ColumnInfo var loopLength: String = "" ,
+    @Ignore var fabricDiaList: MutableList<FabricDia> = mutableListOf()
 ) : Serializable
 
 @Entity(

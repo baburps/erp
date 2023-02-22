@@ -1,19 +1,20 @@
 package com.software.erp.view.knitting
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.software.erp.databinding.ItemKnittingFabricStructureBinding
 
-class FabricStructureAdapter(private val context: Context , private var fabricStructurePOList: List<FabricStructurePO>) :
+class FabricStructureAdapter(private var fabricStructurePOList: List<FabricStructurePO>) :
     RecyclerView.Adapter<FabricStructureAdapter.FabricStructureViewHolder>() {
 
     companion object {
         const val TAG: String = "FabricStructureAdapter"
     }
 
-    private var fabricDiaAdapter: FabricDiaAdapter? = null
+    fun getFabricStructureList(): List<FabricStructurePO> {
+        return fabricStructurePOList
+    }
 
     fun updateList(fabricStructurePOList: List<FabricStructurePO>) {
         this.fabricStructurePOList = fabricStructurePOList

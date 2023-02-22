@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.*
@@ -19,11 +20,11 @@ import java.util.*
 
 @InverseBindingMethods(
     InverseBindingMethod(
-        type = CustomInputBox::class,
+        type = CustomInputBox::class ,
         attribute = "android:text"
     )
 )
-class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(context, attrs) {
+class CustomInputBox(context: Context , var attrs: AttributeSet?) : LinearLayout(context , attrs) {
 
     private var binding: CustomViewInputboxBinding
 
@@ -43,7 +44,7 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         @BindingAdapter("android:textAttrChanged")
         @JvmStatic
         fun setListeners(
-            customInputBox: CustomInputBox?,
+            customInputBox: CustomInputBox? ,
             attrChange: InverseBindingListener
         ) {
             customInputBox?.binding?.mETCustomInput?.doAfterTextChanged {
@@ -53,45 +54,45 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
     }
 
     private fun setInputValue(value: String) {
-        LoggerUtils.debug(TAG, value)
+        LoggerUtils.debug(TAG , value)
         binding.mETCustomInput.setText(value)
     }
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        binding = CustomViewInputboxBinding.inflate(inflater, this, true)
+        binding = CustomViewInputboxBinding.inflate(inflater , this , true)
         mapAttributes()
     }
 
     private fun mapAttributes() {
         val attributes: TypedArray = context.obtainStyledAttributes(
-            attrs, R.styleable.custom_prop, 0, 0
+            attrs , R.styleable.custom_prop , 0 , 0
         )
 
         try {
             val title = attributes.getString(R.styleable.custom_prop_title)
             title?.let {
-                LoggerUtils.debug(TAG, title)
+                LoggerUtils.debug(TAG , title)
                 binding.mTVCustomInputTitle.text = title
             } ?: run {
                 binding.mTVCustomInputTitle.text = ""
             }
             val hint = attributes.getString(R.styleable.custom_prop_hint)
             hint?.let {
-                LoggerUtils.debug(TAG, hint)
+                LoggerUtils.debug(TAG , hint)
                 binding.mETCustomInput.hint = hint
             }
             val error = attributes.getString(R.styleable.custom_prop_error)
             error?.let {
-                LoggerUtils.debug(TAG, error)
+                LoggerUtils.debug(TAG , error)
                 binding.mTVCustomInputError.text = error
             } ?: run {
                 binding.mTVCustomInputError.text = ""
             }
         } catch (e: Exception) {
-            e.message?.let { Log.e(TAG, it) }
+            e.message?.let { Log.e(TAG , it) }
         } finally {
-            LoggerUtils.debug(TAG, "attributes.recycle()")
+            LoggerUtils.debug(TAG , "attributes.recycle()")
             attributes.recycle()
         }
     }
@@ -101,13 +102,13 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
     }
 
     fun setType(type: String?) {
-        LoggerUtils.debug(TAG, "setType$type")
+        LoggerUtils.debug(TAG , "setType$type")
         type?.let { handleFiledType(it) }
     }
 
 
     fun setText(value: String?) {
-        LoggerUtils.debug(TAG, "setText$value")
+        LoggerUtils.debug(TAG , "setText$value")
         value?.let {
             binding.mETCustomInput.setText(it)
         }
@@ -124,14 +125,14 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
         when (type) {
             CustomAttributes.DATE -> {
                 //Make filed only clickable to select date from date picker
-                binding.mETCustomInput.setOnFocusChangeListener { _, focused ->
+                binding.mETCustomInput.setOnFocusChangeListener { _ , focused ->
                     if (focused) {
                         openDatePicker()
                     }
                 }
 
                 binding.mETCustomInput.setOnClickListener {
-                    LoggerUtils.debug(TAG, "mETCustomInput click")
+                    LoggerUtils.debug(TAG , "mETCustomInput click")
                 }
 /*
                 binding.mETCustomInput.setOnTouchListener { v, event ->
@@ -159,23 +160,27 @@ class CustomInputBox(context: Context, var attrs: AttributeSet?) : LinearLayout(
     }
 
     private fun openDatePicker() {
-        LoggerUtils.debug(TAG, "openDatePicker")
+        LoggerUtils.debug(TAG , "openDatePicker")
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(context, { _, years, monthOfYear, dayOfMonth ->
+        val datePickerDialog = DatePickerDialog(context , { _ , years , monthOfYear , dayOfMonth ->
             LoggerUtils.debug(
-                TAG,
+                TAG ,
                 "onDateSelection-year=$years,monthOfYear=$monthOfYear,dayOfMonth=$dayOfMonth"
             )
             binding.mETCustomInput.setText(dayOfMonth.toString() + "-" + (monthOfYear + 1).toString() + "-" + years.toString())
 
             binding.mETCustomInput.clearFocus()
-        }, year, month, day)
+        } , year , month , day)
 
         datePickerDialog.show()
+    }
+
+    fun getInputBox(): EditText {
+        return binding.mETCustomInput
     }
 
 

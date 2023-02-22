@@ -84,8 +84,6 @@
                 android:text="@={viewModel.knittingDetailsPOLiveData.orderRefNo}"
                 app:title="@string/order_ref_no" />
 
-            <View style="@style/divider_line_style" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mRVKnittingDetailsFabricStructure"
                 android:layout_width="match_parent"
@@ -103,11 +101,12 @@
                 android:text="@string/fabric_structure" />
 
             <com.software.erp.common.customviews.CustomButton
+                android:id="@+id/mBTKnittingDetailsSave"
                 style="@style/button_style_full"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:layout_marginBottom="50dp"
-                android:onClick="@{() -> viewModel.onSubmitClick()}"
+                android:onClick="onSubmitClick"
                 android:text="@string/save" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

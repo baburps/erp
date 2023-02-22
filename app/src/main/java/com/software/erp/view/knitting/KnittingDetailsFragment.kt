@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.software.erp.R
 import com.software.erp.base.BaseFragment
+import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.FragmentKnittingDetailsBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,10 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
             showToast(it)
         }
 
+        binding?.mBTKnittingDetailsSave?.setOnClickListener {
+            onSubmitClick()
+        }
+
         handleRecyclerView()
     }
 
@@ -47,8 +52,8 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
         viewModel.fabricStructurePOListLiveData.observe(this) {
             //Update Recycler view
             it?.let {
-                fabricStructureAdapter?.updateList(it)?:run {
-                    fabricStructureAdapter = FabricStructureAdapter(requireActivity(), it)
+                fabricStructureAdapter?.updateList(it) ?: run {
+                    fabricStructureAdapter = FabricStructureAdapter(it)
                     binding?.mRVKnittingDetailsFabricStructure?.adapter = fabricStructureAdapter
                 }
             }
@@ -61,5 +66,16 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
 
     override fun getViewTag(): String {
         return "KnittingDetailsFragment"
+    }
+
+    fun onSubmitClick() {
+        LoggerUtils.debug(TAG , "onSubmitClick")
+
+        fabricStructureAdapter?.let { fabricStructureAdapter ->
+            val list = fabricStructureAdapter.getFabricStructureList()
+            if (list.isNotEmpty()) {
+                LoggerUtils.debug(TAG , "fabric structure list")
+            }
+        }
     }
 }
