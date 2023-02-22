@@ -3,6 +3,8 @@ package com.software.erp.domain.room
 import androidx.room.*
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
+import com.software.erp.view.knitting.FabricDia
+import com.software.erp.view.knitting.FabricStructurePO
 import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
@@ -46,6 +48,28 @@ interface ERPRoomDAO {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertKnittingDetails(knittingProgramPO: KnittingProgramPO)
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertKnittingFabricStructure(fabricStructurePO: FabricStructurePO): Long
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertKnittingFabricDia(fabricDia: FabricDia)
+
+    fun insertKnittingDetailsWithFabricList(knittingProgramPO: KnittingProgramPO) {
+        insertKnittingDetails(knittingProgramPO)
+
+        knittingProgramPO.fabricStructureList.forEach { fabricStructurePo ->
+            //Map foreign key to Fabric Structure PO
+            fabricStructurePo.knittingProgramSRKWDCNo = knittingProgramPO.srkwDCNo
+            val id = insertKnittingFabricStructure(fabricStructurePo)
+
+            fabricStructurePo.fabricDiaList.forEach { fabricDia ->
+                //Map foreign key to Dia PO
+                fabricDia.fabricStructureId = id.toInt()
+                insertKnittingFabricDia(fabricDia)
+            }
+        }
+    }
 
     @Update
     fun updateKnittingDetails(knittingProgramPO: KnittingProgramPO)

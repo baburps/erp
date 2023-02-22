@@ -141,59 +141,75 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
     }
 
 
-    fun onSubmitClick() {
+    fun onSubmitClick(fabricStructurePOList: List<FabricStructurePO>) {
         LoggerUtils.debug(TAG , "onSubmitClick")
 
-        LoggerUtils.debug(TAG , "onSubmitClick-dcNo--${knittingDetailsPOLiveData.value?.srkwDCNo}")
-        LoggerUtils.debug(TAG , "onSubmitClick-date--${knittingDetailsPOLiveData.value?.date}")
-        LoggerUtils.debug(TAG , "onSubmitClick-lotTrackName--${knittingDetailsPOLiveData.value?.lotTrackName}")
-        LoggerUtils.debug(TAG , "onSubmitClick-goodsDesc--${knittingDetailsPOLiveData.value?.goodsDesc}")
-        LoggerUtils.debug(TAG , "onSubmitClick-orderRefNo--${knittingDetailsPOLiveData.value?.orderRefNo}")
-        LoggerUtils.debug(TAG , "onSubmitClick-spinningMill--${knittingDetailsPOLiveData.value?.spinningMill}")
+        try {
+            LoggerUtils.debug(TAG , "onSubmitClick-dcNo--${knittingDetailsPOLiveData.value?.srkwDCNo}")
+            LoggerUtils.debug(TAG , "onSubmitClick-date--${knittingDetailsPOLiveData.value?.date}")
+            LoggerUtils.debug(TAG , "onSubmitClick-lotTrackName--${knittingDetailsPOLiveData.value?.lotTrackName}")
+            LoggerUtils.debug(TAG , "onSubmitClick-goodsDesc--${knittingDetailsPOLiveData.value?.goodsDesc}")
+            LoggerUtils.debug(TAG , "onSubmitClick-orderRefNo--${knittingDetailsPOLiveData.value?.orderRefNo}")
+            LoggerUtils.debug(TAG , "onSubmitClick-spinningMill--${knittingDetailsPOLiveData.value?.spinningMill}")
 
-        /*TODO after adding logic to get multiple fabric structure
-        LoggerUtils.debug(TAG, "onSubmitClick-fabricStructure--${fabricStructurePOLiveData.value?.fabricStructure}")
-        LoggerUtils.debug(TAG, "onSubmitClick-machineGage--${fabricStructurePOLiveData.value?.machineGage}")
-        LoggerUtils.debug(TAG, "onSubmitClick-loopLength--${fabricStructurePOLiveData.value?.loopLength}")
+            fabricStructurePOList.forEach { fabricStructurePO ->
+                LoggerUtils.debug(TAG , "onSubmitClick-fabricStructure--${fabricStructurePO.fabricStructure}")
+                LoggerUtils.debug(TAG , "onSubmitClick-machineGage--${fabricStructurePO.machineGage}")
+                LoggerUtils.debug(TAG , "onSubmitClick-loopLength--${fabricStructurePO.loopLength}")
 
-        LoggerUtils.debug(TAG, "onSubmitClick-dia--${fabricDiaPOLiveData.value?.dia}")
-        LoggerUtils.debug(TAG, "onSubmitClick-qtyInKgs--${fabricDiaPOLiveData.value?.qtyInKgs}")*/
-
-        /*TODO after adding logic to get multiple fabric structure
-        val knittingProgramPO = knittingDetailsPOLiveData.value
-        fabricStructurePOLiveData.value?.let { fabricStructurePO ->
-            fabricDiaPOLiveData.value?.let { fabricDiaPO ->
-                fabricStructurePO.fabricDiaList.add(fabricDiaPO)
+                fabricStructurePO.fabricDiaList.forEach { diaPo ->
+                    LoggerUtils.debug(TAG , "onSubmitClick-dia--${diaPo.dia}")
+                    LoggerUtils.debug(TAG , "onSubmitClick-qtyInKgs--${diaPo.qtyInKgs}")
+                }
             }
-            knittingProgramPO?.fabricStructureList?.add(fabricStructurePO)
-        }*/
+        } catch (exception: Exception) {
+            LoggerUtils.error(TAG , "onSubmitClick" , exception)
+        }
+
         //TODO Add validation to check qty
         yarnPurchasePO?.let { yarnPurchasePO_ ->
             knittingDetailsPOLiveData.value?.let { knittingPO ->
-                val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
+                //TODO qty calculation from fabricStructurePOList pending
+              /*  val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
                 val qtyToBeReduced = knittingPO.qtyInKgs.toDouble()
                 if (availableQty < qtyToBeReduced) {
                     showToastMessage.postValue("Given qty is more than available qty")
-                } else {
-                    yarnPurchasePO_.currentQtyInKgs = (availableQty - qtyToBeReduced).toString()
-                    viewModelScope.launch {
-                        erpRepo.insertKnittingDetails(knittingPO).collect { insertResult ->
-                            when (insertResult.status) {
-                                ResultHandler.Status.SUCCESS -> {
-                                    LoggerUtils.debug(TAG , "insertKnittingDetails-success")
-                                    erpRepo.updateYarnPurchaseDetails(yarnPurchasePO_).collect { updateYarnPurchaseResult ->
-                                        //TODO handle error
-                                        LoggerUtils.debug(TAG , "updateYarnPurchaseDetails-error")
-                                        onKnittingAddSuccess.postValue(true)
-                                    }
-                                }
-                                ResultHandler.Status.ERROR -> {
-                                    LoggerUtils.debug(TAG , "insertKnittingDetails-error")
-                                    //TODO handle error
-                                }
+                } else {*/
+//                    yarnPurchasePO_.currentQtyInKgs = (availableQty - qtyToBeReduced).toString()
+                    //Add fabricStructurePOList to Knitting po
+                    knittingPO.fabricStructureList = fabricStructurePOList
+                    insertKnittingDetails(knittingPO , yarnPurchasePO_)
+//                }
+            }
+        }
+    }
+
+    private fun insertKnittingDetails(
+        knittingPO: KnittingProgramPO ,
+        yarnPurchasePO_: YarnPurchasePO
+    ) = viewModelScope.launch {
+        erpRepo.insertKnittingDetails(knittingPO).collect { insertResult ->
+            when (insertResult.status) {
+                ResultHandler.Status.SUCCESS -> {
+                    LoggerUtils.debug(TAG , "insertKnittingDetails-success")
+/*TODO qty calculation pending
+                    erpRepo.updateYarnPurchaseDetails(yarnPurchasePO_).collect { yarnUpdateResult ->
+                        when (yarnUpdateResult.status) {
+                            ResultHandler.Status.SUCCESS -> {
+                                LoggerUtils.debug(TAG , "updateYarnPurchaseDetails-success")
+                                onKnittingAddSuccess.postValue(true)
+                            }
+                            ResultHandler.Status.ERROR -> {
+                                LoggerUtils.debug(TAG , "updateYarnPurchaseDetails-error")
+                                //TODO handle error
                             }
                         }
                     }
+*/
+                }
+                ResultHandler.Status.ERROR -> {
+                    LoggerUtils.debug(TAG , "insertKnittingDetails-error")
+                    //TODO handle error
                 }
             }
         }

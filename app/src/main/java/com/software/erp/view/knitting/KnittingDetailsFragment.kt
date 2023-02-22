@@ -75,6 +75,8 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
             val list = fabricStructureAdapter.getFabricStructureList()
             if (list.isNotEmpty()) {
                 LoggerUtils.debug(TAG , "fabric structure list")
+
+                viewModel.onSubmitClick(list)
             }
         }
     }

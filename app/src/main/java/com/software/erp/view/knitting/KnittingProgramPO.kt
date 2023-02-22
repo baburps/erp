@@ -48,14 +48,14 @@ data class FabricStructurePO constructor(
 @Entity(
     tableName = "fabric_dia" ,
     foreignKeys = [ForeignKey(
-        entity = KnittingProgramPO::class ,
+        entity = FabricStructurePO::class ,
         parentColumns = arrayOf("id") ,
         childColumns = arrayOf("fabricStructureId") ,
         onDelete = ForeignKey.CASCADE
     )]
 )
 data class FabricDia constructor(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0 ,
+    @PrimaryKey(autoGenerate = true) var diaId: Int = 0 ,
     @ColumnInfo var fabricStructureId: Int = 0 ,
     @ColumnInfo var dia: String = "" ,
     @ColumnInfo var qtyInKgs: String = ""

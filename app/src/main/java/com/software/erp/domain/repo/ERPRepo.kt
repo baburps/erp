@@ -83,7 +83,7 @@ class ERPRepo(
 
     fun insertKnittingDetails(knittingPO: KnittingProgramPO): Flow<ResultHandler<Boolean>> {
         return flow {
-            erpRoomDAO.insertKnittingDetails(knittingPO)
+            erpRoomDAO.insertKnittingDetailsWithFabricList(knittingPO)
             emit(ResultHandler.success(true))
         }
     }
