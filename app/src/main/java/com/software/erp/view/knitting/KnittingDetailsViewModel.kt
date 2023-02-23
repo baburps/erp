@@ -26,7 +26,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
     lateinit var lotTrackNameSelectionListener: CustomSpinnerBox.SpinnerSelection
     val availableYarnQtyLiveData = MutableLiveData<String>()
     lateinit var goodsDescSelectionListener: CustomSpinnerBox.SpinnerSelection
-    lateinit var fabricStructureSelectionListener: CustomSpinnerBox.SpinnerSelection
 
     val spinningMillListLiveData = MutableLiveData<List<String>>()
 
@@ -116,18 +115,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
                 }
             }
 
-        fabricStructureSelectionListener =
-            object : CustomSpinnerBox.SpinnerSelection {
-                override fun onSpinnerItemSelection(selectedItem: String?) {
-                    LoggerUtils.debug(TAG , "goodsDescSelectionListener-- onSpinnerItemSelection")
-                    selectedItem?.let {
-                        //TODO after multiple fabric structure change
-                        //                    fabricStructurePOLiveData.value?.fabricStructure = selectedItem
-                        knittingDetailsPOLiveData.value?.fabricStructure = selectedItem
-                    }
-                }
-            }
-
         //Default Add one fabric structure item
         addFabricStructureList()
     }
@@ -166,20 +153,27 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
             LoggerUtils.error(TAG , "onSubmitClick" , exception)
         }
 
-        //TODO Add validation to check qty
         yarnPurchasePO?.let { yarnPurchasePO_ ->
             knittingDetailsPOLiveData.value?.let { knittingPO ->
-                //TODO qty calculation from fabricStructurePOList pending
-              /*  val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
-                val qtyToBeReduced = knittingPO.qtyInKgs.toDouble()
+                val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
+                var qtyToBeReduced = 0.0
+                fabricStructurePOList.forEach { fabricStructurePO ->
+                    fabricStructurePO.fabricDiaList.forEach { fabricDia ->
+                        qtyToBeReduced += fabricDia.qtyInKgs.toDouble()
+                    }
+                }
+
+                LoggerUtils.debug(TAG , "availableQty$availableQty")
+                LoggerUtils.debug(TAG , "qtyToBeReduced$qtyToBeReduced")
+
                 if (availableQty < qtyToBeReduced) {
                     showToastMessage.postValue("Given qty is more than available qty")
-                } else {*/
-//                    yarnPurchasePO_.currentQtyInKgs = (availableQty - qtyToBeReduced).toString()
+                } else {
+                    yarnPurchasePO_.currentQtyInKgs = (availableQty - qtyToBeReduced).toString()
                     //Add fabricStructurePOList to Knitting po
                     knittingPO.fabricStructureList = fabricStructurePOList
                     insertKnittingDetails(knittingPO , yarnPurchasePO_)
-//                }
+                }
             }
         }
     }
@@ -192,7 +186,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
             when (insertResult.status) {
                 ResultHandler.Status.SUCCESS -> {
                     LoggerUtils.debug(TAG , "insertKnittingDetails-success")
-/*TODO qty calculation pending
                     erpRepo.updateYarnPurchaseDetails(yarnPurchasePO_).collect { yarnUpdateResult ->
                         when (yarnUpdateResult.status) {
                             ResultHandler.Status.SUCCESS -> {
@@ -205,7 +198,6 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
                             }
                         }
                     }
-*/
                 }
                 ResultHandler.Status.ERROR -> {
                     LoggerUtils.debug(TAG , "insertKnittingDetails-error")
