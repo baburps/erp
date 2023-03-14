@@ -6,6 +6,7 @@ import com.software.erp.view.greyfabric.GreyFabricWrapper
 import com.software.erp.view.knitting.FabricDia
 import com.software.erp.view.knitting.FabricStructurePO
 import com.software.erp.view.knitting.KnittingProgramPO
+import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
 @Dao
@@ -73,6 +74,10 @@ interface ERPRoomDAO {
 
     @Update
     fun updateKnittingDetails(knittingProgramPO: KnittingProgramPO)
+
+    @Transaction
+    @Query("SELECT * FROM fabric_structure")
+    fun getKnittingFabricStructureList(): List<KnittingProgramFabricStructureWrapper>
 
     //    ********Grey Fabric********
 

@@ -5,6 +5,7 @@ import com.software.erp.domain.room.ERPRoomDAO
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
 import com.software.erp.view.knitting.KnittingProgramPO
+import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +41,12 @@ class ERPRepo(
     fun fetchAllKnittingProgram(): Flow<ResultHandler<List<KnittingProgramPO>>> {
         return flow {
             emit(ResultHandler.success(erpRoomDAO.fetchAllKnittingProgram()))
+        }
+    }
+
+    fun fetchAllKnittingProgramWithDia(): Flow<ResultHandler<List<KnittingProgramFabricStructureWrapper>>> {
+        return flow {
+            emit(ResultHandler.success(erpRoomDAO.getKnittingFabricStructureList()))
         }
     }
 
