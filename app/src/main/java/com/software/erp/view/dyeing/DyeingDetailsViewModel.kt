@@ -81,11 +81,12 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo) :
                 selectedItem?.let {
                     selectedSpinningMill?.let { it1 ->
                         viewModelScope.launch {
-                            erpRepo.fetchFabricStructureFromGreyFabricStock(it1 , selectedItem).collect { result ->
+                            /* TODO after fabric structure changes in grey fabric
+                                erpRepo.fetchFabricStructureFromGreyFabricStock(it1 , selectedItem).collect { result ->
                                 result.data?.let { fabricStructureList ->
                                     fabricStructureListLiveData.postValue(fabricStructureList)
                                 }
-                            }
+                            }*/
                         }
                     }
                 }
@@ -100,6 +101,7 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo) :
                     selectedSpinningMill?.let { spinningMill ->
                         selectedGoodsDesc?.let { goodsDesc ->
                             selectedFabricStructure?.let { fabricStructure ->
+/* TODO after fabric structure changes in grey fabric
                                 viewModelScope.launch {
                                     erpRepo.fetchMachineGageFromGreyFabricStock(spinningMill , goodsDesc , fabricStructure).collect { result ->
                                         result.data?.let { gageList ->
@@ -107,6 +109,7 @@ class DyeingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo) :
                                         }
                                     }
                                 }
+*/
                             }
                         }
                     }

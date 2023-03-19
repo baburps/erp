@@ -3,10 +3,11 @@ package com.software.erp.domain.room
 import androidx.room.*
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
-import com.software.erp.view.knitting.FabricDia
-import com.software.erp.view.knitting.FabricStructurePO
-import com.software.erp.view.knitting.KnittingProgramPO
+import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
+import com.software.erp.view.knitting.model.FabricDia
+import com.software.erp.view.knitting.model.FabricStructurePO
 import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
+import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
 @Dao
@@ -79,6 +80,10 @@ interface ERPRoomDAO {
     @Query("SELECT * FROM fabric_structure")
     fun getKnittingFabricStructureList(): List<KnittingProgramFabricStructureWrapper>
 
+    @Transaction
+    @Query("SELECT * FROM fabric_structure where fabric_structure.knittingProgramSRKWDCNo = :srkwDCNO")
+    fun getKnittingFabricStructureList(srkwDCNO: String): List<GreyFabricStructureWrapper>
+
     //    ********Grey Fabric********
 
     @Insert
@@ -101,28 +106,30 @@ interface ERPRoomDAO {
     @Query("SELECT DISTINCT goodsDesc FROM grey_fabric where spinningMill = :spinningMill")
     fun fetchGoodsDescFromGreyFabricStock(spinningMill: String): List<String>?
 
+    /* TODO after fabric structure changes in grey fabric
     @Query("SELECT DISTINCT fabricStructure FROM grey_fabric WHERE spinningMill = :spinningMill AND goodsDesc = :goodsDesc")
-    fun fetchFabricStructureFromGreyFabricStock(spinningMill: String , goodsDesc: String): List<String>?
+    fun fetchFabricStructureFromGreyFabricStock(spinningMill: String , goodsDesc: String): List<String>?*/
 
-    @Query(
-        "SELECT DISTINCT machineGage " +
-                "FROM grey_fabric " +
-                "WHERE spinningMill = :spinningMill " +
-                "AND goodsDesc = :goodsDesc " +
-                "AND fabricStructure = :fabricStructure"
-    )
-    fun fetchMachineGageFromGreyFabricStock(spinningMill: String , goodsDesc: String , fabricStructure: String): List<String>?
+/* TODO after fabric structure changes in grey fabric*/
+/*@Query(
+    "SELECT DISTINCT machineGage " +
+            "FROM grey_fabric " +
+            "WHERE spinningMill = :spinningMill " +
+            "AND goodsDesc = :goodsDesc " +
+            "AND fabricStructure = :fabricStructure"
+)
+fun fetchMachineGageFromGreyFabricStock(spinningMill: String , goodsDesc: String , fabricStructure: String): List<String>?*/
 
-    /*@Query(
-        "SELECT DISTINCT loopLength " +
-                "FROM grey_fabric " +
-                "WHERE spinningMill = :spinningMill " +
-                "AND goodsDesc = :goodsDesc " +
-                "AND fabricStructure = :fabricStructure" +
-                "AND machineGage = :machineGage"
-    )
-    fun fetchLoopLengthFromGreyFabricStock(spinningMill: String ,
-                                           goodsDesc: String ,
-                                           fabricStructure: String,
-                                           machineGage: String): List<String>?*/
+/*@Query(
+    "SELECT DISTINCT loopLength " +
+            "FROM grey_fabric " +
+            "WHERE spinningMill = :spinningMill " +
+            "AND goodsDesc = :goodsDesc " +
+            "AND fabricStructure = :fabricStructure" +
+            "AND machineGage = :machineGage"
+)
+fun fetchLoopLengthFromGreyFabricStock(spinningMill: String ,
+                                       goodsDesc: String ,
+                                       fabricStructure: String,
+                                       machineGage: String): List<String>?*/
 }

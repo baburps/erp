@@ -12,8 +12,8 @@ import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
-import com.software.erp.view.knitting.KnittingProgramPO
 import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
+import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.programlist.adapter.ProgramChildAdapterPO
 import com.software.erp.view.programlist.adapter.ProgramParentAdapterPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
@@ -183,7 +183,7 @@ class ProgramDetailsViewModel @Inject constructor(
 
     private fun getKnittingQty(listOfKnittingProgram: List<KnittingProgramPO>) {
         viewModelScope.launch {
-            erpRepo.fetchAllKnittingProgramWithDia().collect { result ->
+            erpRepo.fetchAllFabricStructureWithDia().collect { result ->
                 LoggerUtils.debug(TAG , "getKnittingQty result")
                 when (result.status) {
                     ResultHandler.Status.SUCCESS -> {
@@ -228,7 +228,8 @@ class ProgramDetailsViewModel @Inject constructor(
 
                     if (!wrapper.greyFabricList.isNullOrEmpty()) {
                         wrapper.greyFabricList.forEach { greyFabricDetailsPOs ->
-                            receivedQty += greyFabricDetailsPOs.receivedQtyInKgs.toDouble()
+                            //TODO
+//                            receivedQty += greyFabricDetailsPOs.receivedQtyInKgs.toDouble()
                         }
                     }
 

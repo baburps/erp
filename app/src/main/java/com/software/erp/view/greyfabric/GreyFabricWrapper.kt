@@ -2,7 +2,7 @@ package com.software.erp.view.greyfabric
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.software.erp.view.knitting.KnittingProgramPO
+import com.software.erp.view.knitting.model.KnittingProgramPO
 
 data class GreyFabricWrapper(
     @Embedded val knittingProgramPO: KnittingProgramPO ,

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="constant"
+            type="com.software.erp.common.customviews.CustomAttributes" />
+
+        <variable
+            name="fabricDia"
+            type="com.software.erp.view.greyfabric.GreyFabricDia" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingDia"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@={fabricDia.dia}"
+                app:title="@string/dia"
+                app:type="@{constant.NUMBERS}" />
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingQtyInKgs"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@={fabricDia.qtyInKgs}"
+                app:title="@string/qty_in_kgs"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:visibility="@{fabricDia.showShortageDetails}"
+            android:weightSum="3">
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingReceivedQty"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@={fabricDia.receivedQtyInKgs}"
+                app:title="@string/received_qty_kgs"
+                app:type="@{constant.NUMBERS}" />
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingShortageQty"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@={fabricDia.shortageInKgs}"
+                android:visibility="gone"
+                app:title="@string/shortage"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
+
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingShortagePercentage"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@={fabricDia.shortagePercentage}"
+                android:visibility="gone"
+                app:title="@string/shortage_percent"
+                app:type="@{constant.DECIMAL_NUMBERS}" />
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -81,58 +81,10 @@
                     app:title="@string/description"
                     app:value="@{viewModel.greyFabricDetailsPOLiveData.goodsDesc}" />
 
-                <com.software.erp.common.customviews.CustomTextBox
-                    android:id="@+id/mCTGreyFabricStructure"
-                    style="@style/custom_input_box"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mRVGreyFabricStructure"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:title="@string/fabric_structure"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.fabricStructure}" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    android:id="@+id/mCTGreyFabricGage"
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:title="@string/machine_gage"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.machineGage}" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    android:id="@+id/mCTGreyFabricLoopLength"
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:title="@string/loop_length"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.loopLength}" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    android:id="@+id/mCTGreyFabricDia"
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:title="@string/dia"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.dia}" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    android:id="@+id/mCTGreyFabricProgrammedQty"
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:title="@string/programmed_qty"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.programmedQtyInKgs}" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility='@{!viewModel.greyFabricDetailsPOLiveData.remainingQtyInKgs.equals("")}'
-                    app:title="@string/remaining_qty"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.remainingQtyInKgs}" />
-
-                <com.software.erp.common.customviews.CustomInputBox
-                    style="@style/custom_input_box"
-                    android:text="@={viewModel.greyFabricDetailsPOLiveData.receivedQtyInKgs}"
-                    app:title="@string/received_qty_kgs" />
+                    android:layout_height="wrap_content" />
 
                 <com.software.erp.common.customviews.CustomButton
                     style="@style/button_style"
@@ -142,22 +94,6 @@
                     android:layout_marginEnd="@dimen/side_margin"
                     android:onClick="@{() -> viewModel.onCalculateShortageClick()}"
                     android:text="@string/calculate_shortage" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.greyFabricDetailsPOLiveData.showShortageDetails}"
-                    app:title="@string/shortage"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.shortageInKgs}" />
-
-                <com.software.erp.common.customviews.CustomTextBox
-                    style="@style/custom_input_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.greyFabricDetailsPOLiveData.showShortageDetails}"
-                    app:title="@string/shortage_percent"
-                    app:value="@{viewModel.greyFabricDetailsPOLiveData.shortagePercentage}" />
 
             </LinearLayout>
 

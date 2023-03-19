@@ -14,8 +14,8 @@ import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.CustomViewSpinnerBoxBinding
 
 
-class CustomSpinnerBox(context: Context, private val attrs: AttributeSet) :
-    LinearLayout(context, attrs) {
+class CustomSpinnerBox(context: Context , private val attrs: AttributeSet) :
+    LinearLayout(context , attrs) {
 
     private var binding: CustomViewSpinnerBoxBinding
     private var spinnerList: List<String>? = null
@@ -26,7 +26,7 @@ class CustomSpinnerBox(context: Context, private val attrs: AttributeSet) :
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        binding = CustomViewSpinnerBoxBinding.inflate(inflater, this, true)
+        binding = CustomViewSpinnerBoxBinding.inflate(inflater , this , true)
         mapAttributes()
         initView()
     }
@@ -37,13 +37,13 @@ class CustomSpinnerBox(context: Context, private val attrs: AttributeSet) :
 
     private fun mapAttributes() {
         val attributes: TypedArray = context.obtainStyledAttributes(
-            attrs, R.styleable.custom_prop, 0, 0
+            attrs , R.styleable.custom_prop , 0 , 0
         )
 
         try {
             val title = attributes.getString(R.styleable.custom_prop_title)
             title?.let {
-                LoggerUtils.debug(TAG, title)
+                LoggerUtils.debug(TAG , title)
                 binding.mTVCustomSpinnerTitle.text = title
             } ?: run {
                 binding.mTVCustomSpinnerTitle.text = ""
@@ -51,30 +51,41 @@ class CustomSpinnerBox(context: Context, private val attrs: AttributeSet) :
 
             val error = attributes.getString(R.styleable.custom_prop_error)
             error?.let {
-                LoggerUtils.debug(TAG, error)
+                LoggerUtils.debug(TAG , error)
                 binding.mTVCustomSpinnerError.text = error
             } ?: run {
                 binding.mTVCustomSpinnerError.text = ""
             }
         } catch (e: Exception) {
-            e.message?.let { Log.e(TAG, it) }
+            e.message?.let { Log.e(TAG , it) }
         } finally {
-            LoggerUtils.debug(TAG, "attributes.recycle()")
+            LoggerUtils.debug(TAG , "attributes.recycle()")
             attributes.recycle()
         }
     }
 
     fun setSpinnerList(list: List<String>?) {
-        LoggerUtils.debug(TAG, "setSpinnerList")
+        LoggerUtils.debug(TAG , "setSpinnerList")
         list?.let {
             spinnerList = it
-            val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, it)
+            val adapter = ArrayAdapter(context , android.R.layout.simple_spinner_item , it)
             binding.mSpinnerCustomSpinner.adapter = adapter
         }
     }
 
+    fun setPreSelectedValue(preSelectedValue: String?) {
+        LoggerUtils.debug(TAG , "setPreSelectedValue--$preSelectedValue")
+        try {
+            spinnerList?.let {
+                binding.mSpinnerCustomSpinner.setSelection(it.indexOf(preSelectedValue))
+            }
+        } catch (e: Exception) {
+            LoggerUtils.error(TAG , e)
+        }
+    }
+
     fun setSpinnerSelection(listener: SpinnerSelection?) {
-        LoggerUtils.debug(TAG, "setSpinnerSelection")
+        LoggerUtils.debug(TAG , "setSpinnerSelection")
         binding.mSpinnerCustomSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -82,15 +93,15 @@ class CustomSpinnerBox(context: Context, private val attrs: AttributeSet) :
                 }
 
                 override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
+                    parent: AdapterView<*>? ,
+                    view: View? ,
+                    position: Int ,
                     id: Long
                 ) {
-                    LoggerUtils.debug(TAG, "setSpinnerSelection--onItemSelected")
+                    LoggerUtils.debug(TAG , "setSpinnerSelection--onItemSelected")
                     spinnerList?.let { list ->
                         LoggerUtils.debug(
-                            TAG,
+                            TAG ,
                             "setSpinnerSelection--onItemSelected--spinningMillSelectionLiveData updated"
                         )
                         listener?.onSpinnerItemSelection(list[position])

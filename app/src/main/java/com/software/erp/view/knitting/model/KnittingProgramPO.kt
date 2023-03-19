@@ -1,4 +1,4 @@
-package com.software.erp.view.knitting
+package com.software.erp.view.knitting.model
 
 import androidx.room.*
 import java.io.Serializable

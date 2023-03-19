@@ -3,13 +3,13 @@ package com.software.erp.domain.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
-import com.software.erp.view.knitting.FabricDia
-import com.software.erp.view.knitting.FabricStructurePO
-import com.software.erp.view.knitting.KnittingProgramPO
+import com.software.erp.view.knitting.model.FabricDia
+import com.software.erp.view.knitting.model.FabricStructurePO
+import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
 @Database(
-    version = 5 ,
+    version = 6 ,
     entities = [YarnPurchasePO::class ,
         KnittingProgramPO::class ,
         GreyFabricDetailsPO::class ,

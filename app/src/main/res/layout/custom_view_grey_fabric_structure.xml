@@ -5,7 +5,7 @@
 
         <variable
             name="fabricStructurePO"
-            type="com.software.erp.view.knitting.model.FabricStructurePO" />
+            type="com.software.erp.view.greyfabric.GreyFabricStructurePO" />
 
         <variable
             name="fabricStructureList"

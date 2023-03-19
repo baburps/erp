@@ -13,6 +13,10 @@ class LoggerUtils {
             message?.let { Log.w(tag , it) }
         }
 
+        fun error(tag: String? , exception: Exception) {
+            exception.let { Log.e(tag , "" , exception) }
+        }
+
         fun error(tag: String? , message: String = "" , exception: Exception) {
             exception.let { Log.e(tag , message , exception) }
         }

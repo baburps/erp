@@ -2,10 +2,13 @@ package com.software.erp.view.greyfabric
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.software.erp.R
 import com.software.erp.base.BaseFragment
 import com.software.erp.databinding.FragmentGreyFabricDetailsBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
+import com.software.erp.view.knitting.FabricStructureAdapter
+import com.software.erp.view.knitting.FabricStructureAdapter.Companion.PAGE_KEY_GREY_FABRIC
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +35,22 @@ class GreyFabricDetailsFragment : BaseFragment<FragmentGreyFabricDetailsBinding>
 
         viewModel.showToastMessage.observe(this) {
             showToast(it)
+        }
+
+        handleRecyclerView()
+    }
+
+    private fun handleRecyclerView() {
+        binding?.mRVGreyFabricStructure?.layoutManager = LinearLayoutManager(activity)
+        //Disable list scroll. It will use page scroll
+        binding?.mRVGreyFabricStructure?.isNestedScrollingEnabled = false
+
+        viewModel.fabricStructurePOListLiveData.observe(this) {
+            //Update Recycler view
+            it?.let {
+                val fabricStructureAdapter = FabricStructureAdapter(null , it , PAGE_KEY_GREY_FABRIC)
+                binding?.mRVGreyFabricStructure?.adapter = fabricStructureAdapter
+            }
         }
     }
 

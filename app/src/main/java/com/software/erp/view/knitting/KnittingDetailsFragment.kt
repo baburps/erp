@@ -8,6 +8,8 @@ import com.software.erp.base.BaseFragment
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.databinding.FragmentKnittingDetailsBinding
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
+import com.software.erp.view.knitting.FabricStructureAdapter.Companion.PAGE_KEY_KNITTING
+import com.software.erp.view.knitting.model.KnittingProgramPO
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,7 +55,7 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
             //Update Recycler view
             it?.let {
                 fabricStructureAdapter?.updateList(it) ?: run {
-                    fabricStructureAdapter = FabricStructureAdapter(it)
+                    fabricStructureAdapter = FabricStructureAdapter(it , null , PAGE_KEY_KNITTING)
                     binding?.mRVKnittingDetailsFabricStructure?.adapter = fabricStructureAdapter
                 }
             }
@@ -73,7 +75,7 @@ class KnittingDetailsFragment : BaseFragment<FragmentKnittingDetailsBinding>() {
 
         fabricStructureAdapter?.let { fabricStructureAdapter ->
             val list = fabricStructureAdapter.getFabricStructureList()
-            if (list.isNotEmpty()) {
+            if (list!!.isNotEmpty()) {
                 LoggerUtils.debug(TAG , "fabric structure list")
 
                 viewModel.onSubmitClick(list)

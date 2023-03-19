@@ -7,6 +7,8 @@ import com.software.erp.common.customviews.CustomSpinnerBox
 import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.domain.model.ResultHandler
 import com.software.erp.domain.repo.ERPRepo
+import com.software.erp.view.knitting.model.FabricStructurePO
+import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 import com.software.erp.view.yarnpurchase.YarnPurchaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -9,7 +9,7 @@
 
         <variable
             name="fabricDia"
-            type="com.software.erp.view.knitting.FabricDia" />
+            type="com.software.erp.view.knitting.model.FabricDia" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

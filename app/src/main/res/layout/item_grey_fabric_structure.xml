@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="fabricStructurePO"
-            type="com.software.erp.view.knitting.model.FabricStructurePO" />
+            name="greyFabricStructurePO"
+            type="com.software.erp.view.greyfabric.GreyFabricStructurePO" />
 
         <variable
             name="pageKey"
@@ -23,8 +23,8 @@
         <com.software.erp.view.knitting.KnittingFabricStructureView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:fabricStructurePO="@{fabricStructurePO}"
-            app:pageKey="@{pageKey}" />
+            app:greyFabricStructurePO="@{greyFabricStructurePO}"
+            app:pageKey="@{pageKey}"/>
 
     </LinearLayout>
 </layout>
