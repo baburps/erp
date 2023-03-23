@@ -118,11 +118,9 @@ class KnittingFabricStructureView(context: Context , private val attrs: Attribut
             this.mGreyFabricStructurePO = greyFabricStructurePO
             greyFabricDiaList = greyFabricStructurePO.fabricDiaList
 
-            /* val fabricStructurePO = FabricStructurePO()
-             fabricStructurePO.fabricStructure = greyFabricStructurePO.fabricStructure
-             fabricStructurePO.loopLength = greyFabricStructurePO.loopLength
-             fabricStructurePO.machineGage = greyFabricStructurePO.machineGage
-             greyFabricBinding?.fabricStructurePO = fabricStructurePO*/
+            val fabricList = ArrayList<String>()
+            fabricList.add(greyFabricStructurePO.fabricStructure)
+            greyFabricBinding?.fabricStructureList = fabricList
 
             greyFabricBinding?.fabricStructurePO = greyFabricStructurePO
             addGreyFabricDiaItem()
@@ -160,9 +158,6 @@ class KnittingFabricStructureView(context: Context , private val attrs: Attribut
             greyFabricBinding_.mIBKnittingLoopLength.getInputBox().addTextChangedListener {
                 mFabricStructurePO?.loopLength = it.toString()
             }
-
-            greyFabricBinding_.fabricStructureSelectionListener = fabricStructureSelectionListener
-            greyFabricBinding_.fabricStructureList = ConstantUtils.getFabricStructureList()
         }
     }
 

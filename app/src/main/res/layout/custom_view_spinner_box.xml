@@ -26,6 +26,6 @@
             style="@style/text_error_style"
             android:visibility="gone"
             tools:text="Error"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
     </LinearLayout>
 </layout>

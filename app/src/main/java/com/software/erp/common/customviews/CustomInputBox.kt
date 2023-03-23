@@ -163,6 +163,12 @@ class CustomInputBox(context: Context , var attrs: AttributeSet?) : LinearLayout
                 binding.mETCustomInput.setTextColor(ContextCompat.getColor(context , R.color.text_highlight_color))
                 binding.mTVCustomInputTitle.setTextColor(ContextCompat.getColor(context , R.color.text_highlight_color))
             }
+
+            CustomAttributes.NON_EDITABLE -> {
+                binding.mETCustomInput.isEnabled = false
+                binding.mETCustomInput.isClickable = false
+                binding.mETCustomInput.setTextColor(ContextCompat.getColor(context , R.color.black))
+            }
         }
     }
 

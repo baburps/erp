@@ -4,16 +4,16 @@
     <data>
 
         <variable
+            name="constant"
+            type="com.software.erp.common.customviews.CustomAttributes" />
+
+        <variable
             name="fabricStructurePO"
             type="com.software.erp.view.greyfabric.GreyFabricStructurePO" />
 
         <variable
             name="fabricStructureList"
             type="java.util.List&lt;String>" />
-
-        <variable
-            name="fabricStructureSelectionListener"
-            type="com.software.erp.common.customviews.CustomSpinnerBox.SpinnerSelection" />
 
     </data>
 
@@ -30,23 +30,35 @@
         <com.software.erp.common.customviews.CustomSpinnerBox
             android:id="@+id/mSBFabricStructure"
             style="@style/custom_spinner_box"
-            app:preSelectedValue="@{fabricStructurePO.fabricStructure}"
+            android:clickable="false"
             app:spinnerList="@{fabricStructureList}"
-            app:spinnerSelection="@{fabricStructureSelectionListener}"
             app:title="@string/fabric_structure" />
 
-        <com.software.erp.common.customviews.CustomInputBox
-            android:id="@+id/mIBKnittingGage"
-            style="@style/custom_input_box"
-            android:text="@={fabricStructurePO.machineGage}"
-            app:title="@string/machine_gage" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-        <com.software.erp.common.customviews.CustomInputBox
-            android:id="@+id/mIBKnittingLoopLength"
-            style="@style/custom_input_box"
-            android:text="@={fabricStructurePO.loopLength}"
-            app:title="@string/loop_length" />
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingGage"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@={fabricStructurePO.machineGage}"
+                app:title="@string/machine_gage"
+                app:type="@{constant.NON_EDITABLE}" />
 
+            <com.software.erp.common.customviews.CustomInputBox
+                android:id="@+id/mIBKnittingLoopLength"
+                style="@style/custom_input_box"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@={fabricStructurePO.loopLength}"
+                app:title="@string/loop_length"
+                app:type="@{constant.NON_EDITABLE}" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mRVKnittingFabricStructureDia"

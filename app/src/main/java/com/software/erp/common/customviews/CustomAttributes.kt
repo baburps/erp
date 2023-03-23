@@ -7,5 +7,6 @@ class CustomAttributes {
         const val NUMBERS = "NUMBERS"
         const val DECIMAL_NUMBERS = "DECIMAL_NUMBERS"
         const val NON_EDITABLE_HIGHLIGHT = "NON_EDITABLE_HIGHLIGHT"
+        const val NON_EDITABLE = "NON_EDITABLE"
     }
 }

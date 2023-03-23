@@ -20,8 +20,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="bottom"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:weightSum="3">
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingDia"
@@ -31,7 +32,7 @@
                 android:layout_weight="1"
                 android:text="@={fabricDia.dia}"
                 app:title="@string/dia"
-                app:type="@{constant.NUMBERS}" />
+                app:type="@{constant.NON_EDITABLE}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingQtyInKgs"
@@ -41,15 +42,7 @@
                 android:layout_weight="1"
                 android:text="@={fabricDia.qtyInKgs}"
                 app:title="@string/qty_in_kgs"
-                app:type="@{constant.DECIMAL_NUMBERS}" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            android:weightSum="3">
+                app:type="@{constant.NON_EDITABLE}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingReceivedQty"
@@ -59,7 +52,17 @@
                 android:layout_weight="1"
                 android:text="@={fabricDia.receivedQtyInKgs}"
                 app:title="@string/received_qty_kgs"
-                app:type="@{constant.NUMBERS}" />
+                app:type="@{constant.DECIMAL_NUMBERS}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:visibility="@{fabricDia.showShortageDetails}"
+            android:weightSum="2">
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingShortageQty"
@@ -68,7 +71,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:text="@={fabricDia.shortageInKgs}"
-                android:visibility="@{fabricDia.showShortageDetails}"
                 app:title="@string/shortage"
                 app:type="@{constant.NON_EDITABLE_HIGHLIGHT}" />
 
@@ -79,7 +81,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:text="@={fabricDia.shortagePercentage}"
-                android:visibility="@{fabricDia.showShortageDetails}"
                 app:title="@string/shortage_percent"
                 app:type="@{constant.NON_EDITABLE_HIGHLIGHT}" />
 
