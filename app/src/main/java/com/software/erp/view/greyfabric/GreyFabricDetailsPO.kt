@@ -37,6 +37,7 @@ data class GreyFabricDetailsPO constructor(
     @ColumnInfo var shortagePercentage: String = "" ,*/
     @Ignore var showKnittingDetails: Boolean = false ,
     @Ignore var showShortageDetails: Boolean = false ,
+    @Ignore var fabricStructureList: List<GreyFabricStructurePO> = mutableListOf()
 ) : Serializable {}
 
 @Entity(
@@ -50,7 +51,7 @@ data class GreyFabricDetailsPO constructor(
 )
 data class GreyFabricStructurePO constructor(
     @PrimaryKey(autoGenerate = true) var id: Int = 0 ,
-    @ColumnInfo var greyFabricId: String = "" ,//Used by self to track fabric
+    @ColumnInfo var greyFabricId: Int = 0 ,//Used by self to track fabric
     @ColumnInfo var fabricStructure: String = "" ,
     @ColumnInfo var machineGage: String = "" ,
     @ColumnInfo var loopLength: String = "" ,

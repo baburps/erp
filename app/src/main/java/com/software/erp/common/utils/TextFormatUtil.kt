@@ -1,5 +1,8 @@
 package com.software.erp.common.utils
 
+import java.math.RoundingMode
+import java.text.DecimalFormat
+
 class TextFormatUtil {
 
     companion object Test {
@@ -12,5 +15,10 @@ class TextFormatUtil {
             }
         }
 
+        fun roundOffToTwoDigit(value: Double): String {
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            return df.format(value)
+        }
     }
 }

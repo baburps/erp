@@ -110,7 +110,7 @@ class ERPRepo(
 
     fun insertGreyFabricDetails(greyFabricPO: GreyFabricDetailsPO): Flow<ResultHandler<Boolean>> {
         return flow {
-            erpRoomDAO.insertGreyFabricDetails(greyFabricPO)
+            erpRoomDAO.insertGreyFabricDetailsWithFabricList(greyFabricPO)
             emit(ResultHandler.success(true))
         }
     }

@@ -1,7 +1,10 @@
 package com.software.erp.domain.room
 
 import androidx.room.*
+import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
+import com.software.erp.view.greyfabric.GreyFabricDia
+import com.software.erp.view.greyfabric.GreyFabricStructurePO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
 import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
 import com.software.erp.view.knitting.model.FabricDia
@@ -58,6 +61,7 @@ interface ERPRoomDAO {
     fun insertKnittingFabricDia(fabricDia: FabricDia)
 
     fun insertKnittingDetailsWithFabricList(knittingProgramPO: KnittingProgramPO) {
+        //TODO add logic to remove added row incase of failure in child table
         insertKnittingDetails(knittingProgramPO)
 
         knittingProgramPO.fabricStructureList.forEach { fabricStructurePo ->
@@ -88,6 +92,31 @@ interface ERPRoomDAO {
 
     @Insert
     fun insertGreyFabricDetails(gretFabricDetailsPO: GreyFabricDetailsPO): Long
+
+    fun insertGreyFabricDetailsWithFabricList(greyFabricDetailsPO: GreyFabricDetailsPO) {
+        //TODO add logic to remove added row incase of failure in child table
+        val fabricPOId = insertGreyFabricDetails(greyFabricDetailsPO)
+        LoggerUtils.debug("insertGreyFabricDetailsWithFabricList", "fabricPOId--$fabricPOId")
+
+        greyFabricDetailsPO.fabricStructureList.forEach { fabricStructurePo ->
+            //Map foreign key to Fabric Structure PO
+            fabricStructurePo.greyFabricId = fabricPOId.toInt()
+            val fabricStructuredId = insertGreyFabricStructure(fabricStructurePo)
+            LoggerUtils.debug("insertGreyFabricStructure", "fabricStructuredId--$fabricStructuredId")
+
+            fabricStructurePo.fabricDiaList.forEach { fabricDia ->
+                //Map foreign key to Dia PO
+                fabricDia.fabricStructureId = fabricStructuredId.toInt()
+                insertGreyFabricDia(fabricDia)
+            }
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertGreyFabricStructure(fabricStructurePO: GreyFabricStructurePO): Long
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertGreyFabricDia(fabricDia: GreyFabricDia)
 
     @Query("SELECT * FROM grey_fabric")
     fun fetchAllGreyFabricList(): List<GreyFabricDetailsPO>

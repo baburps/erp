@@ -49,7 +49,6 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:visibility="@{fabricDia.showShortageDetails}"
             android:weightSum="3">
 
             <com.software.erp.common.customviews.CustomInputBox
@@ -69,9 +68,9 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:text="@={fabricDia.shortageInKgs}"
-                android:visibility="gone"
+                android:visibility="@{fabricDia.showShortageDetails}"
                 app:title="@string/shortage"
-                app:type="@{constant.DECIMAL_NUMBERS}" />
+                app:type="@{constant.NON_EDITABLE_HIGHLIGHT}" />
 
             <com.software.erp.common.customviews.CustomInputBox
                 android:id="@+id/mIBKnittingShortagePercentage"
@@ -80,9 +79,9 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:text="@={fabricDia.shortagePercentage}"
-                android:visibility="gone"
+                android:visibility="@{fabricDia.showShortageDetails}"
                 app:title="@string/shortage_percent"
-                app:type="@{constant.DECIMAL_NUMBERS}" />
+                app:type="@{constant.NON_EDITABLE_HIGHLIGHT}" />
 
         </LinearLayout>
     </LinearLayout>

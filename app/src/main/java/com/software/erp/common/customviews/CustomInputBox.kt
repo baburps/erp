@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.*
 import com.software.erp.R
@@ -155,6 +156,12 @@ class CustomInputBox(context: Context , var attrs: AttributeSet?) : LinearLayout
                     InputType.TYPE_CLASS_NUMBER or
                             InputType.TYPE_NUMBER_FLAG_DECIMAL
 
+            }
+            CustomAttributes.NON_EDITABLE_HIGHLIGHT -> {
+                binding.mETCustomInput.isEnabled = false
+                binding.mETCustomInput.isClickable = false
+                binding.mETCustomInput.setTextColor(ContextCompat.getColor(context , R.color.text_highlight_color))
+                binding.mTVCustomInputTitle.setTextColor(ContextCompat.getColor(context , R.color.text_highlight_color))
             }
         }
     }

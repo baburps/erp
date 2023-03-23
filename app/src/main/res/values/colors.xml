@@ -23,4 +23,5 @@
     <color name="highlight_color">#047BD5</color>
     <color name="product_listing_bg">#F6F6F6</color>
     <color name="error_label_color">#FF0000</color>
+    <color name="text_highlight_color">#FF018786</color>
 </resources>

@@ -1,9 +1,11 @@
 package com.software.erp.view.greyfabric
 
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.software.erp.common.utils.LoggerUtils
+import com.software.erp.common.utils.TextFormatUtil
 import com.software.erp.domain.model.ResultHandler
 import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
@@ -159,23 +161,78 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRep
     }
 
     fun onCalculateShortageClick() {
+        var showError = false
+        var enableSaveButton = true
+        LoggerUtils.debug(TAG , "onCalculateShortageClick")
+        fabricStructurePOListLiveData.value?.let { greyFabricList ->
+            greyFabricList.forEach { _greyFabricPO ->
+                _greyFabricPO.fabricDiaList.forEach { _fabricDiaPO ->
+                    val programmedQty = _fabricDiaPO.qtyInKgs
+                    val receivedQty = _fabricDiaPO.receivedQtyInKgs
+                    //Clear show shortage flag by default
+                    _fabricDiaPO.showShortageDetails = false
+                    if (!TextUtils.isEmpty(programmedQty) &&
+                        TextUtils.isDigitsOnly(programmedQty) &&
+                        !TextUtils.isEmpty(receivedQty) &&
+                        TextUtils.isDigitsOnly(receivedQty)
+                    ) {
+                        if (receivedQty.toDouble()
+                            /* TODO + existingReceivedQtyTemp*/
+                            > programmedQty.toDouble()
+                        ) {
+                            //TODO show error in that field
+                            showToastMessage.postValue("Received Qty is more the Programmed Qty")
+                            showError = true
+                        } else {
+                            val actualQty = programmedQty.toDouble() /* TODO - existingReceivedQtyTemp*/
+                            val shortage = actualQty - receivedQty.toDouble()
+                            _fabricDiaPO.shortageInKgs = shortage.toString()
+                            val shortagePercentage = shortage / (actualQty / 100)
+                            _fabricDiaPO.shortagePercentage = TextFormatUtil.roundOffToTwoDigit(shortagePercentage)
+                            _fabricDiaPO.showShortageDetails = true
+                        }
+                    } else {
+                        //If field is empty then don't show save button
+                        enableSaveButton = false
+                    }
+                }
+            }
+
+            //Skip updating UI in case of error
+            if (!showError) {
+                fabricStructurePOListLiveData.postValue(greyFabricList)
+
+                greyFabricDetailsPOLiveData.value?.let { greyFabricPO ->
+                    greyFabricPO.showShortageDetails = enableSaveButton
+                    greyFabricDetailsPOLiveData.postValue(greyFabricPO)
+                }
+            }
+        }
+/*
         greyFabricDetailsPOLiveData.value?.let { greyFabricPO ->
             //TODO
-            /* val receivedQty = greyFabricPO.receivedQtyInKgs.toDouble()
-             val actualQty = greyFabricPO.remainingQtyInKgs.toDouble()*/
+            */
+/* val receivedQty = greyFabricPO.receivedQtyInKgs.toDouble()
+             val actualQty = greyFabricPO.remainingQtyInKgs.toDouble()*//*
+
+
+
 
             if (isReceivedQtyValid()) {
                 //Calculate shortage
                 //TODO
-                /*val shortage = actualQty - receivedQty
+                */
+/*val shortage = actualQty - receivedQty
                 greyFabricPO.shortageInKgs = shortage.toString()
                 val shortagePercentage = shortage / (actualQty / 100)
                 greyFabricPO.shortagePercentage = shortagePercentage.toString()
                 greyFabricPO.showShortageDetails = true
-*/
+*//*
+
                 greyFabricDetailsPOLiveData.postValue(greyFabricPO)
             }
         }
+*/
     }
 
     private fun isReceivedQtyValid(): Boolean {
@@ -202,28 +259,21 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRep
         LoggerUtils.debug(TAG , "onSubmitClick--goodsDesc--${greyFabricDetailsPOLiveData.value?.goodsDesc}")
         LoggerUtils.debug(TAG , "onSubmitClick--orderRefNo--${greyFabricDetailsPOLiveData.value?.orderRefNo}")
 
-/* TODO after fabric structure changes in grey fabric
-LoggerUtils.debug(TAG , "onSubmitClick--fabricStructure--${greyFabricDetailsPOLiveData.value?.fabricStructure}")
-LoggerUtils.debug(TAG , "onSubmitClick--machineGage--${greyFabricDetailsPOLiveData.value?.machineGage}")
-LoggerUtils.debug(TAG , "onSubmitClick--dia--${greyFabricDetailsPOLiveData.value?.dia}")
-LoggerUtils.debug(TAG , "onSubmitClick--loopLength--${greyFabricDetailsPOLiveData.value?.loopLength}")
-LoggerUtils.debug(TAG , "onSubmitClick--programmedQtyInKgs--${greyFabricDetailsPOLiveData.value?.programmedQtyInKgs}")
-LoggerUtils.debug(TAG , "onSubmitClick--remainingQtyInKgs--${greyFabricDetailsPOLiveData.value?.remainingQtyInKgs}")
-LoggerUtils.debug(TAG , "onSubmitClick--receivedQtyInKgs--${greyFabricDetailsPOLiveData.value?.receivedQtyInKgs}")
-LoggerUtils.debug(TAG , "onSubmitClick--shortageInKgs--${greyFabricDetailsPOLiveData.value?.shortageInKgs}")
-LoggerUtils.debug(TAG , "onSubmitClick--shortagePercentage--${greyFabricDetailsPOLiveData.value?.shortagePercentage}")*/
 
         if (isReceivedQtyValid()) {
-            greyFabricDetailsPOLiveData.value?.let {
-                viewModelScope.launch {
-                    erpRepo.insertGreyFabricDetails(it).collect { result ->
-                        when (result.status) {
-                            ResultHandler.Status.SUCCESS -> {
-                                onGretFabricAddSuccess.postValue(true)
-                            }
+            greyFabricDetailsPOLiveData.value?.let { greyFabricPO ->
+                fabricStructurePOListLiveData.value?.let { fabricList ->
+                    greyFabricPO.fabricStructureList = fabricList
+                    viewModelScope.launch {
+                        erpRepo.insertGreyFabricDetails(greyFabricPO).collect { result ->
+                            when (result.status) {
+                                ResultHandler.Status.SUCCESS -> {
+                                    onGretFabricAddSuccess.postValue(true)
+                                }
 
-                            ResultHandler.Status.ERROR -> {
-                                //TODO handle error
+                                ResultHandler.Status.ERROR -> {
+                                    //TODO handle error
+                                }
                             }
                         }
                     }

@@ -170,8 +170,12 @@ class KnittingFabricStructureView(context: Context , private val attrs: Attribut
         LoggerUtils.debug(TAG , "addGreyFabricDiaItem")
         greyFabricDiaList?.let { greyFabricDiaList_ ->
             LoggerUtils.debug(TAG , "addFabricDiaItem--greyFabricDiaList not null")
-            fabricDiaAdapter = FabricDiaAdapter(null , greyFabricDiaList_)
-            greyFabricBinding?.mRVKnittingFabricStructureDia?.adapter = fabricDiaAdapter
+//            if (fabricDiaAdapter == null) {
+                fabricDiaAdapter = FabricDiaAdapter(null , greyFabricDiaList_)
+                greyFabricBinding?.mRVKnittingFabricStructureDia?.adapter = fabricDiaAdapter
+//            } else {
+//                fabricDiaAdapter?.updateGreyFabricDiaList(greyFabricDiaList_)
+//            }
         }
     }
 
