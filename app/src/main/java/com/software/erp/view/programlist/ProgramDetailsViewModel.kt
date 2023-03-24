@@ -12,6 +12,7 @@ import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
+import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
 import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
 import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.programlist.adapter.ProgramChildAdapterPO
@@ -201,10 +202,11 @@ class ProgramDetailsViewModel @Inject constructor(
 
     fun fetchGreyFabricDetails() {
         viewModelScope.launch {
-            erpRepo.fetchGreyFabricBasedOnDCNo().collect { result ->
+            erpRepo.fetchAllGreyFabricList().collect { result ->
                 when (result.status) {
                     ResultHandler.Status.SUCCESS -> {
-                        populateGreyFabricList(result.data)
+//                        populateGreyFabricList(result.data)
+                        fetchAllGreyFabricStructureAndDiaList(result.data)
                     }
 
                     ResultHandler.Status.ERROR -> {
@@ -215,7 +217,26 @@ class ProgramDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun populateGreyFabricList(fabricList: List<GreyFabricWrapper>?) {
+    private fun fetchAllGreyFabricStructureAndDiaList(listOfGreyFabric: List<GreyFabricWrapper>?) {
+        viewModelScope.launch {
+            erpRepo.fetchAllGreyFabricStructureWithDia().collect { result ->
+                when (result.status) {
+                    ResultHandler.Status.SUCCESS -> {
+                        populateGreyFabricList(listOfGreyFabric , result.data)
+                    }
+
+                    ResultHandler.Status.ERROR -> {
+                        //TODO handle error
+                    }
+                }
+            }
+        }
+    }
+
+    private fun populateGreyFabricList(
+        fabricList: List<GreyFabricWrapper>? ,
+        listOfGreyFabricStructureDia: List<GreyFabricStructureWrapper>?
+    ) {
         val programKey = DashboardViewModel.GREY_FABRIC_STOCK
         fabricList.let {
             it.let { wrapperList ->
@@ -225,18 +246,37 @@ class ProgramDetailsViewModel @Inject constructor(
                     val greyFabricDetailsPO = GreyFabricDetailsPO()
 
                     var receivedQty = 0.0
+                    var programmedQty = 0.0
 
                     if (!wrapper.greyFabricList.isNullOrEmpty()) {
                         wrapper.greyFabricList.forEach { greyFabricDetailsPOs ->
                             //TODO
 //                            receivedQty += greyFabricDetailsPOs.receivedQtyInKgs.toDouble()
+                            listOfGreyFabricStructureDia?.forEach { greyFabricStructureWrapper ->
+                                val greyFabricId = greyFabricDetailsPOs.id
+                                val greyFabricIdInStructure = greyFabricStructureWrapper.fabricStructurePO.greyFabricId
+                                LoggerUtils.debug(TAG , "populateGreyFabricList--id$greyFabricId")
+                                LoggerUtils.debug(TAG , "populateGreyFabricList--greyFabricId$greyFabricIdInStructure")
+                                if (greyFabricId == greyFabricIdInStructure) {
+                                    greyFabricStructureWrapper.fabricDiaList?.forEach { greyFabricDia ->
+                                        LoggerUtils.debug(
+                                            TAG ,
+                                            "populateGreyFabricList--greyFabricDia.receivedQty" + greyFabricDia.receivedQtyInKgs.toDouble()
+                                        )
+                                        receivedQty += greyFabricDia.receivedQtyInKgs.toDouble()
+                                        LoggerUtils.debug(TAG , "populateGreyFabricList--receivedQty$receivedQty")
+
+                                        LoggerUtils.debug(TAG , "populateGreyFabricList--greyFabricDia.qtyInKgs$" + greyFabricDia.qtyInKgs)
+                                        programmedQty += greyFabricDia.qtyInKgs.toDouble()
+                                        LoggerUtils.debug(TAG , "populateGreyFabricList--programmedQty$programmedQty")
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    //TODO
-                    /*val actualQty = knittingProgramPO.qtyInKgs.toDouble()
-                    val shortage = actualQty - receivedQty
-                    val shortagePercentage = shortage / (actualQty / 100)*/
+                    val shortage = programmedQty - receivedQty
+                    val shortagePercentage = shortage / (programmedQty / 100)
 
                     val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
                     listOfChildEntries.add(
@@ -258,56 +298,30 @@ class ProgramDetailsViewModel @Inject constructor(
                             getString(R.string.goods_desc) , knittingProgramPO.goodsDesc , greyFabricDetailsPO
                         )
                     )
-                    /* //TODO
                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.fabric_structure) , knittingProgramPO.fabricStructure , greyFabricDetailsPO
-                         )
-                     )
-                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.machine_gage) , knittingProgramPO.machineGage , greyFabricDetailsPO
-                         )
-                     )
-                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.loop_length) , knittingProgramPO.loopLength , greyFabricDetailsPO
-                         )
-                     )
-                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.dia) , knittingProgramPO.dia , greyFabricDetailsPO
-                         )
-                     )
-                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.programmed_qty) , knittingProgramPO.qtyInKgs , greyFabricDetailsPO
-                         )
-                     )*/
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            getString(R.string.programmed_qty) , programmedQty.toString() , greyFabricDetailsPO
+                        )
+                    )
                     listOfChildEntries.add(
                         ProgramChildAdapterPO(
                             programKey ,
                             getString(R.string.received_qty_kgs) , receivedQty.toString() , greyFabricDetailsPO
                         )
                     )
-                    /* //TODO
                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.shortage) , shortage.toString() , greyFabricDetailsPO
-                         )
-                     )
-                     listOfChildEntries.add(
-                         ProgramChildAdapterPO(
-                             programKey ,
-                             getString(R.string.shortage_percent) , shortagePercentage.toString() , greyFabricDetailsPO
-                         )
-                     )*/
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            getString(R.string.shortage) , shortage.toString() , greyFabricDetailsPO
+                        )
+                    )
+                    listOfChildEntries.add(
+                        ProgramChildAdapterPO(
+                            programKey ,
+                            getString(R.string.shortage_percent) , shortagePercentage.toString() , greyFabricDetailsPO
+                        )
+                    )
 
                     listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
                 }

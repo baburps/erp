@@ -6,6 +6,7 @@ import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricDia
 import com.software.erp.view.greyfabric.GreyFabricStructurePO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
+import com.software.erp.view.greyfabric.model.FabricStructureWrapper
 import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
 import com.software.erp.view.knitting.model.FabricDia
 import com.software.erp.view.knitting.model.FabricStructurePO
@@ -86,7 +87,7 @@ interface ERPRoomDAO {
 
     @Transaction
     @Query("SELECT * FROM fabric_structure where fabric_structure.knittingProgramSRKWDCNo = :srkwDCNO")
-    fun getKnittingFabricStructureList(srkwDCNO: String): List<GreyFabricStructureWrapper>
+    fun getKnittingFabricStructureList(srkwDCNO: String): List<FabricStructureWrapper>
 
     //    ********Grey Fabric********
 
@@ -120,6 +121,10 @@ interface ERPRoomDAO {
 
     @Query("SELECT * FROM grey_fabric")
     fun fetchAllGreyFabricList(): List<GreyFabricDetailsPO>
+
+    @Transaction
+    @Query("SELECT * FROM grey_fabric_structure GROUP BY greyFabricId")
+    fun fetchAllGreyFabricStructureList(): List<GreyFabricStructureWrapper>
 
     @Transaction
     @Query("SELECT * FROM knitting_program")

@@ -8,7 +8,7 @@ import com.software.erp.common.utils.LoggerUtils
 import com.software.erp.common.utils.TextFormatUtil
 import com.software.erp.domain.model.ResultHandler
 import com.software.erp.domain.repo.ERPRepo
-import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
+import com.software.erp.view.greyfabric.model.FabricStructureWrapper
 import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -83,7 +83,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRep
 
     private fun populateFabricDetails(
         _knittingProgramPO: KnittingProgramPO ,
-        listOfFabricStructureWrapper: List<GreyFabricStructureWrapper>
+        listOfFabricStructureWrapper: List<FabricStructureWrapper>
     ) {
         val greyFabricDetailsPO = greyFabricDetailsPOLiveData.value
         greyFabricDetailsPO?.let { _greyFabricPo ->
@@ -124,7 +124,6 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRep
 
                         //Change FabricDetails PO
                         val greyFabricDetailsPOs = GreyFabricStructurePO()
-                        greyFabricDetailsPOs.id = fabricStructurePO.id
                         greyFabricDetailsPOs.fabricStructure = fabricStructurePO.fabricStructure
                         greyFabricDetailsPOs.machineGage = fabricStructurePO.machineGage
                         greyFabricDetailsPOs.loopLength = fabricStructurePO.loopLength

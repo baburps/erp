@@ -4,6 +4,7 @@ import com.software.erp.domain.model.ResultHandler
 import com.software.erp.domain.room.ERPRoomDAO
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
+import com.software.erp.view.greyfabric.model.FabricStructureWrapper
 import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
 import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
 import com.software.erp.view.knitting.model.KnittingProgramPO
@@ -51,15 +52,21 @@ class ERPRepo(
         }
     }
 
-    fun fetchFabricStructureWithDia(srkwDCNO: String): Flow<ResultHandler<List<GreyFabricStructureWrapper>>> {
+    fun fetchFabricStructureWithDia(srkwDCNO: String): Flow<ResultHandler<List<FabricStructureWrapper>>> {
         return flow {
             emit(ResultHandler.success(erpRoomDAO.getKnittingFabricStructureList(srkwDCNO)))
         }
     }
 
-    fun fetchGreyFabricBasedOnDCNo(): Flow<ResultHandler<List<GreyFabricWrapper>>> {
+    fun fetchAllGreyFabricList(): Flow<ResultHandler<List<GreyFabricWrapper>>> {
         return flow {
             emit(ResultHandler.success(erpRoomDAO.fetchGreyFabricBasedOnDCNo()))
+        }
+    }
+
+    fun fetchAllGreyFabricStructureWithDia(): Flow<ResultHandler<List<GreyFabricStructureWrapper>>> {
+        return flow {
+            emit(ResultHandler.success(erpRoomDAO.fetchAllGreyFabricStructureList()))
         }
     }
 
