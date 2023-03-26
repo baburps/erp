@@ -118,7 +118,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRep
                         fabricDiaList.forEach { fabricDia ->
                             val diaPO = GreyFabricDia()
                             diaPO.dia = fabricDia.dia
-                            diaPO.qtyInKgs = fabricDia.qtyInKgs
+                            diaPO.programmedQtyInKgs = fabricDia.qtyInKgs
                             greyDiaList.add(diaPO)
                         }
 
@@ -166,7 +166,7 @@ class GreyFabricDetailsViewModel @Inject constructor(private val erpRepo: ERPRep
         fabricStructurePOListLiveData.value?.let { greyFabricList ->
             greyFabricList.forEach { _greyFabricPO ->
                 _greyFabricPO.fabricDiaList.forEach { _fabricDiaPO ->
-                    val programmedQty = _fabricDiaPO.qtyInKgs
+                    val programmedQty = _fabricDiaPO.programmedQtyInKgs
                     val receivedQty = _fabricDiaPO.receivedQtyInKgs
                     //Clear show shortage flag by default
                     _fabricDiaPO.showShortageDetails = false

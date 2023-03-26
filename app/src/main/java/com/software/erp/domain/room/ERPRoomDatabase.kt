@@ -11,7 +11,7 @@ import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.yarnpurchase.YarnPurchasePO
 
 @Database(
-    version = 7 ,
+    version = 1 ,
     entities = [YarnPurchasePO::class ,
         KnittingProgramPO::class ,
         GreyFabricDetailsPO::class ,

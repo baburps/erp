@@ -14,11 +14,12 @@ data class KnittingProgramPO constructor(
     @ColumnInfo var lotTrackName: String ,
     @ColumnInfo var goodsDesc: String ,
     @ColumnInfo var orderRefNo: String ,
+    @ColumnInfo var programmedQty: String ,
     @Ignore var fabricStructureList: List<FabricStructurePO> = mutableListOf()
 ) : Serializable {
     constructor() : this(
         "" , "" , "" , "" ,
-        "" , ""
+        "" , "" , ""
     )
 }
 

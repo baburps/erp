@@ -158,22 +158,23 @@ class KnittingDetailsViewModel @Inject constructor(private val erpRepo: ERPRepo)
         yarnPurchasePO?.let { yarnPurchasePO_ ->
             knittingDetailsPOLiveData.value?.let { knittingPO ->
                 val availableQty = yarnPurchasePO_.currentQtyInKgs.toDouble()
-                var qtyToBeReduced = 0.0
+                var programmedQty = 0.0
                 fabricStructurePOList.forEach { fabricStructurePO ->
                     fabricStructurePO.fabricDiaList.forEach { fabricDia ->
-                        qtyToBeReduced += fabricDia.qtyInKgs.toDouble()
+                        programmedQty += fabricDia.qtyInKgs.toDouble()
                     }
                 }
 
                 LoggerUtils.debug(TAG , "availableQty$availableQty")
-                LoggerUtils.debug(TAG , "qtyToBeReduced$qtyToBeReduced")
+                LoggerUtils.debug(TAG , "qtyToBeReduced$programmedQty")
 
-                if (availableQty < qtyToBeReduced) {
+                if (availableQty < programmedQty) {
                     showToastMessage.postValue("Given qty is more than available qty")
                 } else {
-                    yarnPurchasePO_.currentQtyInKgs = (availableQty - qtyToBeReduced).toString()
+                    yarnPurchasePO_.currentQtyInKgs = (availableQty - programmedQty).toString()
                     //Add fabricStructurePOList to Knitting po
                     knittingPO.fabricStructureList = fabricStructurePOList
+                    knittingPO.programmedQty = programmedQty.toString()
                     insertKnittingDetails(knittingPO , yarnPurchasePO_)
                 }
             }

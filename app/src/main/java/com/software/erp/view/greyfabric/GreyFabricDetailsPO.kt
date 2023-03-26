@@ -23,18 +23,6 @@ data class GreyFabricDetailsPO constructor(
     @ColumnInfo var goodsDesc: String = "" ,
     @ColumnInfo var orderRefNo: String = "" ,
 
-    /*@ColumnInfo var fabricStructure: String = "" ,
-    @ColumnInfo var machineGage: String = "" ,
-    @ColumnInfo var loopLength: String = "" ,
-    @ColumnInfo var dia: String = "" ,
-    @ColumnInfo var programmedQtyInKgs: String = "" ,
-    @Ignore var remainingQtyInKgs: String = "" ,
-    //Available Grey fabric in Stock, can be used in Dyeing program
-    @ColumnInfo var receivedQtyInKgs: String = "" ,
-    //Available Grey fabric in Stock, can be used in Dyeing program
-    @ColumnInfo var stockQtyInKgs: String = "" ,
-    @ColumnInfo var shortageInKgs: String = "" ,
-    @ColumnInfo var shortagePercentage: String = "" ,*/
     @Ignore var showKnittingDetails: Boolean = false ,
     @Ignore var showShortageDetails: Boolean = false ,
     @Ignore var fabricStructureList: List<GreyFabricStructurePO> = mutableListOf()
@@ -71,15 +59,10 @@ data class GreyFabricDia constructor(
     @PrimaryKey(autoGenerate = true) var diaId: Int = 0 ,
     @ColumnInfo var fabricStructureId: Int = 0 ,
     @ColumnInfo var dia: String = "" ,
-    @ColumnInfo var qtyInKgs: String = "",
-
     @ColumnInfo var programmedQtyInKgs: String = "" ,
     @Ignore var remainingQtyInKgs: String = "" ,
-    //Available Grey fabric in Stock, can be used in Dyeing program
     @ColumnInfo var receivedQtyInKgs: String = "" ,
-    //Available Grey fabric in Stock, can be used in Dyeing program
-    @ColumnInfo var stockQtyInKgs: String = "" ,
     @ColumnInfo var shortageInKgs: String = "" ,
-    @ColumnInfo var shortagePercentage: String = "",
+    @ColumnInfo var shortagePercentage: String = "" ,
     @Ignore var showShortageDetails: Boolean = false
 ) : Serializable

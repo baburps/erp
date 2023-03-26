@@ -1,19 +1,18 @@
 package com.software.erp.view.programlist
 
-import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.software.erp.R
 import com.software.erp.base.ERPApplication
 import com.software.erp.common.utils.LoggerUtils
+import com.software.erp.common.utils.TextFormatUtil
 import com.software.erp.domain.model.ResultHandler
 import com.software.erp.domain.repo.ERPRepo
 import com.software.erp.view.dashboard.viewmodel.DashboardViewModel
 import com.software.erp.view.greyfabric.GreyFabricDetailsPO
 import com.software.erp.view.greyfabric.GreyFabricWrapper
 import com.software.erp.view.greyfabric.model.GreyFabricStructureWrapper
-import com.software.erp.view.knitting.model.KnittingProgramFabricStructureWrapper
 import com.software.erp.view.knitting.model.KnittingProgramPO
 import com.software.erp.view.programlist.adapter.ProgramChildAdapterPO
 import com.software.erp.view.programlist.adapter.ProgramParentAdapterPO
@@ -96,7 +95,7 @@ class ProgramDetailsViewModel @Inject constructor(
                 when (result.status) {
                     ResultHandler.Status.SUCCESS -> {
                         result.data?.let {
-                            getKnittingQty(it)
+                            populateKnittingList(result.data)
                         }
                     }
 
@@ -109,12 +108,10 @@ class ProgramDetailsViewModel @Inject constructor(
     }
 
     /**
-     * @param listOfFabricStructure List of fabric structure & dia details
      * @param listOfKnittingProgram List of Knitting programs
      */
     private fun populateKnittingList(
-        listOfKnittingProgram: List<KnittingProgramPO>? ,
-        listOfFabricStructure: List<KnittingProgramFabricStructureWrapper>?
+        listOfKnittingProgram: List<KnittingProgramPO>?
     ) {
         val programKey = DashboardViewModel.KNITTING_PROGRAM
         val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
@@ -139,65 +136,18 @@ class ProgramDetailsViewModel @Inject constructor(
                     getString(R.string.description) , knittingProgramPO.goodsDesc , knittingProgramPO
                 )
             )
-            populateKnittingQty(listOfChildEntries , programKey , knittingProgramPO , listOfFabricStructure)
+            listOfChildEntries.add(
+                ProgramChildAdapterPO(
+                    programKey ,
+                    getString(R.string.qty_in_kgs) , knittingProgramPO.programmedQty , knittingProgramPO
+                )
+            )
 
             listOfParentEntries.add(ProgramParentAdapterPO(programKey , listOfChildEntries))
         }
 
         recyclerViewAdapterPOLiveData.postValue(listOfParentEntries)
 
-    }
-
-    private fun populateKnittingQty(
-        listOfChildEntries: MutableList<ProgramChildAdapterPO> ,
-        programKey: String ,
-        knittingProgramPO: KnittingProgramPO ,
-        listOfFabricStructure: List<KnittingProgramFabricStructureWrapper>?
-    ) {
-        try {
-            var qtyInKgs = 0.0
-            listOfFabricStructure?.let { fabricStructureList ->
-
-                fabricStructureList.forEach { po ->
-                    if (!TextUtils.isEmpty(po.fabricStructurePO.knittingProgramSRKWDCNo) &&
-                        !TextUtils.isEmpty(knittingProgramPO.srkwDCNo) &&
-                        po.fabricStructurePO.knittingProgramSRKWDCNo.equals(knittingProgramPO.srkwDCNo , true)
-                    ) {
-                        po.fabricDiaList?.forEach { diaPO ->
-                            if (!TextUtils.isEmpty(diaPO.qtyInKgs) && TextUtils.isDigitsOnly(diaPO.qtyInKgs))
-                                qtyInKgs += diaPO.qtyInKgs.toDouble()
-                        }
-                    }
-                }
-
-                listOfChildEntries.add(
-                    ProgramChildAdapterPO(
-                        programKey ,
-                        getString(R.string.qty_in_kgs) , qtyInKgs.toString() , knittingProgramPO
-                    )
-                )
-            }
-        } catch (e: Exception) {
-            LoggerUtils.error(TAG , "populateKnittingQty" , e)
-        }
-    }
-
-    private fun getKnittingQty(listOfKnittingProgram: List<KnittingProgramPO>) {
-        viewModelScope.launch {
-            erpRepo.fetchAllFabricStructureWithDia().collect { result ->
-                LoggerUtils.debug(TAG , "getKnittingQty result")
-                when (result.status) {
-                    ResultHandler.Status.SUCCESS -> {
-                        populateKnittingList(listOfKnittingProgram , result.data)
-                        LoggerUtils.debug(TAG , "getKnittingQty")
-                    }
-
-                    ResultHandler.Status.ERROR -> {
-                        //TODO handle error
-                    }
-                }
-            }
-        }
     }
 
     fun fetchGreyFabricDetails() {
@@ -243,6 +193,7 @@ class ProgramDetailsViewModel @Inject constructor(
                 val listOfParentEntries = mutableListOf<ProgramParentAdapterPO>()
                 wrapperList?.forEach { wrapper ->
                     val knittingProgramPO = wrapper.knittingProgramPO
+                    LoggerUtils.debug(TAG , "populateGreyFabricList--srkwDCNo-" + knittingProgramPO.srkwDCNo)
                     val greyFabricDetailsPO = GreyFabricDetailsPO()
 
                     var receivedQty = 0.0
@@ -263,20 +214,21 @@ class ProgramDetailsViewModel @Inject constructor(
                                             TAG ,
                                             "populateGreyFabricList--greyFabricDia.receivedQty" + greyFabricDia.receivedQtyInKgs.toDouble()
                                         )
+                                        programmedQty += greyFabricDia.programmedQtyInKgs.toDouble()
                                         receivedQty += greyFabricDia.receivedQtyInKgs.toDouble()
                                         LoggerUtils.debug(TAG , "populateGreyFabricList--receivedQty$receivedQty")
-
-                                        LoggerUtils.debug(TAG , "populateGreyFabricList--greyFabricDia.qtyInKgs$" + greyFabricDia.qtyInKgs)
-                                        programmedQty += greyFabricDia.qtyInKgs.toDouble()
                                         LoggerUtils.debug(TAG , "populateGreyFabricList--programmedQty$programmedQty")
                                     }
                                 }
                             }
                         }
+                    } else {
+                        //If Grey fabric entry is not there for knitting program then show programmed qty from knitting program
+                        programmedQty = knittingProgramPO.programmedQty.toDouble()
                     }
 
                     val shortage = programmedQty - receivedQty
-                    val shortagePercentage = shortage / (programmedQty / 100)
+                    val shortagePercentage = TextFormatUtil.roundOffToTwoDigit(shortage / (programmedQty / 100))
 
                     val listOfChildEntries = mutableListOf<ProgramChildAdapterPO>()
                     listOfChildEntries.add(

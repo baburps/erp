@@ -126,6 +126,12 @@ interface ERPRoomDAO {
     @Query("SELECT * FROM grey_fabric_structure GROUP BY greyFabricId")
     fun fetchAllGreyFabricStructureList(): List<GreyFabricStructureWrapper>
 
+    /*@Query("SELECT grey_fabric.*, grey_fabric_structure.*, grey_fabric_dia.* " +
+            "FROM grey_fabric " +
+            "JOIN grey_fabric_structure ON grey_fabric.id = grey_fabric_structure.greyFabricId " +
+            "JOIN grey_fabric_dia ON grey_fabric_structure.id = grey_fabric_dia.fabricStructureId")
+    fun fetchAllGreyFabricDetails(): List<GreyFabricStructureWrapper>*/
+
     @Transaction
     @Query("SELECT * FROM knitting_program")
     fun fetchGreyFabricBasedOnDCNo(): List<GreyFabricWrapper>
